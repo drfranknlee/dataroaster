@@ -1,5 +1,0 @@
-Location: koreacentral
-ResourceGroup: k8s-ldcc-dataplatform-pod 
-Vnet: k8s-ldcc-dataplatform-pod-vnet 
-Subnet: k8s-ldcc-dataplatform-pod-subnet 
-NetworkSecurityGroup: k8s-ldcc-dataplatform-pod-nsg

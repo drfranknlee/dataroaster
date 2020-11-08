@@ -3,11 +3,11 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>io.spongebob</groupId>
-    <artifactId>spongebob-parent</artifactId>
+    <groupId>com.cloudcheflabs.dataroaster</groupId>
+    <artifactId>dataroaster-parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>Spongebob: Parent</name>
+    <name>DataRoaster: Parent</name>
     <modules>
         <module>api-server</module>
 		<module>authorizer</module>
