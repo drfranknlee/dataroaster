@@ -5,12 +5,12 @@ azure_tenant_id: 4042b515-f941-4735-8a39-a63d3a29118c
 azure_subscription_id: c3134fa1-f4d4-455e-8927-7aa4e97b8ea5
 azure_aad_client_id: 9256d78b-51ca-475d-a201-ec8467d4fdd2
 azure_aad_client_secret: icarus
-azure_resource_group: spongebob2
+azure_resource_group: dataroaster2
 azure_location: koreasouth
 azure_subnet_name: minion-subnet
 azure_security_group_name: secgroup
 azure_vnet_name: KubeVNET
-azure_vnet_resource_group: spongebob2
+azure_vnet_resource_group: dataroaster2
 azure_route_table_name: routetable
 
 # supported values are 'standard' or 'vmss'

@@ -10,7 +10,7 @@
 	</appender>
 
 	<appender name="dailyRollingFileAppender" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="/tmp/spongebob-logs/pod-runner.log" />
+		<param name="File" value="/tmp/dataroaster-logs/pod-runner.log" />
 		<param name="DatePattern" value="'.'yyyy-MM-dd" />
 		<param name="Encoding" value="UTF-8" />
 		<layout class="org.apache.log4j.PatternLayout">

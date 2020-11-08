@@ -9,8 +9,8 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.jdbc.Driver  
-    url: jdbc:mysql://localhost:3306/spongebob
-    username: spongebob
+    url: jdbc:mysql://localhost:3306/dataroaster
+    username: dataroaster
     password: icarus0337
     hikari:
       maximum-pool-size: 10

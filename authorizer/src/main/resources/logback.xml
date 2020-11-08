@@ -39,7 +39,7 @@
     <springProfile name="prod">
         <appender name="RollingFile"
                   class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>/data/spongebob/logs/authorizer/authorizer.log</file>
+            <file>/data/dataroaster/logs/authorizer/authorizer.log</file>
             <encoder
                     class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
                 <Pattern>%d %p %C{1.} [%t] %m%n</Pattern>
@@ -47,7 +47,7 @@
 
             <rollingPolicy
                     class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-                <fileNamePattern>/data/spongebob/logs/authorizer/archived/authorizer-%d{yyyy-MM-dd}.%i.log
+                <fileNamePattern>/data/dataroaster/logs/authorizer/archived/authorizer-%d{yyyy-MM-dd}.%i.log
                 </fileNamePattern>
                 <timeBasedFileNamingAndTriggeringPolicy
                         class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">

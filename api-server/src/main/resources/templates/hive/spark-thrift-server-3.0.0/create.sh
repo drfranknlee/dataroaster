@@ -77,7 +77,7 @@ spark-submit \
 --master $MASTER \
 --deploy-mode cluster \
 --name spark-thrift-server \
---class io.spongebob.hive.SparkThriftServerRunner \
+--class com.cloudcheflabs.dataroaster.hive.SparkThriftServerRunner \
 --packages com.amazonaws:aws-java-sdk-s3:1.11.375,org.apache.hadoop:hadoop-aws:3.2.0 \
 --conf spark.kubernetes.driver.volumes.persistentVolumeClaim.checkpointpvc.mount.path=/checkpoint \
 --conf spark.kubernetes.driver.volumes.persistentVolumeClaim.checkpointpvc.mount.subPath=checkpoint \

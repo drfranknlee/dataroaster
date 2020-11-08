@@ -189,7 +189,7 @@
 					<relocations>
 						<relocation>
 							<pattern>com.google</pattern>
-							<shadedPattern>io.spongebob.shaded.google</shadedPattern>
+							<shadedPattern>com.cloudcheflabs.dataroaster.shaded.google</shadedPattern>
 							<excludes>
 								<exclude>com.google.common.base.Optional</exclude>
 							</excludes>

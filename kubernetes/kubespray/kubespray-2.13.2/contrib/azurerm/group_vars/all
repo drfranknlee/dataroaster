@@ -1,7 +1,7 @@
 
 # Due to some Azure limitations (ex:- Storage Account's name must be unique),
 # this name must be globally unique - it will be used as a prefix for azure components
-cluster_name: spongebob2
+cluster_name: dataroaster2
 
 # Set this to true if you do not want to have public IPs for your masters and minions. This will provision a bastion
 # node that can be used to access the masters and minions
