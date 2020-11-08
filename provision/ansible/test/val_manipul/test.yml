@@ -1,0 +1,23 @@
+##############################################################################
+# Name        : test.yml
+# Creator     : L.S.H.
+# Syntax      : ansible-playbook test.yml  -e "vmname=SpongeBobVM2"
+# Description : 
+##############################################################################
+---
+- name: Value manipulatioin test
+  hosts: localhost
+  become_method: sudo
+  become: yes
+  remote_user: pcp
+  connection: local
+  tasks:
+    - include_vars: resource-info-conf.yml
+    - name: "value manipulation" 
+      vars:
+        NICNM: "{{ item_vm }}__{{ NIC }}"
+      include_tasks: crt_spongebob_vm.yml 
+      loop: "{{ query('inventory_hostnames', '{{ vmname }}') }}"
+      loop_control:
+        loop_var: item_vm
+

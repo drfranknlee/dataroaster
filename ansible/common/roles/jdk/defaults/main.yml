@@ -1,0 +1,12 @@
+---
+
+java_home: /usr/lib/jdk
+
+java_dist_name: jdk-8u231-linux-x64
+
+java_dist_file: "{{ java_dist_name }}.tar.gz"
+
+java_temp_dir: /tmp/java
+
+
+

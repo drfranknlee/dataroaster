@@ -1,0 +1,18 @@
+##############################################################################
+# Name        : test.yml
+# Creator     : L.S.H.
+# Syntax      : ansible-playbook test.yml
+# Description :
+##############################################################################
+---
+- name: NTP Setup 
+  hosts: localhost
+  become_method: sudo
+  become: yes
+  remote_user: pcp
+  tasks:
+    - name: "JDK install" 
+      yum:
+        name: java-1.8.0-openjdk
+        state: latest
+

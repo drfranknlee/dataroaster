@@ -1,0 +1,21 @@
+server:
+  port: 8082
+  servlet:
+    context-path: /api
+
+authorizer:
+  url: http://localhost:8081
+
+client:
+  secret: YXBpOmhlbGxvQXV0aEFQSQ==
+
+vault:
+  host: localhost
+  port: 8200
+  trustStore: /home/pcp/vault/work/keystore.jks
+  token: s.652G9bFIwOC2XQczhZ633UW0
+
+objectStorage:
+  minio:
+    defaultAccessKey: bWluaW8=
+    defaultSecretKey: bWluaW8xMjM=

@@ -1,0 +1,14 @@
+##############################################################################
+# Name        : test.yml
+# Creator     : L.S.H.
+# Syntax      : ansible-playbook test2.yml
+# Description :
+##############################################################################
+---
+- name: getinventoryname 
+  hosts: SpongeBobVM1
+  tasks:
+  - name: Set hostname
+    hostname:
+      name: "{{ inventory_hostname_short }}"
+

@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-ozone-{{ namespace }}
+  namespace: {{ namespace }}
+  annotations:
+    # use the shared ingress-nginx
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/proxy-body-size: 8g
+spec:
+  rules:
+    - host: {{ host }}
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: s3g-service
+              servicePort: 9898
+  tls:
+    - hosts:
+        - {{ host }}
+      secretName: {{ host }}-tls

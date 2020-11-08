@@ -1,0 +1,7 @@
+---
+- hosts: localhost
+  tasks: 
+    - name: with_lines test 
+      debug: 
+        msg: "{{ item | regex_search('(?<=: )(.*)(?=)') | regex_replace(' ', '') }}"
+      with_lines: cat resource-config-val.yml

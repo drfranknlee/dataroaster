@@ -1,0 +1,42 @@
+##############################################################################
+# Name        : test.yml
+# Creator     : L.S.H.
+# Syntax      : ansible-playbook test.yml -e "vmname=pcp-m01"
+# Description :
+##############################################################################
+---
+- name: Blockfile test
+  hosts: "{{ vmname }}" 
+  become_method: sudo
+  become: yes
+  remote_user: pcp
+  tasks:
+    - name: "1) Copy file with owner and permissions"
+      copy:
+        src: /etc/ansible/template/hosts
+        dest: /tmp/hosts
+        owner: root
+        group: root
+        mode: '0644'
+        force: yes
+
+    - name: "2) get remote file contents" 
+      slurp:
+        src: /tmp/hosts
+      register: hostsinfo 
+    - debug:
+        msg: "{{ hostsinfo['content'] | b64decode }}" 
+
+    - name: Insert/Update configuration using a local file and validate it
+      blockinfile:
+        block: "{{ hostsinfo['content'] | b64decode }}"
+        dest: /etc/hosts
+        backup: no
+        marker: ""
+        insertafter: EOF
+
+    - name: Remove blank lines blockinfile put in
+      lineinfile :
+        path: /etc/hosts
+        state: absent
+        regexp: '^$'

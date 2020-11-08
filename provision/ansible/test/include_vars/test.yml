@@ -1,0 +1,17 @@
+---
+include_vars: resource-config-val.yml
+- hosts: localhost
+  tasks: 
+  #    - include_vars: resource-config-val.yml
+    - name: with_lines test 
+      debug: 
+        msg: 
+          - "{{ Location }}"
+          - "{{ ResourceGroup }}"
+          - "{{ NetworkSecurityGroup }}"
+          - "{{ item_vm }}"
+      loop: "{{ query('inventory_hostnames', 'SpongeBobVM1') }}"
+      loop_control:
+        loop_var: item_vm
+
+

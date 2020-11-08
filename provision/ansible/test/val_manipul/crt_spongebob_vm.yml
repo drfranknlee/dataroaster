@@ -1,0 +1,28 @@
+#######################################################################
+# Name        : crt_spongebob_vm.yml
+# Creator     : L.S.H.
+# Syntax      : None 
+# Description : Create VM on Azure & Be included from crt_spongebob.yml
+#######################################################################
+---
+#- name: Message 1
+#  debug:
+#    msg: "The merge value is {{ NICNM }}."
+#
+#- name: Message 2
+#  debug:
+#    msg: "The merge value is {{ \"test_01.test_vm_01\".split(\".\")[1]  }}"
+
+- name: Message 3
+  debug:
+    msg: "inventory_hostname : {{ inventory_hostname }}, configuration name : {{ AnsibleSvr }}"
+
+- name: Message 4 (When)
+  debug:
+    msg: "inventory_hostname : {{ inventory_hostname }}, configuration name : {{ AnsibleSvr }}"
+  when: "'AnsibleSvr' in inventory_hostname"
+
+- name: Message 5 (When)
+  debug:
+    msg: "inventory_hostname : {{ inventory_hostname }}, configuration name : {{ AnsibleSvr }}"
+  when: "AnsibleSvr in inventory_hostname"

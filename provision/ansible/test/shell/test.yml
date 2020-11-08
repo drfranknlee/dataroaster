@@ -1,0 +1,19 @@
+##############################################################################
+# Name        : test.yml
+# Creator     : L.S.H.
+# Syntax      : ansible-playbook test.yml
+# Description :
+##############################################################################
+---
+- name: ansible feature test playbook 
+  hosts: localhost
+  become_method: sudo
+  become: yes
+  remote_user: pcp
+  connection: local
+  tasks:
+    - name: Shell  
+      shell: | 
+        sudo sed -i '/swap/d' /etc/fstab
+        sudo swapoff -a
+

@@ -1,0 +1,17 @@
+
+- name: Removing Java home directory
+  shell: sudo su - -c 'rm -Rf {{ maven_home }}'
+  args:
+    executable: /bin/bash
+    
+- name: Removing Java Profile Shell
+  shell: sudo su - -c 'rm -Rf /etc/profile.d/maven.sh'
+  args:
+    executable: /bin/bash
+    
+- name: Removing Java Profile Shell 2
+  shell: sudo su - -c 'source /etc/profile'
+  args:
+    executable: /bin/bash
+    
+ 

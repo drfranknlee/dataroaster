@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: presto-cli
+spec:
+  containers:
+    - name: presto-cli
+      image: mykidong/presto-cli:v337
+      command: ["tail", "-f", "/dev/null"]
+      imagePullPolicy: Always
+  restartPolicy: Always

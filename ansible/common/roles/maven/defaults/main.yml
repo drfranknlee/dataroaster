@@ -1,0 +1,12 @@
+---
+
+maven_home: /usr/lib/maven
+
+maven_dist_name: apache-maven-3.6.0
+
+maven_dist_file: "{{ maven_dist_name }}-bin.tar.gz"
+
+maven_temp_dir: /tmp/maven
+
+
+

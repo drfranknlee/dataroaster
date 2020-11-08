@@ -1,0 +1,70 @@
+#########################################################################
+# Name        : crt_spongebob_ans.yml
+# Creator     : L.S.H.
+# Syntax      : None, just be called by main playbook 
+# Description : Make up VM on Azure & Be included from crt_spongebob.yml
+#########################################################################
+---
+
+###################################
+ Ansible install on master  
+ Host information add 
+###################################
+- name: "EPEL Repository add" 
+  yum_repository:
+    name: epel
+    description: EPEL YUM repo
+    baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+    gpgcheck: no
+
+- name: "Ansible install"
+  yum:
+    name: 
+      - ansible
+    state: latest
+
+- name: "   1) Copy file with owner and permissions"
+  copy:
+    src: /etc/ansible/template/hosts
+    dest: /tmp/hosts
+    owner: root
+    group: root
+    mode: '0644'
+    force: yes
+
+- name: "   2) get remote file contents"
+  slurp:
+    src: /tmp/hosts
+  register: hostsinfo
+
+- name: "   3) insert hosts file contents"
+  blockinfile:
+    block: "{{ hostsinfo['content'] | b64decode }}"
+    dest: /etc/hosts
+    backup: no
+    marker: ""
+    insertafter: EOF
+
+- name: "   4) Remove blank lines"
+  lineinfile :
+    path: /etc/hosts
+    state: absent
+    regexp: '^$'
+  
+###################################
+# inventory file copy from host   
+###################################
+- name: "inventory file copy from host"
+  template:
+    src: /etc/ansible/hosts
+    dest: /etc/ansible/hosts
+    owner: root
+    group: root
+    mode: 0644
+
+###################################
+# create ssh key   
+###################################
+- name: "SSH key generate" 
+  shell: ssh-keygen -q -b 2048 -t rsa -N "" -C "creating SSH" -f ~/.ssh/{{ user }}/id_rsa
+

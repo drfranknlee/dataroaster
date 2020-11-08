@@ -1,0 +1,101 @@
+#######################################################################
+# Name        : crt_spongebob_vm.yml
+# Creator     : L.S.H.
+# Syntax      : None 
+# Description : Create VM on Azure & Be included from crt_spongebob.yml
+#######################################################################
+---
+
+#################################################################
+# create vm public ip address 
+#################################################################
+- name: Create public IP address
+  azure_rm_publicipaddress:
+    resource_group: "{{ ResourceGroup }}"
+    allocation_method: Static
+    name: "{{ item_vm }}_public_IP"
+  register: output_ip_address
+- name: Dump public IP for VM which will be created
+  debug:
+    msg: "The public IP is {{ output_ip_address.state.ip_address }}."
+
+#################################################################
+# create network interface card
+#################################################################
+- name: Create virtual network interface card
+  azure_rm_networkinterface:
+    resource_group: "{{ ResourceGroup }}"
+    name: "{{ NIC }}" 
+    virtual_network: "{{ Vnet }}"
+    subnet: "{{ Subnet }}"
+    public_ip_name: "{{ item_vm }}_public_IP"
+    security_group: "{{ NetworkSecurityGroup }}"
+
+#################################################################
+# create vm 
+#################################################################
+- name: Create VM
+  azure_rm_virtualmachine:
+    resource_group: "{{ ResourceGroup }}"
+    name: "{{ item_vm }}"
+    vm_size: "{{ VM_SIZE }}"
+    admin_username: pcp
+    ssh_password_enabled: false
+    ssh_public_keys:
+      - path: /home/pcp/.ssh/authorized_keys
+        key_data: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDMDHlhGUEMdTd7qX/75GL1H4kG2r5uZhyE/kLCd6GW0poI8x53tL14paz6EErFIseJN1QA7UiaZBEOxYLq95CQDqPIcFoYCWJaGAVmLqSfFtxUqptmry46FvfyK9ryR05lNo9t3TReP1MwViZJ41S7YTlwTcJILvrB2kACo1m38Y+5PX4PccPHM1uyXy5P7xrfC65Ok7FIztMUM7cH/UFZkcOzp0ujyqulMMsXwgmvtGUB5O8PII935AyRCRysJ1t/kGnG6hKQFi/wVpXog8W5qMrY9JPF5oXWROOrkxBsMJu0MM9egPLutSz/zolso+r+SFlNXAlal3tD0sAd9E8F1I/2s26yWEAC5NhL9b6ojrBh7ceqaE1hj19eV6LZKyIuXrD6IEgW6b1v8VPSAyd2iGEaqlaJQ9SeWw4W8hduDHBlmnLQcKTkpFo/S5gfNvLtUYzLx5MReX/V6W1s8w1Uutopu1ff/xBCYx1b9n75JQBoGpWxHevVxjFUcV98vXM= pcp@SpongeBob-Ansible
+    network_interfaces: "{{ NIC }}"
+    image:
+      offer: CentOS
+      publisher: OpenLogic
+      sku: '7.5'
+      version: latest
+    data_disks:
+      - lun: 0
+        disk_size_gb: 16
+        storage_container_name: datadisk1
+        storage_blob_name: datadisk1.vhd
+      - lun: 1
+        disk_size_gb: 16
+        storage_container_name: datadisk2
+        storage_blob_name: datadisk2.vhd
+      - lun: 2
+        disk_size_gb: 16
+        storage_container_name: datadisk3
+        storage_blob_name: datadisk3.vhd
+
+#################################################################
+# get vm private ip address 
+#################################################################
+- name: Get network interface details
+  azure_rm_networkinterface_facts:
+    resource_group: "{{ ResourceGroup }}"
+    name: "{{ NIC }}"
+    #   profile: "{{vm.azure_profile}}"
+  register: azure_networkinterfaces
+  delegate_to: localhost
+
+- name: print internal IP
+  debug: 
+    msg: "internal ip is {{azure_networkinterfaces.ansible_facts.azure_networkinterfaces[0].properties.ipConfigurations[0].properties.privateIPAddress}}"
+
+- name: set value of vm internal IP
+  set_fact:
+    vm_internal_ip: "{{azure_networkinterfaces.ansible_facts.azure_networkinterfaces[0].properties.ipConfigurations[0].properties.privateIPAddress}}"
+
+#################################################################
+# hosts file ip address registe
+#################################################################
+- name: Add a line Public IP address to a host file
+  lineinfile:
+    path: /etc/hosts
+    line: "{{ output_ip_address.state.ip_address }}     {{ item_vm }}"
+    state: present
+
+    #- name: Add a line Private IP address to a host file 
+    #  lineinfile:
+    #    path: /etc/hosts
+    #    line: "{{ azure_networkinterfaces.ansible_facts.azure_networkinterfaces[0].properties.ipConfigurations[0].properties.privateIPAddress }}    {{ item_vm }}" 
+    #    state: present
+
+

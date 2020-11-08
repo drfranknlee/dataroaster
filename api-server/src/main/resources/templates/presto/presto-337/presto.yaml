@@ -1,0 +1,160 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: presto
+  namespace: {{ namespace }}
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8080
+  selector:
+    app: presto-coordinator
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: presto-coordinator
+  namespace: {{ namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: presto-coordinator
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: presto-coordinator
+    spec:
+      containers:
+      - name: metastore
+        image: mykidong/fb-presto:v337
+        ports:
+        - containerPort: 8080
+        env:
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: presto-s3-keys
+              key: access-key
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: presto-s3-keys
+              key: secret-key
+        volumeMounts:
+        - name: presto-cfg-vol
+          mountPath: /opt/presto-server/etc/jvm.config
+          subPath: jvm.config
+        - name: presto-cfg-vol
+          mountPath: /opt/presto-server/etc/config.properties
+          subPath: config.properties.coordinator
+        - name: presto-cfg-vol
+          mountPath: /opt/presto-server/etc/node.properties.template
+          subPath: node.properties.template
+        - name: presto-cfg-vol
+          mountPath: /opt/presto-server/etc/catalog/hive.properties.template
+          subPath: hive.properties.template
+        command: ['/opt/autoconfig-and-launch.sh']
+        resources:
+          requests:
+            memory: "{{ serverMaxMemory }}G"
+            cpu: {{ cpu }}
+        imagePullPolicy: Always
+      volumes:
+        - name: presto-cfg-vol
+          configMap:
+            name: presto-cfg
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: presto-worker
+  namespace: {{ namespace }}
+spec:
+  serviceName: presto-worker 
+  replicas: {{ workers }}
+  selector:
+    matchLabels:
+      app: presto-worker
+  template:
+    metadata:
+      labels:
+        app: presto-worker
+    spec:
+      containers:
+      - name: metastore
+        image: mykidong/fb-presto:v337
+        ports:
+        - containerPort: 8080
+        env:
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: presto-s3-keys
+              key: access-key
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: presto-s3-keys
+              key: secret-key
+        volumeMounts:
+        - name: presto-cfg-vol
+          mountPath: /opt/presto-server/etc/jvm.config
+          subPath: jvm.config
+        - name: presto-cfg-vol
+          mountPath: opt/presto-server/etc/config.properties
+          subPath: config.properties.worker
+        - name: presto-cfg-vol
+          mountPath: /opt/presto-server/etc/node.properties.template
+          subPath: node.properties.template
+        - name: presto-cfg-vol
+          mountPath: /opt/presto-server/etc/catalog/hive.properties.template
+          subPath: hive.properties.template
+        - name: presto-tmp-data
+          mountPath: /tmp
+        - name: presto-data-dir
+          mountPath: /var/presto/data
+        command: ['/opt/autoconfig-and-launch.sh']
+        resources:
+          requests:
+            memory: "{{ serverMaxMemory }}G"
+            cpu: {{ cpu }}
+        imagePullPolicy: Always
+      volumes:
+        - name: presto-cfg-vol
+          configMap:
+            name: presto-cfg
+  volumeClaimTemplates:
+  - metadata:
+      name: presto-tmp-data
+    spec:
+      accessModes:
+      - ReadWriteMany
+      resources:
+        requests:
+          storage: {{ tempDataStorage }}Gi
+      storageClassName: nfs
+  - metadata:
+      name: presto-data-dir
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: {{ dataStorage }}Gi
+      storageClassName: direct.csi.min.io
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: presto-cli
+  namespace: {{ namespace }}
+spec:
+  containers:
+  - name: presto-cli
+    image: mykidong/presto-cli:v337
+    command: ["tail", "-f", "/dev/null"]
+    imagePullPolicy: Always
+  restartPolicy: Always

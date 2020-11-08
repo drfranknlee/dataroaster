@@ -1,0 +1,10 @@
+#########################################################################
+# Basic Information for Logical Volume on VM
+#########################################################################
+raw_disks           : "/dev/sdc,/dev/sdd,/dev/sde"
+vg_name             : "vg_ansible"
+lv_name             : "lv_ansible"
+require_lv_size     : "100%FREE"
+fs                  : "ext4"
+mount_point         : "/data"
+

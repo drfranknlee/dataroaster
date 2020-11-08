@@ -1,0 +1,20 @@
+apiVersion: v1
+clusters:
+  - cluster:
+      certificate-authority-data: {{ clusterCertData }}
+      server: {{ masterUrl }}
+    name: {{ clusterName }}
+contexts:
+  - context:
+      cluster: {{ clusterName }}
+      namespace: {{ namespace }}
+      user: {{ user }}
+    name: {{ user }}-{{ namespace }}@{{ clusterName }}
+current-context: {{ user }}-{{ namespace }}@{{ clusterName }}
+kind: Config
+preferences: {}
+users:
+  - name: {{ user }}
+    user:
+      client-certificate-data: {{ clientCertData }}
+      client-key-data: {{ clientKeyData }}

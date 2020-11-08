@@ -1,0 +1,22 @@
+###########################################################################
+# Name        : mgmt_vm_stop.yml
+# Creator     : L.S.H.
+# Syntax      : ansible-playbook mgmt_vm_stop.yml -e "vmname=SpongeBobVM1"
+#               Start : 
+# Description :
+###########################################################################
+---
+- name: Create Azure VM
+  hosts: localhost
+  become: yes
+  connection: local
+  tasks:
+    - include_vars: resource-config-val.yml
+    - name: "Stop virtual machine"
+      azure_rm_virtualmachine:
+        resource_group: "{{ ResourceGroup }}"
+        name: "{{ item_vm }}"
+        allocated: no
+      loop: "{{ query('inventory_hostnames', 'SpongeBobVM1') }}"
+      loop_control:
+        loop_var: item_vm

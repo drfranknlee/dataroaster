@@ -1,0 +1,38 @@
+##############################################################################
+# Name        : test.yml
+# Creator     : L.S.H.
+# Syntax      : ansible-playbook test.yml
+# Description :
+##############################################################################
+---
+- name: NTP Setup 
+  hosts: k8s-ldcc-dataplatform-pod-vm1
+  become_method: sudo
+  become: yes
+  remote_user: pcp
+  tasks:
+    - name: "NTP install" 
+      yum:
+        name: ntp
+        state: latest
+
+    - name: "Set ntp.conf" 
+      template: 
+        src: /etc/ansible/template/ntp.conf
+        dest: /etc/ntp.conf
+        owner: root
+        group: root
+        mode: 0644
+    
+    - name: "regist auto start"
+      service:
+        name: ntpd 
+        enabled: yes
+      notify: "started ntp service"
+
+  handlers:
+  - name: start ntp 
+    service:
+      name: ntpd
+      state: restarted
+    listen: "started ntp service"

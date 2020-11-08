@@ -1,0 +1,21 @@
+##############################################################################
+# Name        : crt_spongebob.yml
+# Creator     : L.S.H.
+# Syntax      : ansible-playbook crt_spongebob.yml  -e "vmname=SpongeBobVM1"
+# Description :
+##############################################################################
+---
+- name: Create Azure VM
+  hosts: localhost
+  become_method: sudo
+  become: yes
+  remote_user: pcp
+  connection: local
+  tasks:
+    - name: Add a line Public IP address to a host file
+      lineinfile:
+        path: /etc/hosts
+        line: "20.41.98.97     k8s-ldcc-dataplatform-pod-vm1"
+        state: present
+
+
