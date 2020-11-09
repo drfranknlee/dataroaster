@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: hello-dag-
+spec:
+  entrypoint: main
+  templates:
+  - name: main
+      dag:
+        tasks:
+        - name: A
+          template: echo
+        - name: B
+          dependencies: [ A ]
+          template: echo
+        - name: C
+          dependencies: [ A ]
+          template: echo
+        - name: D
+          dependencies: [ B, C ]
+          template: echo
+  - name: echo
+    container:
+      image: docker/whalesay
+      command: [cowsay]
+      args: ["hello world"]
