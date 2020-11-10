@@ -646,7 +646,7 @@ spec:
           name: tmp
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   labels:
     app: postgres
@@ -679,8 +679,21 @@ spec:
                 - SELECT 1
             initialDelaySeconds: 15
             timeoutSeconds: 2
+          volumeMounts:
+            - name: postgresql-data
+              mountPath: /var/lib//postgresql
       nodeSelector:
         kubernetes.io/os: linux
+  volumeClaimTemplates:
+    - metadata:
+        name: postgresql-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 2Gi
+        storageClassName: direct.csi.min.io
 ---
 apiVersion: apps/v1
 kind: Deployment
