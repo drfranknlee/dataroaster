@@ -682,7 +682,7 @@ spec:
             timeoutSeconds: 2
           volumeMounts:
             - name: postgresql-data
-              mountPath: /var/lib//postgresql
+              mountPath: /var/lib/postgresql/data
       nodeSelector:
         kubernetes.io/os: linux
   volumeClaimTemplates:
