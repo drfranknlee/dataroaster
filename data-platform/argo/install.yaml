@@ -711,15 +711,15 @@ spec:
     spec:
       containers:
         - args:
-            - --configmap
-            - workflow-controller-configmap
-            - --executor-image
-            - argoproj/argoexec:latest
-            - --namespaced
-            - --pod-workers
-            - 3
-            - --workflow-workers
-            - 3
+          - --configmap
+          - workflow-controller-configmap
+          - --executor-image
+          - argoproj/argoexec:latest
+          - --namespaced
+          - --pod-workers
+          - 3
+          - --workflow-workers
+          - 3
           command:
             - workflow-controller
           image: argoproj/workflow-controller:latest
