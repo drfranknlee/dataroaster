@@ -717,9 +717,9 @@ spec:
           - argoproj/argoexec:latest
           - --namespaced
           - --pod-workers
-          - 3
+          - "3"
           - --workflow-workers
-          - 3
+          - "3"
           command:
             - workflow-controller
           image: argoproj/workflow-controller:latest
