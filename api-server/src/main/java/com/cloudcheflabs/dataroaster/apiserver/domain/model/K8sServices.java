@@ -23,6 +23,7 @@ public class K8sServices implements Serializable {
         REDASH,
         JUPYTERHUB,
         ELASTICSEARCH,
+        WORKFLOW,
         SPARK_THRIFT_SERVER;
     }
 
@@ -166,6 +167,22 @@ public class K8sServices implements Serializable {
             inverseJoinColumns = { @JoinColumn(name = "namespace_id") }
     )
     private Set<K8sNamespace> elasticsearchK8sNamespaceSet = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "k8s_workflow_namespace",
+            joinColumns = { @JoinColumn(name = "service_id") },
+            inverseJoinColumns = { @JoinColumn(name = "namespace_id") }
+    )
+    private Set<K8sNamespace> workflowK8sNamespaceSet = new HashSet<>();
+
+    public Set<K8sNamespace> getWorkflowK8sNamespaceSet() {
+        return workflowK8sNamespaceSet;
+    }
+
+    public void setWorkflowK8sNamespaceSet(Set<K8sNamespace> workflowK8sNamespaceSet) {
+        this.workflowK8sNamespaceSet = workflowK8sNamespaceSet;
+    }
 
     public Set<K8sNamespace> getElasticsearchK8sNamespaceSet() {
         return elasticsearchK8sNamespaceSet;

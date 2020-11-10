@@ -324,6 +324,22 @@ VALUES
 );
 
 
+INSERT INTO k8s_services
+(
+	`id`,
+	`type`,
+	`name`,
+	`version`
+)
+VALUES
+(
+	16,
+	'WORKFLOW',
+	'Argo Workflow',
+	'2.11.7'
+);
+
+
 -- mapping table of csi and cluster.
 create table k8s_csi_cluster
 (
@@ -592,4 +608,23 @@ ALTER TABLE `k8s_elasticsearch_namespace`
 
 ALTER TABLE `k8s_elasticsearch_namespace`
     ADD CONSTRAINT `fk_k8s_elasticsearch_namespace_service`
+        FOREIGN KEY (`service_id`) REFERENCES `k8s_services` (`id`);
+
+-- mapping table of workflow and namespace..
+create table k8s_workflow_namespace
+(
+    `id`        bigint(11) unsigned NOT NULL AUTO_INCREMENT,
+    `namespace_id`   bigint(11) unsigned NOT NULL,
+    `service_id`        bigint(11) unsigned NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `k8s_workflow_namespace_unique` (`namespace_id`, `service_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
+
+ALTER TABLE `k8s_workflow_namespace`
+    ADD CONSTRAINT `fk_k8s_workflow_namespace`
+        FOREIGN KEY (`namespace_id`) REFERENCES `k8s_namespace` (`id`);
+
+ALTER TABLE `k8s_workflow_namespace`
+    ADD CONSTRAINT `fk_k8s_workflow_namespace_service`
         FOREIGN KEY (`service_id`) REFERENCES `k8s_services` (`id`);

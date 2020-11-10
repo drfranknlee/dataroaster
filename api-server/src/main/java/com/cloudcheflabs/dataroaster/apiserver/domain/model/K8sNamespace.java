@@ -60,6 +60,16 @@ public class K8sNamespace implements Serializable {
     @ManyToMany(mappedBy = "elasticsearchK8sNamespaceSet")
     private Set<K8sServices> elasticsearchK8sServicesSet = new HashSet<>();
 
+    @ManyToMany(mappedBy = "workflowK8sNamespaceSet")
+    private Set<K8sServices> workflowK8sServicesSet = new HashSet<>();
+
+    public Set<K8sServices> getWorkflowK8sServicesSet() {
+        return workflowK8sServicesSet;
+    }
+
+    public void setWorkflowK8sServicesSet(Set<K8sServices> workflowK8sServicesSet) {
+        this.workflowK8sServicesSet = workflowK8sServicesSet;
+    }
 
     public Set<K8sServices> getElasticsearchK8sServicesSet() {
         return elasticsearchK8sServicesSet;
