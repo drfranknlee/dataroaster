@@ -11,6 +11,7 @@ COPY enc ${APP_HOME}/
 COPY pod-runner-1.0.0-*-fat.jar ${APP_HOME}/
 COPY run.sh ${APP_HOME}/
 RUN chmod a+x ${APP_HOME}/*.sh
+RUN chmod a+x ${APP_HOME}/enc
 
 RUN chmod a+x -R ${APP_HOME}/bin
 RUN chown spark: -R ${APP_HOME}
