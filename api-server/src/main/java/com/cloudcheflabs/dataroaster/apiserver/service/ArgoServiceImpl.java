@@ -87,6 +87,11 @@ public class ArgoServiceImpl implements ArgoService {
         k8sServices.getWorkflowK8sNamespaceSet().add(k8sNamespace);
         k8sServicesDao.update(k8sServices);
 
+        // check if minio direct csi storage class exists or not.
+        if(!resourceControlDao.existsMinIOStorageClass(kubeconfig)) {
+            throw new RuntimeException("MinIO Direct CSI not installed, please install it first.");
+        }
+
         ExecutorUtils.runTask(() -> {
             return ArgoHandler.create(k8sServices,
                     kubeconfig,
