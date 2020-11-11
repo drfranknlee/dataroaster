@@ -612,6 +612,7 @@ spec:
     metadata:
       labels:
         app: argo-server
+        component: argo-workflow
     spec:
       containers:
         - args:
@@ -658,6 +659,7 @@ spec:
     metadata:
       labels:
         app: postgres
+        component: argo-workflow
       name: postgres
     spec:
       containers:
@@ -706,6 +708,7 @@ spec:
     metadata:
       labels:
         app: workflow-controller
+        component: argo-workflow
     spec:
       containers:
         - args:
