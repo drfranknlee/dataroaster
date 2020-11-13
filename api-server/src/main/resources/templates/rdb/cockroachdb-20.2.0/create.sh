@@ -16,7 +16,7 @@ while [[ $(kubectl get pods -n {{ namespace }} -l app=cockroach-operator -o json
 
 
 # create cockroachdb.
-kubectl apply -n {{ namespace }} -f cockroachdb.yaml.yaml;
+kubectl apply -n {{ namespace }} -f cockroachdb.yaml;
 
 
 # wait for cockroachdb being run
