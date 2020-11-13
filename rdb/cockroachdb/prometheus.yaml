@@ -104,3 +104,19 @@ spec:
           requests:
             storage: 10Gi
         storageClassName: direct.csi.min.io
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-public
+spec:
+  ports:
+    - name: web
+      port: 9090
+      protocol: TCP
+      targetPort: web
+  selector:
+    app: prometheus
+  sessionAffinity: None
+  type: LoadBalancer
+
