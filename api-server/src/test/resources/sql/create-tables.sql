@@ -339,6 +339,21 @@ VALUES
 	'2.11.7'
 );
 
+INSERT INTO k8s_services
+(
+	`id`,
+	`type`,
+	`name`,
+	`version`
+)
+VALUES
+(
+	17,
+	'RDB',
+	'CockroachDB',
+	'20.2.0'
+);
+
 
 -- mapping table of csi and cluster.
 create table k8s_csi_cluster
@@ -627,4 +642,24 @@ ALTER TABLE `k8s_workflow_namespace`
 
 ALTER TABLE `k8s_workflow_namespace`
     ADD CONSTRAINT `fk_k8s_workflow_namespace_service`
+        FOREIGN KEY (`service_id`) REFERENCES `k8s_services` (`id`);
+
+
+-- mapping table of rdb and namespace..
+create table k8s_rdb_namespace
+(
+    `id`        bigint(11) unsigned NOT NULL AUTO_INCREMENT,
+    `namespace_id`   bigint(11) unsigned NOT NULL,
+    `service_id`        bigint(11) unsigned NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `k8s_rdb_namespace_unique` (`namespace_id`, `service_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
+
+ALTER TABLE `k8s_rdb_namespace`
+    ADD CONSTRAINT `fk_k8s_rdb_namespace`
+        FOREIGN KEY (`namespace_id`) REFERENCES `k8s_namespace` (`id`);
+
+ALTER TABLE `k8s_rdb_namespace`
+    ADD CONSTRAINT `fk_k8s_rdb_namespace_service`
         FOREIGN KEY (`service_id`) REFERENCES `k8s_services` (`id`);

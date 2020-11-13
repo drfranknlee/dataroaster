@@ -63,6 +63,17 @@ public class K8sNamespace implements Serializable {
     @ManyToMany(mappedBy = "workflowK8sNamespaceSet")
     private Set<K8sServices> workflowK8sServicesSet = new HashSet<>();
 
+    @ManyToMany(mappedBy = "rdbK8sNamespaceSet")
+    private Set<K8sServices> rdbK8sServicesSet = new HashSet<>();
+
+    public Set<K8sServices> getRdbK8sServicesSet() {
+        return rdbK8sServicesSet;
+    }
+
+    public void setRdbK8sServicesSet(Set<K8sServices> rdbK8sServicesSet) {
+        this.rdbK8sServicesSet = rdbK8sServicesSet;
+    }
+
     public Set<K8sServices> getWorkflowK8sServicesSet() {
         return workflowK8sServicesSet;
     }
