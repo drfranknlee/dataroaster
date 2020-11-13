@@ -94,7 +94,7 @@ spec:
   containers:
     - name: prometheus
       securityContext:
-        runAsUser: root
+        runAsUser: 0
   storage:
     volumeClaimTemplate:
       spec:
