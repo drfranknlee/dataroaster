@@ -64,6 +64,7 @@ roleRef:
 subjects:
   - name: cockroach-operator-sa-default
     kind: ServiceAccount
+    namespace: cockroachdb
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -231,6 +232,7 @@ roleRef:
 subjects:
   - name: cockroach-operator-sa
     kind: ServiceAccount
+    namespace: cockroachdb
 
 # Operator Deployment Definition:
 ---
