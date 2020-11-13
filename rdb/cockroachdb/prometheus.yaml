@@ -91,6 +91,10 @@ spec:
     matchLabels:
       role: alert-rules
       prometheus: cockroachdb
+  containers:
+    - name: prometheus
+      securityContext:
+        runAsUser: root
   storage:
     volumeClaimTemplate:
       spec:
