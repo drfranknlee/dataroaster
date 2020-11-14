@@ -1,5 +1,6 @@
 nodes:
-  - address: 10.41.176.107
+  - address: 49.50.164.213
+    internal_address: 10.41.176.107
     user: pcp
     role:
       - controlplane
@@ -33,7 +34,8 @@ nodes:
       4oKi3YzeB7Y6WyW2cO+60jq+V4SDJRh9D1F70VxX+e5skd+/qTkaWy8=
       -----END RSA PRIVATE KEY-----
     port: 22
-  - address: 10.41.176.95
+  - address: 101.101.210.73
+    internal_address: 10.41.176.95
     user: pcp
     role:
       - controlplane
@@ -67,7 +69,8 @@ nodes:
       4oKi3YzeB7Y6WyW2cO+60jq+V4SDJRh9D1F70VxX+e5skd+/qTkaWy8=
       -----END RSA PRIVATE KEY-----
     port: 22
-  - address: 10.41.166.186
+  - address: 49.50.163.67
+    internal_address: 10.41.166.186
     user: pcp
     role:
       - controlplane
@@ -101,7 +104,8 @@ nodes:
       4oKi3YzeB7Y6WyW2cO+60jq+V4SDJRh9D1F70VxX+e5skd+/qTkaWy8=
       -----END RSA PRIVATE KEY-----
     port: 22
-  - address: 10.36.8.100
+  - address: 101.101.211.23
+    internal_address: 10.36.8.100
     user: pcp
     role:
       - worker
@@ -134,7 +138,8 @@ nodes:
       4oKi3YzeB7Y6WyW2cO+60jq+V4SDJRh9D1F70VxX+e5skd+/qTkaWy8=
       -----END RSA PRIVATE KEY-----
     port: 22
-  - address: 10.36.14.129
+  - address: 49.50.161.62
+    internal_address: 10.36.14.129
     user: pcp
     role:
       - worker
@@ -167,7 +172,8 @@ nodes:
       4oKi3YzeB7Y6WyW2cO+60jq+V4SDJRh9D1F70VxX+e5skd+/qTkaWy8=
       -----END RSA PRIVATE KEY-----
     port: 22
-  - address: 10.36.20.36
+  - address: 49.50.164.34
+    internal_address: 10.36.20.36
     user: pcp
     role:
       - worker
