@@ -1,6 +1,6 @@
 nodes:
   - address: 49.50.164.213
-    internal_address: 10.41.176.107
+    internal_address: master-node001
     user: pcp
     role:
       - controlplane
@@ -35,7 +35,7 @@ nodes:
       -----END RSA PRIVATE KEY-----
     port: 22
   - address: 101.101.210.73
-    internal_address: 10.41.176.95
+    internal_address: master-node002
     user: pcp
     role:
       - controlplane
@@ -70,7 +70,7 @@ nodes:
       -----END RSA PRIVATE KEY-----
     port: 22
   - address: 49.50.163.67
-    internal_address: 10.41.166.186
+    internal_address: master-node003
     user: pcp
     role:
       - controlplane
@@ -105,7 +105,7 @@ nodes:
       -----END RSA PRIVATE KEY-----
     port: 22
   - address: 101.101.211.23
-    internal_address: 10.36.8.100
+    internal_address: worker-node001
     user: pcp
     role:
       - worker
@@ -139,7 +139,7 @@ nodes:
       -----END RSA PRIVATE KEY-----
     port: 22
   - address: 49.50.161.62
-    internal_address: 10.36.14.129
+    internal_address: worker-node002
     user: pcp
     role:
       - worker
@@ -173,7 +173,7 @@ nodes:
       -----END RSA PRIVATE KEY-----
     port: 22
   - address: 49.50.164.34
-    internal_address: 10.36.20.36
+    internal_address: worker-node003
     user: pcp
     role:
       - worker
