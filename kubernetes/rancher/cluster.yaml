@@ -276,18 +276,18 @@ kubernetes_version: v1.17.6-rancher2-2
 # located here:
 # https://github.com/rancher/kontainer-driver-metadata/blob/master/rke/k8s_rke_system_images.go
 #
-system_images:
-  kubernetes: rancher/hyperkube:v1.10.3-rancher2
-  etcd: rancher/coreos-etcd:v3.1.12
-  alpine: rancher/rke-tools:v0.1.9
-  nginx_proxy: rancher/rke-tools:v0.1.9
-  cert_downloader: rancher/rke-tools:v0.1.9
-  kubernetes_services_sidecar: rancher/rke-tools:v0.1.9
-  kubedns: rancher/k8s-dns-kube-dns-amd64:1.14.8
-  dnsmasq: rancher/k8s-dns-dnsmasq-nanny-amd64:1.14.8
-  kubedns_sidecar: rancher/k8s-dns-sidecar-amd64:1.14.8
-  kubedns_autoscaler: rancher/cluster-proportional-autoscaler-amd64:1.0.0
-  pod_infra_container: rancher/pause-amd64:3.1
+#system_images:
+#  kubernetes: rancher/hyperkube:v1.10.3-rancher2
+#  etcd: rancher/coreos-etcd:v3.1.12
+#  alpine: rancher/rke-tools:v0.1.9
+#  nginx_proxy: rancher/rke-tools:v0.1.9
+#  cert_downloader: rancher/rke-tools:v0.1.9
+#  kubernetes_services_sidecar: rancher/rke-tools:v0.1.9
+#  kubedns: rancher/k8s-dns-kube-dns-amd64:1.14.8
+#  dnsmasq: rancher/k8s-dns-dnsmasq-nanny-amd64:1.14.8
+#  kubedns_sidecar: rancher/k8s-dns-sidecar-amd64:1.14.8
+#  kubedns_autoscaler: rancher/cluster-proportional-autoscaler-amd64:1.0.0
+#  pod_infra_container: rancher/pause-amd64:3.1
 
 services:
   etcd:
