@@ -245,7 +245,7 @@ ssh_agent_auth: true
 #     -----END RSA PRIVATE KEY-----
 
 # Set the name of the Kubernetes cluster
-cluster_name: mycluster
+cluster_name: cluster.local
 
 
 # The Kubernetes version used. The default versions of Kubernetes
