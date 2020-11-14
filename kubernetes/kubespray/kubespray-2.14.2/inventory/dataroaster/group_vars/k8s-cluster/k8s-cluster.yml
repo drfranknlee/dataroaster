@@ -145,9 +145,9 @@ dns_mode: coredns
 # Set manual server if using a custom cluster DNS server
 # manual_dns_server: 10.x.x.x
 # Enable nodelocal dns cache
-enable_nodelocaldns: true
-nodelocaldns_ip: 169.254.25.10
-nodelocaldns_health_port: 9254
+enable_nodelocaldns: false
+# nodelocaldns_ip: 169.254.25.10
+# nodelocaldns_health_port: 9254
 # nodelocaldns_external_zones:
 # - zones:
 #   - example.com
