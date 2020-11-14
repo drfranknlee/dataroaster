@@ -385,7 +385,7 @@ addon_job_timeout: 30
 
 # Specify network plugin-in (canal, calico, flannel, weave, or none)
 network:
-  plugin: calico
+  plugin: none
 
 # Specify DNS provider (coredns or kube-dns)
 dns:
