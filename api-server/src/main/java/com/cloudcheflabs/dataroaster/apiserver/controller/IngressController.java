@@ -59,8 +59,10 @@ public class IngressController {
         return ControllerUtils.doProcess(Roles.ROLE_PLATFORM_ADMIN, context, () -> {
             String clusterId = params.get("cluster_id");
             String serviceId = params.get("service_id");
+            String fromIp = params.get("from_ip");
+            String toIp = params.get("to_ip");
 
-            ingressControllerService.createMetalLB(Long.valueOf(clusterId), Long.valueOf(serviceId));
+            ingressControllerService.createMetalLB(Long.valueOf(clusterId), Long.valueOf(serviceId), fromIp, toIp);
             return ControllerUtils.successMessage();
         });
     }
