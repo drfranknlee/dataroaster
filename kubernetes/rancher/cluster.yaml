@@ -268,7 +268,7 @@ cluster_name: cluster.local
 # In case the kubernetes_version and kubernetes image in
 # system_images are defined, the system_images configuration
 # will take precedence over kubernetes_version.
-kubernetes_version: v1.17.6-rancher2-2
+kubernetes_version: v1.19.2-rancher1-1
 
 # System Images are defaulted to a tag that is mapped to a specific
 # Kubernetes Version and not required in a cluster.yml.
