@@ -4,7 +4,7 @@ server:
     context-path: /api
 
 authorizer:
-  url: http://localhost:8081
+  url: http://localhost:8091
 
 client:
   secret: YXBpOmhlbGxvQXV0aEFQSQ==
