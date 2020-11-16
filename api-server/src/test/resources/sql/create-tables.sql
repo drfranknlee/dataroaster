@@ -260,7 +260,7 @@ VALUES
 	11,
 	'SPARK_THRIFT_SERVER',
 	'Spark Thrift Server',
-	'3.0.0'
+	'3.0.1'
 );
 
 INSERT INTO k8s_services
