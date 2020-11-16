@@ -21,7 +21,7 @@
 		<scala.binary.version>2.12</scala.binary.version>
 
 		<!-- spark -->
-		<spark.version>3.0.0</spark.version>
+		<spark.version>3.0.1</spark.version>
 
 		<!-- hive -->
 		<hive.version>2.3.7</hive.version>

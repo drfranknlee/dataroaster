@@ -3,9 +3,9 @@
 cd {{ tempDirectory }};
 
 # download spark tar file from google drive.
-# https://drive.google.com/file/d/1_hpk6p_mgQ3gCA3ZV_cSUuEdt_yZlAaX/view?usp=sharing
-SPARK_FILE_NAME=spark-3.0.0-bin-custom-spark
-fileId=1_hpk6p_mgQ3gCA3ZV_cSUuEdt_yZlAaX
+# https://drive.google.com/file/d/1_7uLGjY1JjnNbdFc1F5bYkPxz7SmWS3O/view?usp=sharing
+SPARK_FILE_NAME=spark-3.0.1-bin-custom-spark
+fileId=1_7uLGjY1JjnNbdFc1F5bYkPxz7SmWS3O
 fileName=${SPARK_FILE_NAME}.tgz
 
 curl -sc /tmp/cookie "https://drive.google.com/uc?export=download&id=${fileId}" > /dev/null
@@ -96,7 +96,7 @@ spark-submit \
 --conf spark.kubernetes.file.upload.path=s3a://{{ bucket }}/spark-thrift-server \
 --conf spark.kubernetes.container.image.pullPolicy=Always \
 --conf spark.kubernetes.namespace=$NAMESPACE \
---conf spark.kubernetes.container.image=mykidong/spark:v3.0.0 \
+--conf spark.kubernetes.container.image=mykidong/spark:v3.0.1 \
 --conf spark.kubernetes.authenticate.driver.serviceAccountName=spark \
 --conf spark.hadoop.hive.metastore.client.connect.retry.delay=5 \
 --conf spark.hadoop.hive.metastore.client.socket.timeout=1800 \
