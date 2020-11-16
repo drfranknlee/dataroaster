@@ -132,7 +132,7 @@ public class IngressControllerServiceImpl implements IngressControllerService {
     }
 
     @Override
-    public void createMetalLB(long clusterId, long serviceId) {
+    public void createMetalLB(long clusterId, long serviceId, String fromIp, String toIp) {
         K8sServices k8sServices = k8sServicesDao.findOne(serviceId);
 
         // check the service type.
@@ -148,19 +148,24 @@ public class IngressControllerServiceImpl implements IngressControllerService {
         String path = k8sCluster.getK8sKubeconfigAdminSet().iterator().next().getSecretPath();
         Kubeconfig kubeconfigAdmin = secretDao.readSecret(path, Kubeconfig.class);
 
-        // get external ip.
-        String ip = resourceControlDao.getExternalIPForMetalLB(kubeconfigAdmin);
-        String[] tokens = ip.split("\\.");
-        int lastNum = Integer.valueOf(tokens[tokens.length - 1]);
-        int from = lastNum + 5;
-        int to = from + 5;
-        String prefix = ip.substring(0, ip.lastIndexOf("."));
-        String fromIP = prefix + "." + from;
-        String toIP = prefix + "." + to;
-
-        ExecutorUtils.runTask(() -> {
-            return LoadBalancerMetalLBHandler.create(k8sServices, kubeconfigAdmin, fromIP, toIP);
-        });
+        if(fromIp == null) {
+            // get external ip.
+            String ip = resourceControlDao.getExternalIPForMetalLB(kubeconfigAdmin);
+            String[] tokens = ip.split("\\.");
+            int lastNum = Integer.valueOf(tokens[tokens.length - 1]);
+            int from = lastNum + 5;
+            int to = from + 5;
+            String prefix = ip.substring(0, ip.lastIndexOf("."));
+            String fromIpFinal = prefix + "." + from;
+            String toIpFinal = prefix + "." + to;
+            ExecutorUtils.runTask(() -> {
+                return LoadBalancerMetalLBHandler.create(k8sServices, kubeconfigAdmin, fromIpFinal, toIpFinal);
+            });
+        } else {
+            ExecutorUtils.runTask(() -> {
+                return LoadBalancerMetalLBHandler.create(k8sServices, kubeconfigAdmin, fromIp, toIp);
+            });
+        }
     }
 
     @Override

@@ -1,5 +1,5 @@
 ---
-raw_disks: "/dev/sdc,/dev/sdd,/dev/sde"
+raw_disks: "/dev/xvdb,/dev/xvdc,/dev/xvdd"
 vg_name: "share"
 lv_name: "csi"
 require_lv_size: "100%FREE"

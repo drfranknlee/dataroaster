@@ -51,7 +51,7 @@ loadbalancer_apiserver_healthcheck_port: 8081
 ## If set the possible values are either 'gce', 'aws', 'azure', 'openstack', 'vsphere', 'oci', or 'external'
 ## When openstack is used make sure to source in the openstack credentials
 ## like you would do when using openstack-client before starting the playbook.
-cloud_provider: azure
+# cloud_provider: azure
 
 ## When cloud_provider is set to 'external', you can set the cloud controller to deploy
 ## Supported cloud controllers are: 'openstack' and 'vsphere'
