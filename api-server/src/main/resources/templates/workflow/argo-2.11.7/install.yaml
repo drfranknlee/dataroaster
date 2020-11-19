@@ -469,7 +469,7 @@ data:
     archiveLogs: true
     s3:
       bucket: mykidong
-      endpoint: mykidong-tenant.minio.cloudchef-labs.com
+      endpoint: {{ s3Endpoint }}
       insecure: false
       accessKeySecret:
         name: my-minio-cred
