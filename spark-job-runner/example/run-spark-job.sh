@@ -97,7 +97,11 @@ echo "pod name: $pod_name";
 status_phase=$(kubectl get po $pod_name -n ${NAMESPACE} -o jsonpath={..status.phase});
 echo "status phase: $status_phase";
 
-if [[ $status_phase == "Failed" ]]
+if [[ $status_phase == "Succeeded" ]]
+then
+   echo "job $pod_name succeeded...";
+   exit 0;
+elif [[ $status_phase == "Failed" ]]
 then
    echo "job $pod_name failed...";
    exit 1;
