@@ -12,6 +12,27 @@ spec:
             template: spark-job-runner
     - name: spark-job-runner
       container:
+        env:
+        - name: S3_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: smart-life-s3-secret
+              key: accesskey
+        - name: S3_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: smart-life-s3-secret
+              key: secretKey
+        - name: S3_BUCKET
+          valueFrom:
+            secretKeyRef:
+              name: smart-life-s3-secret
+              key: bucket
+        - name: S3_ENDPOINT
+          valueFrom:
+            secretKeyRef:
+              name: smart-life-s3-secret
+              key: endpoint
         image: mykidong/spark-job-runner:v3.0.1
         command: ["/opt/spark/run.sh"]
         args:
