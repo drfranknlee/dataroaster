@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: spark-example-
+spec:
+  entrypoint: main
+  templates:
+    - name: main
+      dag:
+        tasks:
+          - name: spark-delta-example
+            template: spark-job-runner
+    - name: spark-job-runner
+      container:
+        image: mykidong/spark-job-runner:v3.0.1
+        command: ["/opt/spark/run.sh"]
+        args:
+          - --run.job.path=example/spark-delta-example
+        imagePullPolicy: Always
