@@ -36,18 +36,18 @@ echo "ready to run main job..."
 chmod a+x ./${RUN_JOB_SH};
 ./${RUN_JOB_SH};
 
-# check job status after job completed.
-export JOB_STATUS=$(cat job-status.txt);
-echo "JOB_STATUS: ${JOB_STATUS}";
-if [[ ${JOB_STATUS} == "Succeeded" ]]
-then
-   exit 0;
-elif [[ ${JOB_STATUS} == "Failed" ]]
-then
-   exit 1;
-else
-   echo "abnormal exit...";
-   exit 1;
-fi
+## check job status after job completed.
+#export JOB_STATUS=$(cat job-status.txt);
+#echo "JOB_STATUS: ${JOB_STATUS}";
+#if [[ ${JOB_STATUS} == "Succeeded" ]]
+#then
+#   exit 0;
+#elif [[ ${JOB_STATUS} == "Failed" ]]
+#then
+#   exit 1;
+#else
+#   echo "abnormal exit...";
+#   exit 1;
+#fi
 
 

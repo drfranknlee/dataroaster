@@ -89,14 +89,14 @@ spark-submit \
 file://$(pwd)/${SPARK_JOB_JAR} \
 --master ${MASTER};
 
-
-# check pod job status.
-pod_name=$(kubectl get po -n ${NAMESPACE} | grep ${JOB_NAME} | awk '{print $1}');
-echo "pod name: $pod_name";
-
-status_phase=$(kubectl get po $pod_name -n ${NAMESPACE} -o jsonpath={..status.phase});
-echo "status phase: $status_phase";
-
-# write job status to file.
-touch job-status.txt;
-echo "$status_phase" > job-status.txt;
+#
+## check pod job status.
+#pod_name=$(kubectl get po -n ${NAMESPACE} | grep ${JOB_NAME} | awk '{print $1}');
+#echo "pod name: $pod_name";
+#
+#status_phase=$(kubectl get po $pod_name -n ${NAMESPACE} -o jsonpath={..status.phase});
+#echo "status phase: $status_phase";
+#
+## write job status to file.
+#touch job-status.txt;
+#echo "$status_phase" > job-status.txt;
