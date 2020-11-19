@@ -7,7 +7,6 @@ RUN dpkg-reconfigure -f noninteractive tzdata
 
 RUN useradd -ms /bin/bash -d ${APP_HOME} spark
 
-COPY enc ${APP_HOME}/
 COPY run.sh ${APP_HOME}/
 RUN chmod a+x ${APP_HOME}/*.sh
 
