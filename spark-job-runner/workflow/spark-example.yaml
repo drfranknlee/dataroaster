@@ -17,7 +17,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: smart-life-s3-secret
-              key: accesskey
+              key: accessKey
         - name: S3_SECRET_KEY
           valueFrom:
             secretKeyRef:
