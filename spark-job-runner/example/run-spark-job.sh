@@ -97,5 +97,6 @@ echo "pod name: $pod_name";
 status_phase=$(kubectl get po $pod_name -n ${NAMESPACE} -o jsonpath={..status.phase});
 echo "status phase: $status_phase";
 
-# set job status.
-export JOB_STATUS=${status_phase}
+# write job status to file.
+touch job-status.txt;
+echo "$status_phase" > job-status.txt;
