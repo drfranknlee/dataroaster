@@ -31,11 +31,21 @@ export RUN_JOB_SH=run-job.sh
 # download run job shell file from s3.
 aws s3api --profile=minio --endpoint=$S3_ENDPOINT get-object --bucket ${S3_BUCKET} --key ${RUN_JOB_PATH} ./${RUN_JOB_SH};
 
+export JOB_STATUS=NOT_RUNNING
 
 # run job.
-chmod a+x ./${RUN_JOB_SH};
-
 echo "ready to run main job..."
+chmod a+x ./${RUN_JOB_SH};
 ./${RUN_JOB_SH};
+
+# check job status.
+echo "JOB_STATUS: ${JOB_STATUS}";
+if [[ ${JOB_STATUS} == "Succeeded" ]]
+then
+   exit 0;
+elif [[ ${JOB_STATUS} == "Failed" ]]
+then
+   exit 1;
+fi
 
 
