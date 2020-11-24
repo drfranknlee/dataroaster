@@ -10,7 +10,8 @@ RUN apt-get --allow-unauthenticated -o Acquire::Check-Valid-Until=false update &
 RUN pip install sasl && \
     pip install thrift && \
     pip install thrift-sasl && \
-    pip install PyHive
+    pip install PyHive && \
+    pip install boto3 paramiko nltk scipy numpy scikit-learn pandas
 
 USER jovyan
 WORKDIR $HOME

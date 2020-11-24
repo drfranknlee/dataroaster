@@ -16,9 +16,10 @@ cat <<EOF > config.yaml
 proxy:
   secretToken: $(openssl rand -hex 32)
 singleuser:
-  extraEnv:
-    GRANT_SUDO: "yes"
-    NOTEBOOK_ARGS: "--allow-root"
+  image:
+    name: mykidong/dataroaster-jupyter
+    tag: '0.9.1'
+    pullPolicy: Always
 EOF
 
 
