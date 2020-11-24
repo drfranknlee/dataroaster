@@ -19,7 +19,6 @@ singleuser:
   extraEnv:
     GRANT_SUDO: "yes"
     NOTEBOOK_ARGS: "--allow-root"
-  uid: 0
 EOF
 
 
