@@ -15,6 +15,11 @@ export KUBECONFIG={{ kubeconfig }};
 cat <<EOF > config.yaml
 proxy:
   secretToken: $(openssl rand -hex 32)
+singleuser:
+  extraEnv:
+    GRANT_SUDO: "yes"
+    NOTEBOOK_ARGS: "--allow-root"
+  uid: 0
 EOF
 
 
