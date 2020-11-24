@@ -9,7 +9,6 @@ RUN apt-get --allow-unauthenticated -o Acquire::Check-Valid-Until=false update &
 
 RUN pip install pure-sasl && \
     pip install thrift && \
-    pip install thrift-sasl && \
     pip install 'pyhive[hive]' && \
     pip install 'pyhive[presto]' && \
     pip install boto3 paramiko nltk scipy numpy scikit-learn pandas
