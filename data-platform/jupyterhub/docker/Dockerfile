@@ -7,12 +7,10 @@ RUN apt-get --allow-unauthenticated -o Acquire::Check-Valid-Until=false update &
     apt-get -y install gcc && \
     apt-get install libsasl2-2 libsasl2-dev -y
 
-RUN /opt/conda/bin/pip install pure-sasl && \
-    /opt/conda/bin/pip install thrift && \
-    /opt/conda/bin/pip install 'pyhive[hive]' && \
+RUN /opt/conda/bin/pip install 'pyhive[hive]' && \
     /opt/conda/bin/pip install 'pyhive[presto]' && \
     /opt/conda/bin/pip install boto3 paramiko nltk scipy numpy scikit-learn pandas && \
-    /opt/conda/bin/pip uninstall sasl && \
+    /opt/conda/bin/pip uninstall sasl -y && \
     /opt/conda/bin/pip install pure-sasl
 
 USER jovyan
