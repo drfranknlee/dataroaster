@@ -2,11 +2,6 @@ FROM jupyterhub/k8s-singleuser-sample:0.9.1
 
 USER 0
 RUN apt-get --allow-unauthenticated -o Acquire::Check-Valid-Until=false update
-RUN apt-get install gnupg gnupg2 gnupg1
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 8B48AD6246925553
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 7638D0442B90D010
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 7638D0442B90D010
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys CBF8D6FD518E17E1
 RUN apt-get install libsasl2-dev
 RUN pip install sasl
 RUN pip install thrift
