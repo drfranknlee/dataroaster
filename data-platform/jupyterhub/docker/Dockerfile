@@ -7,7 +7,7 @@ RUN apt-get --allow-unauthenticated -o Acquire::Check-Valid-Until=false update &
     apt-get -y install gcc && \
     apt-get install libsasl2-2 libsasl2-dev -y
 
-RUN pip install sasl && \
+RUN pip install pure-sasl && \
     pip install thrift && \
     pip install thrift-sasl && \
     pip install 'pyhive[hive]' && \
