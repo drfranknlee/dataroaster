@@ -5,7 +5,7 @@ RUN apt-get --allow-unauthenticated -o Acquire::Check-Valid-Until=false update &
     apt-get install --reinstall build-essential -y && \
     apt-get install -y apt-utils && \
     apt-get -y install gcc && \
-    apt-get install libsasl2-dev -y
+    apt-get install sasl2-bin -y 
 
 RUN pip install sasl && \
     pip install thrift && \
