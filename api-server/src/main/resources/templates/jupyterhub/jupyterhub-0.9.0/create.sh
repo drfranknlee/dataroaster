@@ -30,9 +30,6 @@ auth:
     access: true
     users:
     - mykidong
-  whitelist:
-    users:
-    - mykidong
 EOF
 
 
