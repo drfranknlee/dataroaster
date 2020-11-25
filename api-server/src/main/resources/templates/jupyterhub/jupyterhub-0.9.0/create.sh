@@ -20,20 +20,19 @@ singleuser:
     name: mykidong/dataroaster-jupyter
     tag: '0.9.1'
     pullPolicy: Always
-hub:
-  extraEnv:
-    OAUTH2_AUTHORIZE_URL: http://192.168.10.102:8091/authorizer/oauth/authorize
-    OAUTH2_TOKEN_URL: http://192.168.10.102:8091/authorizer/oauth/token
-    OAUTH_CALLBACK_URL: http://118.67.128.161:8888/hub/oauth_callback
-    OAUTH2_TLS_VERIFY: false
 auth:
-  type: custom
-  custom:
-    className: oauthenticator.generic.GenericOAuthenticator
-    config:
-      client_id: "api"
-      client_secret: "helloAuthAPI"
-      token_url: http://192.168.10.102:8091/authorizer/oauth/token
+  type: github
+  github:
+    clientId: "fda465239bb2522f9b5b"
+    clientSecret: "8fc50987b316939a724954bf3b2104ef4ae6271c"
+    callbackUrl: "http://118.67.128.161:8888/hub/oauth_callback"
+  admin:
+    access: true
+    users:
+    - mykidong
+  whitelist:
+    users:
+    - mykidong
 EOF
 
 
