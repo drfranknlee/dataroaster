@@ -31,7 +31,6 @@ auth:
   custom:
     className: oauthenticator.generic.GenericOAuthenticator
     config:
-      login_service: "dataroaster"
       client_id: "api"
       client_secret: "helloAuthAPI"
       token_url: http://192.168.10.102:8091/authorizer/oauth/token
