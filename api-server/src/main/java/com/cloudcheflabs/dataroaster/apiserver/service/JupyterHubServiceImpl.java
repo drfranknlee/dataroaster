@@ -72,7 +72,8 @@ public class JupyterHubServiceImpl implements JupyterHubService {
     @Override
     public void createJupyterHub(long namespaceId,
                                  long serviceId,
-                                 int storage) {
+                                 int storage,
+                                 String config) {
         K8sServices k8sServices = k8sServicesDao.findOne(serviceId);
 
         // check if it is Object Storage service.
@@ -94,7 +95,8 @@ public class JupyterHubServiceImpl implements JupyterHubService {
             return JupyterHubHandler.create(k8sServices,
                     kubeconfig,
                     namespace,
-                    storage);
+                    storage,
+                    config);
         });
     }
 

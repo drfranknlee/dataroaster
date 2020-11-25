@@ -15,22 +15,13 @@ export KUBECONFIG={{ kubeconfig }};
 cat <<EOF > config.yaml
 proxy:
   secretToken: $(openssl rand -hex 32)
-singleuser:
-  image:
-    name: mykidong/dataroaster-jupyter
-    tag: '0.9.1'
-    pullPolicy: Always
-auth:
-  type: github
-  github:
-    clientId: "fda465239bb2522f9b5b"
-    clientSecret: "8fc50987b316939a724954bf3b2104ef4ae6271c"
-    callbackUrl: "http://118.67.128.161:8888/hub/oauth_callback"
-  admin:
-    access: true
-    users:
-    - mykidong
 EOF
+
+# append additional configuration to config.
+cat tempconfig.yaml >> config.yaml
+
+echo "config yaml: "
+cat config.yaml
 
 
 # install jupyterhub.

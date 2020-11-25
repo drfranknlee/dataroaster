@@ -9,6 +9,7 @@ import com.cloudcheflabs.dataroaster.apiserver.util.TemplateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.util.*;
 
 public class JupyterHubHandler {
@@ -45,9 +46,25 @@ public class JupyterHubHandler {
     public static String create(K8sServices k8sServices,
                                 Kubeconfig kubeconfig,
                                 String namespace,
-                                int storage) {
+                                int storage,
+                                String config) {
 
         String tempDirectory = moveFiles(k8sServices, kubeconfig);
+
+        // create temp config yaml.
+        String tempConfig = "tempconfig.yaml";
+        String tempConfigPath = tempDirectory + "/" + tempConfig;
+        if(config == null) {
+            File tempConfigFile = new File(tempConfigPath);
+            try {
+                tempConfigFile.createNewFile();
+            } catch (Exception e) {
+                LOG.error(e.getMessage());
+                throw new RuntimeException(e);
+            }
+        } else {
+            FileUtils.stringToFile(config, tempConfigPath, false);
+        }
 
         substitute(tempDirectory,
                 namespace,

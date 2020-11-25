@@ -35,10 +35,12 @@ public class JupyterHubController {
             String namespaceId = params.get("namespace_id");
             String serviceId = params.get("service_id");
             String storage = params.get("storage");
+            String config = params.get("config");
 
             jupyterHubService.createJupyterHub(Long.valueOf(namespaceId),
                     Long.valueOf(serviceId),
-                    Integer.valueOf(storage));
+                    Integer.valueOf(storage),
+                    config);
             return ControllerUtils.successMessage();
         });
     }
