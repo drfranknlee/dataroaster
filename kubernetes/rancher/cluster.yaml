@@ -1,5 +1,6 @@
 nodes:
-  - address: 10.0.2.4
+  - address: 52.141.62.98
+    internal_address: 10.0.2.4
     hostname_override: maya-0
     user: pcp
     role:
@@ -35,7 +36,8 @@ nodes:
       1CA3niwhUQoI/X3F0+gdFrxv/FnxF7JiGULSFfPJtStCP2v6g06Vbw==
       -----END RSA PRIVATE KEY-----
     port: 22
-  - address: 10.0.2.5
+  - address: 52.141.63.222
+    internal_address: 10.0.2.5
     hostname_override: maya-1
     user: pcp
     role:
@@ -71,7 +73,8 @@ nodes:
       1CA3niwhUQoI/X3F0+gdFrxv/FnxF7JiGULSFfPJtStCP2v6g06Vbw==
       -----END RSA PRIVATE KEY-----
     port: 22
-  - address: 10.0.2.6
+  - address: 52.231.38.217
+    internal_address: 10.0.2.6
     hostname_override: maya-2
     user: pcp
     role:
