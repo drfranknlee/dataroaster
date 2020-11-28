@@ -1,218 +1,122 @@
 nodes:
-  - address: 101.101.219.42
-    internal_address: 192.168.10.21
-    hostname_override: master-node001
+  - address: 10.0.2.4
+    hostname_override: maya-0
     user: pcp
     role:
       - controlplane
       - etcd
+      - worker
     ssh_key: |-
       -----BEGIN RSA PRIVATE KEY-----
-      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
+      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
       -----END RSA PRIVATE KEY-----
     port: 22
-  - address: 101.101.208.247
-    internal_address: 192.168.10.22
-    hostname_override: master-node002
+  - address: 10.0.2.5
+    hostname_override: maya-1
     user: pcp
     role:
       - controlplane
       - etcd
+      - worker
     ssh_key: |-
       -----BEGIN RSA PRIVATE KEY-----
-      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
+      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
       -----END RSA PRIVATE KEY-----
     port: 22
-  - address: 49.50.173.41
-    internal_address: 192.168.10.23
-    hostname_override: master-node003
+  - address: 10.0.2.6
+    hostname_override: maya-2
     user: pcp
     role:
       - controlplane
       - etcd
-    ssh_key: |-
-      -----BEGIN RSA PRIVATE KEY-----
-      MIIEpQIBAAKCAQEAyg54YSTS/TVx9olYdYjP4RL7NhTofmgwbG10diNjlRvpFoMg
-      WIc3PqBavd76ODF5rDUP2Gw2sdxcDBfZMfVKxK9Bup+svHEGQZ/qNfMiZnl4Gbhq
-      IPUBKhQRNGTBlDo8AWDkC1OrDXOMgmE3GRpYNYmSMIHxrqsUZ5NBTHJh/lwOwLhh
-      618P1a71098QntMer/zNM4bAb+wNa+hiTEaefIIWJIi3kytxpR0PuiyO7ToqRWmU
-      LImXyczsSx6JGSk+hfzH/CYw/UEMGAi4BAGLJi8m0x+T3DyXnvwH53GpP5r+zERP
-      C4Uk5kBklt0jiIEbipZn21zhi0aG3catKDjLjQIDAQABAoIBAQCXoSZLWFQRerMM
-      HOPKSCIgOJtWaXhTrCJyq+0S3tnTQv+3Si3S4Z3enH2cMSG7W72AMs2yTvr4nHJj
-      DN6MNBSo5xA/WaZKP9M/Gh+r3sp49jzfqFnUY6g9CJQkqlvuvYjcS/a2XVJnJMhT
-      61pqty9s9dFEH6/bsTz9wS7mjIvnUZzkr2enKcGzH6ujerksbVM6ZpFe16r0lB+K
-      Y3zGvQqZgB5BG4ET1VdOQRiTbX6UrRv2Q5OFO1bj2XF7uetKjUCmAQL4J57Q7Gl2
-      A6vwUlPNWaCFRuW8qiVvyqqalSk2nCWq43P+kU+jb7wMFlxgYJ0oBDN5ZceH9/PM
-      rSIXrkLhAoGBAPzsru9e1sqpU4zhvwb3wRkALzsf5r9cwzrFqRDN5Wc965HZQ8tB
-      kZ5pvTiyLroFbiCXbhVu9+1JP/MtSZBeq06R+AAo5JahUxQ49TjEo2yOF3naYW/N
-      t5wLmAggxZJ8M8cxqLDD4M8tuG0e+TjYgQbFRY5163+EcStqmecItTt5AoGBAMyD
-      cTkXHsqfBu4F0z8MI2zZ63syiJ41w33LtvSJc8lSd+Pp2/VCd42OcBd4Oh50dd8t
-      POPROYz7bKLj9oJOat6Q+DHDCJmspCPX3b4YjPYFUUXHH76hFwANdsG/tXRJlSL3
-      AtWDRZZsbaF3yLjX4LzLGNUz8dq3m1iFchqgVPe1AoGBAIPf+Lpwjbfvn9O2JP9C
-      ERmzAe1nDc47VMQBKczMPk+ddoV+bh29m2qooXO9XCW8DRbLPifIy1aaudBWjaPL
-      6LA35cJXkBCGHyZNKHcn+DnywITVe7Zq4dBoLyYVyE4/mlPDLby09TOxGBc1bibY
-      pDXeiAzmqRq8+LD1jTdsT+qpAoGAbPbjjo15BHAymwNTiFYJUefSBXPpQpJWtGGj
-      +yp5HJzp7+8cGNLvK+bmZjrSjIN0ghJyTNefGDSlryxSnR725drLwoetv2MymT5c
-      kPo3sKUopkrv6Pufa5HA4n4oSesioNyHEAe/PeRLjSprMcEjprN3abEhfW0yQbno
-      D7O5UbkCgYEAr9iwlkOc/xeT3JsNszacC12Lkjtv1J+OsyVinmjUfajZqX2KQQXv
-      dbrzRhGGG3ouI7V0zedyd1KG30RDuLw1TrZ0yReoU6kPWFHjipi3E/E5FkWkyjAE
-      4oKi3YzeB7Y6WyW2cO+60jq+V4SDJRh9D1F70VxX+e5skd+/qTkaWy8=
-      -----END RSA PRIVATE KEY-----
-    port: 22
-  - address: 101.101.211.23
-    internal_address: 192.168.10.31
-    hostname_override: worker-node001
-    user: pcp
-    role:
       - worker
     ssh_key: |-
       -----BEGIN RSA PRIVATE KEY-----
-      MIIEpQIBAAKCAQEAyg54YSTS/TVx9olYdYjP4RL7NhTofmgwbG10diNjlRvpFoMg
-      WIc3PqBavd76ODF5rDUP2Gw2sdxcDBfZMfVKxK9Bup+svHEGQZ/qNfMiZnl4Gbhq
-      IPUBKhQRNGTBlDo8AWDkC1OrDXOMgmE3GRpYNYmSMIHxrqsUZ5NBTHJh/lwOwLhh
-      618P1a71098QntMer/zNM4bAb+wNa+hiTEaefIIWJIi3kytxpR0PuiyO7ToqRWmU
-      LImXyczsSx6JGSk+hfzH/CYw/UEMGAi4BAGLJi8m0x+T3DyXnvwH53GpP5r+zERP
-      C4Uk5kBklt0jiIEbipZn21zhi0aG3catKDjLjQIDAQABAoIBAQCXoSZLWFQRerMM
-      HOPKSCIgOJtWaXhTrCJyq+0S3tnTQv+3Si3S4Z3enH2cMSG7W72AMs2yTvr4nHJj
-      DN6MNBSo5xA/WaZKP9M/Gh+r3sp49jzfqFnUY6g9CJQkqlvuvYjcS/a2XVJnJMhT
-      61pqty9s9dFEH6/bsTz9wS7mjIvnUZzkr2enKcGzH6ujerksbVM6ZpFe16r0lB+K
-      Y3zGvQqZgB5BG4ET1VdOQRiTbX6UrRv2Q5OFO1bj2XF7uetKjUCmAQL4J57Q7Gl2
-      A6vwUlPNWaCFRuW8qiVvyqqalSk2nCWq43P+kU+jb7wMFlxgYJ0oBDN5ZceH9/PM
-      rSIXrkLhAoGBAPzsru9e1sqpU4zhvwb3wRkALzsf5r9cwzrFqRDN5Wc965HZQ8tB
-      kZ5pvTiyLroFbiCXbhVu9+1JP/MtSZBeq06R+AAo5JahUxQ49TjEo2yOF3naYW/N
-      t5wLmAggxZJ8M8cxqLDD4M8tuG0e+TjYgQbFRY5163+EcStqmecItTt5AoGBAMyD
-      cTkXHsqfBu4F0z8MI2zZ63syiJ41w33LtvSJc8lSd+Pp2/VCd42OcBd4Oh50dd8t
-      POPROYz7bKLj9oJOat6Q+DHDCJmspCPX3b4YjPYFUUXHH76hFwANdsG/tXRJlSL3
-      AtWDRZZsbaF3yLjX4LzLGNUz8dq3m1iFchqgVPe1AoGBAIPf+Lpwjbfvn9O2JP9C
-      ERmzAe1nDc47VMQBKczMPk+ddoV+bh29m2qooXO9XCW8DRbLPifIy1aaudBWjaPL
-      6LA35cJXkBCGHyZNKHcn+DnywITVe7Zq4dBoLyYVyE4/mlPDLby09TOxGBc1bibY
-      pDXeiAzmqRq8+LD1jTdsT+qpAoGAbPbjjo15BHAymwNTiFYJUefSBXPpQpJWtGGj
-      +yp5HJzp7+8cGNLvK+bmZjrSjIN0ghJyTNefGDSlryxSnR725drLwoetv2MymT5c
-      kPo3sKUopkrv6Pufa5HA4n4oSesioNyHEAe/PeRLjSprMcEjprN3abEhfW0yQbno
-      D7O5UbkCgYEAr9iwlkOc/xeT3JsNszacC12Lkjtv1J+OsyVinmjUfajZqX2KQQXv
-      dbrzRhGGG3ouI7V0zedyd1KG30RDuLw1TrZ0yReoU6kPWFHjipi3E/E5FkWkyjAE
-      4oKi3YzeB7Y6WyW2cO+60jq+V4SDJRh9D1F70VxX+e5skd+/qTkaWy8=
-      -----END RSA PRIVATE KEY-----
-    port: 22
-  - address: 49.50.161.62
-    internal_address: 192.168.10.32
-    hostname_override: worker-node002
-    user: pcp
-    role:
-      - worker
-    ssh_key: |-
-      -----BEGIN RSA PRIVATE KEY-----
-      MIIEpQIBAAKCAQEAyg54YSTS/TVx9olYdYjP4RL7NhTofmgwbG10diNjlRvpFoMg
-      WIc3PqBavd76ODF5rDUP2Gw2sdxcDBfZMfVKxK9Bup+svHEGQZ/qNfMiZnl4Gbhq
-      IPUBKhQRNGTBlDo8AWDkC1OrDXOMgmE3GRpYNYmSMIHxrqsUZ5NBTHJh/lwOwLhh
-      618P1a71098QntMer/zNM4bAb+wNa+hiTEaefIIWJIi3kytxpR0PuiyO7ToqRWmU
-      LImXyczsSx6JGSk+hfzH/CYw/UEMGAi4BAGLJi8m0x+T3DyXnvwH53GpP5r+zERP
-      C4Uk5kBklt0jiIEbipZn21zhi0aG3catKDjLjQIDAQABAoIBAQCXoSZLWFQRerMM
-      HOPKSCIgOJtWaXhTrCJyq+0S3tnTQv+3Si3S4Z3enH2cMSG7W72AMs2yTvr4nHJj
-      DN6MNBSo5xA/WaZKP9M/Gh+r3sp49jzfqFnUY6g9CJQkqlvuvYjcS/a2XVJnJMhT
-      61pqty9s9dFEH6/bsTz9wS7mjIvnUZzkr2enKcGzH6ujerksbVM6ZpFe16r0lB+K
-      Y3zGvQqZgB5BG4ET1VdOQRiTbX6UrRv2Q5OFO1bj2XF7uetKjUCmAQL4J57Q7Gl2
-      A6vwUlPNWaCFRuW8qiVvyqqalSk2nCWq43P+kU+jb7wMFlxgYJ0oBDN5ZceH9/PM
-      rSIXrkLhAoGBAPzsru9e1sqpU4zhvwb3wRkALzsf5r9cwzrFqRDN5Wc965HZQ8tB
-      kZ5pvTiyLroFbiCXbhVu9+1JP/MtSZBeq06R+AAo5JahUxQ49TjEo2yOF3naYW/N
-      t5wLmAggxZJ8M8cxqLDD4M8tuG0e+TjYgQbFRY5163+EcStqmecItTt5AoGBAMyD
-      cTkXHsqfBu4F0z8MI2zZ63syiJ41w33LtvSJc8lSd+Pp2/VCd42OcBd4Oh50dd8t
-      POPROYz7bKLj9oJOat6Q+DHDCJmspCPX3b4YjPYFUUXHH76hFwANdsG/tXRJlSL3
-      AtWDRZZsbaF3yLjX4LzLGNUz8dq3m1iFchqgVPe1AoGBAIPf+Lpwjbfvn9O2JP9C
-      ERmzAe1nDc47VMQBKczMPk+ddoV+bh29m2qooXO9XCW8DRbLPifIy1aaudBWjaPL
-      6LA35cJXkBCGHyZNKHcn+DnywITVe7Zq4dBoLyYVyE4/mlPDLby09TOxGBc1bibY
-      pDXeiAzmqRq8+LD1jTdsT+qpAoGAbPbjjo15BHAymwNTiFYJUefSBXPpQpJWtGGj
-      +yp5HJzp7+8cGNLvK+bmZjrSjIN0ghJyTNefGDSlryxSnR725drLwoetv2MymT5c
-      kPo3sKUopkrv6Pufa5HA4n4oSesioNyHEAe/PeRLjSprMcEjprN3abEhfW0yQbno
-      D7O5UbkCgYEAr9iwlkOc/xeT3JsNszacC12Lkjtv1J+OsyVinmjUfajZqX2KQQXv
-      dbrzRhGGG3ouI7V0zedyd1KG30RDuLw1TrZ0yReoU6kPWFHjipi3E/E5FkWkyjAE
-      4oKi3YzeB7Y6WyW2cO+60jq+V4SDJRh9D1F70VxX+e5skd+/qTkaWy8=
-      -----END RSA PRIVATE KEY-----
-    port: 22
-  - address: 49.50.164.34
-    internal_address: 192.168.10.33
-    hostname_override: worker-node003
-    user: pcp
-    role:
-      - worker
-    ssh_key: |-
-      -----BEGIN RSA PRIVATE KEY-----
-      MIIEpQIBAAKCAQEAyg54YSTS/TVx9olYdYjP4RL7NhTofmgwbG10diNjlRvpFoMg
-      WIc3PqBavd76ODF5rDUP2Gw2sdxcDBfZMfVKxK9Bup+svHEGQZ/qNfMiZnl4Gbhq
-      IPUBKhQRNGTBlDo8AWDkC1OrDXOMgmE3GRpYNYmSMIHxrqsUZ5NBTHJh/lwOwLhh
-      618P1a71098QntMer/zNM4bAb+wNa+hiTEaefIIWJIi3kytxpR0PuiyO7ToqRWmU
-      LImXyczsSx6JGSk+hfzH/CYw/UEMGAi4BAGLJi8m0x+T3DyXnvwH53GpP5r+zERP
-      C4Uk5kBklt0jiIEbipZn21zhi0aG3catKDjLjQIDAQABAoIBAQCXoSZLWFQRerMM
-      HOPKSCIgOJtWaXhTrCJyq+0S3tnTQv+3Si3S4Z3enH2cMSG7W72AMs2yTvr4nHJj
-      DN6MNBSo5xA/WaZKP9M/Gh+r3sp49jzfqFnUY6g9CJQkqlvuvYjcS/a2XVJnJMhT
-      61pqty9s9dFEH6/bsTz9wS7mjIvnUZzkr2enKcGzH6ujerksbVM6ZpFe16r0lB+K
-      Y3zGvQqZgB5BG4ET1VdOQRiTbX6UrRv2Q5OFO1bj2XF7uetKjUCmAQL4J57Q7Gl2
-      A6vwUlPNWaCFRuW8qiVvyqqalSk2nCWq43P+kU+jb7wMFlxgYJ0oBDN5ZceH9/PM
-      rSIXrkLhAoGBAPzsru9e1sqpU4zhvwb3wRkALzsf5r9cwzrFqRDN5Wc965HZQ8tB
-      kZ5pvTiyLroFbiCXbhVu9+1JP/MtSZBeq06R+AAo5JahUxQ49TjEo2yOF3naYW/N
-      t5wLmAggxZJ8M8cxqLDD4M8tuG0e+TjYgQbFRY5163+EcStqmecItTt5AoGBAMyD
-      cTkXHsqfBu4F0z8MI2zZ63syiJ41w33LtvSJc8lSd+Pp2/VCd42OcBd4Oh50dd8t
-      POPROYz7bKLj9oJOat6Q+DHDCJmspCPX3b4YjPYFUUXHH76hFwANdsG/tXRJlSL3
-      AtWDRZZsbaF3yLjX4LzLGNUz8dq3m1iFchqgVPe1AoGBAIPf+Lpwjbfvn9O2JP9C
-      ERmzAe1nDc47VMQBKczMPk+ddoV+bh29m2qooXO9XCW8DRbLPifIy1aaudBWjaPL
-      6LA35cJXkBCGHyZNKHcn+DnywITVe7Zq4dBoLyYVyE4/mlPDLby09TOxGBc1bibY
-      pDXeiAzmqRq8+LD1jTdsT+qpAoGAbPbjjo15BHAymwNTiFYJUefSBXPpQpJWtGGj
-      +yp5HJzp7+8cGNLvK+bmZjrSjIN0ghJyTNefGDSlryxSnR725drLwoetv2MymT5c
-      kPo3sKUopkrv6Pufa5HA4n4oSesioNyHEAe/PeRLjSprMcEjprN3abEhfW0yQbno
-      D7O5UbkCgYEAr9iwlkOc/xeT3JsNszacC12Lkjtv1J+OsyVinmjUfajZqX2KQQXv
-      dbrzRhGGG3ouI7V0zedyd1KG30RDuLw1TrZ0yReoU6kPWFHjipi3E/E5FkWkyjAE
-      4oKi3YzeB7Y6WyW2cO+60jq+V4SDJRh9D1F70VxX+e5skd+/qTkaWy8=
+      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
       -----END RSA PRIVATE KEY-----
     port: 22
 
+
+cloud_provider:
+  name: azure
+  azureCloudProvider:
+    aadClientId: 39f72fe1-7136-480e-ae01-f144e031702f
+    aadClientSecret: icarus
+    resourceGroup: openebs
+    subscriptionId: d87fad0a-1906-46a7-814a-a17e15427903
+    tenantId: 7414e334-a9c3-46a2-8db5-7b59083b240f
 
 # If set to true, RKE will not fail when unsupported Docker version
 # are found
