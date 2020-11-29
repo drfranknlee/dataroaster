@@ -57,7 +57,6 @@ check_msn_is_online() {
           then
               printf "selected msn - status: %s, name: %s\n" "${MSN_STATUS}" "${MSN_NAME}";
               MSN_IS_ONLINE="True";
-              echo "MSN_IS_ONLINE: ${MSN_IS_ONLINE}";
           fi
       done
       {% endraw %}
@@ -69,6 +68,7 @@ do
     echo "waiting for msn being online...";
     sleep 2;
     check_msn_is_online;
+    echo "MSN_IS_ONLINE: ${MSN_IS_ONLINE}";
 done
 
 
