@@ -8,6 +8,7 @@ kubectl delete -f .;
 
 # make sure all the pools are removed.
 MSP=$(kubectl get msp -n mayastor | grep pool | awk '{print $1}');
+echo "MSP: ${MSP}";
 
 # Set space as the delimiter
 IFS=' ';
