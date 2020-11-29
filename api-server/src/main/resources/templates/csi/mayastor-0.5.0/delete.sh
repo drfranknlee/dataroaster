@@ -11,7 +11,7 @@ MSP=$(kubectl get msp -n mayastor | grep pool | awk '{print $1}');
 echo "MSP: ${MSP}";
 
 # Set space as the delimiter
-IFS=' ';
+IFS='\n';
 
 #Read the split words into an array based on space delimiter
 read -a MSP_ARRAY <<< "${MSP}";
