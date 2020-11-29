@@ -63,7 +63,7 @@ check_msn_is_online() {
     fi
 }
 
-while [[ MSN_IS_ONLINE != "True" ]];
+while [[ ${MSN_IS_ONLINE} != "True" ]];
 do
     echo "waiting for msn being online...";
     sleep 2;
