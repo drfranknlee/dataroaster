@@ -4,6 +4,7 @@ import com.cloudcheflabs.dataroaster.apiserver.domain.Kubeconfig;
 import com.cloudcheflabs.dataroaster.apiserver.domain.model.K8sServices;
 import com.cloudcheflabs.dataroaster.apiserver.kubernetes.ExecutorUtils;
 import com.cloudcheflabs.dataroaster.apiserver.kubernetes.handler.CsiHandler;
+import com.cloudcheflabs.dataroaster.apiserver.kubernetes.handler.MayastorHandler;
 import com.cloudcheflabs.dataroaster.apiserver.util.JsonUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.PersistentVolumeClaim;
@@ -109,6 +110,67 @@ public class CsiServiceImpl implements CsiService {
 
         ExecutorUtils.runTask(() -> {
             return CsiHandler.deleteCsi(k8sServices, kubeconfigAdmin);
+        });
+    }
+
+    @Override
+    public void createMayastor(long serviceId, long clusterId, String workerNodes, String disks) {
+        // add csi and cluster mapping to db.
+        K8sServices k8sServices = k8sServicesDao.findOne(serviceId);
+
+        // check if it is csi service.
+        if(!k8sServices.getType().equals(K8sServices.ServiceTypeEnum.CSI.name())) {
+            throw new RuntimeException("It is not type of CSI");
+        }
+
+        K8sCluster k8sCluster = k8sClusterDao.findOne(clusterId);
+        k8sServices.getK8sClusterSet().add(k8sCluster);
+
+        k8sServicesDao.update(k8sServices);
+
+        // create csi in real k8s.
+        String path = k8sCluster.getK8sKubeconfigAdminSet().iterator().next().getSecretPath();
+        Kubeconfig kubeconfigAdmin = secretDao.readSecret(path, Kubeconfig.class);
+
+        ExecutorUtils.runTask(() -> {
+            return MayastorHandler.create(k8sServices, kubeconfigAdmin, workerNodes, disks);
+        });
+    }
+
+    @Override
+    public void deleteMayastor(long serviceId, long clusterId) {
+        // remove csi and cluster mapping to db.
+        K8sServices k8sServices = k8sServicesDao.findOne(serviceId);
+        // check if it is csi service.
+        if(!k8sServices.getType().equals(K8sServices.ServiceTypeEnum.CSI.name())) {
+            throw new RuntimeException("It is not type of CSI");
+        }
+
+        Set<K8sCluster> k8sClusterSet = k8sServices.getK8sClusterSet();
+        for(K8sCluster k8sCluster : k8sClusterSet) {
+            long id = k8sCluster.getId();
+            // remove csi / cluster mapping.
+            if(id == clusterId) {
+                k8sClusterSet.remove(k8sCluster);
+            }
+        }
+        k8sServices.setK8sClusterSet(k8sClusterSet);
+        k8sServicesDao.update(k8sServices);
+
+        // delete csi in real k8s.
+        K8sCluster k8sCluster = k8sClusterDao.findOne(clusterId);
+        String path = k8sCluster.getK8sKubeconfigAdminSet().iterator().next().getSecretPath();
+        Kubeconfig kubeconfigAdmin = secretDao.readSecret(path, Kubeconfig.class);
+
+        // get pvc list using minio direct csi storage class.
+        List<PersistentVolumeClaim> persistentVolumeClaims = resourceControlDao.listPvcUsingStorageClass(kubeconfigAdmin, "mayastor-iscsi");
+        if(persistentVolumeClaims.size() > 0) {
+            throw new RuntimeException("CSI cannot be deleted, because currently Other PVCs are using CSI StorageClass: " +
+                    JsonUtils.toJson(new ObjectMapper(), persistentVolumeClaims));
+        }
+
+        ExecutorUtils.runTask(() -> {
+            return MayastorHandler.delete(k8sServices, kubeconfigAdmin);
         });
     }
 }

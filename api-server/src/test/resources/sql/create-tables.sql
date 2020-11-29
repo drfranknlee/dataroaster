@@ -354,6 +354,21 @@ VALUES
 	'20.2.0'
 );
 
+INSERT INTO k8s_services
+(
+	`id`,
+	`type`,
+	`name`,
+	`version`
+)
+VALUES
+(
+	18,
+	'CSI',
+	'OpenEBS Mayastor',
+	'0.5.0'
+);
+
 
 -- mapping table of csi and cluster.
 create table k8s_csi_cluster

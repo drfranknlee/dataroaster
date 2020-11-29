@@ -1,8 +1,8 @@
 package com.cloudcheflabs.dataroaster.apiserver.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.cloudcheflabs.dataroaster.apiserver.api.service.CsiService;
 import com.cloudcheflabs.dataroaster.apiserver.domain.Roles;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +50,32 @@ public class CsiController {
             String serviceId = params.get("service_id");
 
             csiService.deleteCsi(Long.valueOf(serviceId), Long.valueOf(clusterId));
+            return ControllerUtils.successMessage();
+        });
+    }
+
+
+
+    @PostMapping("/apis/csi/mayastor/create")
+    public String createMayastor(@RequestParam Map<String, String> params) {
+        return ControllerUtils.doProcess(Roles.ROLE_PLATFORM_ADMIN, context, () -> {
+            String clusterId = params.get("cluster_id");
+            String serviceId = params.get("service_id");
+            String workerNodes = params.get("worker_nodes");
+            String disks = params.get("disks");
+
+            csiService.createMayastor(Long.valueOf(serviceId), Long.valueOf(clusterId), workerNodes, disks);
+            return ControllerUtils.successMessage();
+        });
+    }
+
+    @DeleteMapping("/apis/csi/mayastor/delete")
+    public String deleteMayastor(@RequestParam Map<String, String> params) {
+        return ControllerUtils.doProcess(Roles.ROLE_PLATFORM_ADMIN, context, () -> {
+            String clusterId = params.get("cluster_id");
+            String serviceId = params.get("service_id");
+
+            csiService.deleteMayastor(Long.valueOf(serviceId), Long.valueOf(clusterId));
             return ControllerUtils.successMessage();
         });
     }
