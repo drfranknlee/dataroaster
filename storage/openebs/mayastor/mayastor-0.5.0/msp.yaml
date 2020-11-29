@@ -1,0 +1,59 @@
+apiVersion: "openebs.io/v1alpha1"
+kind: MayastorPool
+metadata:
+  name: pool-on-maya-0
+  namespace: mayastor
+spec:
+  node: maya-0
+  disks:
+    - /dev/sdc
+---
+apiVersion: "openebs.io/v1alpha1"
+kind: MayastorPool
+metadata:
+  name: pool2-on-maya-0
+  namespace: mayastor
+spec:
+  node: maya-0
+  disks:
+    - /dev/sdd
+---
+apiVersion: "openebs.io/v1alpha1"
+kind: MayastorPool
+metadata:
+  name: pool-on-maya-1
+  namespace: mayastor
+spec:
+  node: maya-1
+  disks:
+    - /dev/sdc
+---
+apiVersion: "openebs.io/v1alpha1"
+kind: MayastorPool
+metadata:
+  name: pool2-on-maya-1
+  namespace: mayastor
+spec:
+  node: maya-1
+  disks:
+    - /dev/sdd
+---
+apiVersion: "openebs.io/v1alpha1"
+kind: MayastorPool
+metadata:
+  name: pool-on-maya-2
+  namespace: mayastor
+spec:
+  node: maya-2
+  disks:
+    - /dev/sdc
+---
+apiVersion: "openebs.io/v1alpha1"
+kind: MayastorPool
+metadata:
+  name: pool2-on-maya-2
+  namespace: mayastor
+spec:
+  node: maya-2
+  disks:
+    - /dev/sdd
