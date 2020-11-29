@@ -7,11 +7,11 @@ export KUBECONFIG={{ kubeconfig }};
 kubectl delete -f .;
 
 # make sure all the pools are removed.
-MSP=$(kubectl get msp -n mayastor | grep pool | awk '{print $1}');
+MSP=$(kubectl get msp -n mayastor -o jsonpath={..metadata.name});
 echo "MSP: ${MSP}";
 
 # Set space as the delimiter
-IFS='\n';
+IFS=' ';
 
 #Read the split words into an array based on space delimiter
 read -a MSP_ARRAY <<< "${MSP}";
