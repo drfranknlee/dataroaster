@@ -370,6 +370,37 @@ VALUES
 );
 
 
+INSERT INTO k8s_services
+(
+	`id`,
+	`type`,
+	`name`,
+	`version`
+)
+VALUES
+(
+	19,
+	'MONITORING',
+	'Kubernetes Prometheus Stack',
+	'12.2.4'
+);
+
+INSERT INTO k8s_services
+(
+	`id`,
+	`type`,
+	`name`,
+	`version`
+)
+VALUES
+(
+	20,
+	'MONITORING',
+	'Metrics Server',
+	'0.4.1'
+);
+
+
 -- mapping table of csi and cluster.
 create table k8s_csi_cluster
 (

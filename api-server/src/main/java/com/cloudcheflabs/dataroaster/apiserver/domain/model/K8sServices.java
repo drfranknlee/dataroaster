@@ -25,6 +25,7 @@ public class K8sServices implements Serializable {
         ELASTICSEARCH,
         WORKFLOW,
         RDB,
+        MONITORING,
         SPARK_THRIFT_SERVER;
     }
 
