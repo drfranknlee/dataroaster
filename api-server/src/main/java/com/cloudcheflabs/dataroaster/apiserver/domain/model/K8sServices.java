@@ -67,6 +67,14 @@ public class K8sServices implements Serializable {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
+            name = "k8s_monitoring_cluster",
+            joinColumns = { @JoinColumn(name = "service_id") },
+            inverseJoinColumns = { @JoinColumn(name = "cluster_id") }
+    )
+    private Set<K8sCluster> monitoringK8sClusterSet = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
             name = "k8s_object_storage_namespace",
             joinColumns = { @JoinColumn(name = "service_id") },
             inverseJoinColumns = { @JoinColumn(name = "namespace_id") }
@@ -186,6 +194,15 @@ public class K8sServices implements Serializable {
             inverseJoinColumns = { @JoinColumn(name = "namespace_id") }
     )
     private Set<K8sNamespace> rdbK8sNamespaceSet = new HashSet<>();
+
+
+    public Set<K8sCluster> getMonitoringK8sClusterSet() {
+        return monitoringK8sClusterSet;
+    }
+
+    public void setMonitoringK8sClusterSet(Set<K8sCluster> monitoringK8sClusterSet) {
+        this.monitoringK8sClusterSet = monitoringK8sClusterSet;
+    }
 
     public Set<K8sNamespace> getRdbK8sNamespaceSet() {
         return rdbK8sNamespaceSet;

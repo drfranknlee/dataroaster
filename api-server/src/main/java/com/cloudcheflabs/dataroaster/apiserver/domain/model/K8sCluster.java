@@ -35,6 +35,8 @@ public class K8sCluster implements Serializable {
     @ManyToMany(mappedBy = "nfsK8sClusterSet")
     private Set<K8sServices> nfsK8sServicesSet = new HashSet<>();
 
+    @ManyToMany(mappedBy = "monitoringK8sClusterSet")
+    private Set<K8sServices> monitoringK8sServicesSet = new HashSet<>();
 
     @ManyToMany(mappedBy = "objectStorageOperatorK8sClusterSet")
     private Set<K8sServices> objectStorageOperatorK8sServicesSet = new HashSet<>();
@@ -47,6 +49,14 @@ public class K8sCluster implements Serializable {
 
     @ManyToMany(mappedBy = "certManagerK8sClusterSet")
     private Set<K8sServices> certManagerK8sServicesSet = new HashSet<>();
+
+    public Set<K8sServices> getMonitoringK8sServicesSet() {
+        return monitoringK8sServicesSet;
+    }
+
+    public void setMonitoringK8sServicesSet(Set<K8sServices> monitoringK8sServicesSet) {
+        this.monitoringK8sServicesSet = monitoringK8sServicesSet;
+    }
 
     public Set<K8sServices> getCertManagerK8sServicesSet() {
         return certManagerK8sServicesSet;

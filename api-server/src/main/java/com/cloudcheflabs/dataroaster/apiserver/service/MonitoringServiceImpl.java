@@ -57,7 +57,7 @@ public class MonitoringServiceImpl implements MonitoringService {
         }
 
         K8sCluster k8sCluster = k8sClusterDao.findOne(clusterId);
-        k8sServices.getK8sClusterSet().add(k8sCluster);
+        k8sServices.getMonitoringK8sClusterSet().add(k8sCluster);
 
         k8sServicesDao.update(k8sServices);
 
@@ -79,7 +79,7 @@ public class MonitoringServiceImpl implements MonitoringService {
             throw new RuntimeException("It is not type of MONITORING");
         }
 
-        Set<K8sCluster> k8sClusterSet = k8sServices.getK8sClusterSet();
+        Set<K8sCluster> k8sClusterSet = k8sServices.getMonitoringK8sClusterSet();
         for(K8sCluster k8sCluster : k8sClusterSet) {
             long id = k8sCluster.getId();
             // remove csi / cluster mapping.
@@ -87,7 +87,7 @@ public class MonitoringServiceImpl implements MonitoringService {
                 k8sClusterSet.remove(k8sCluster);
             }
         }
-        k8sServices.setK8sClusterSet(k8sClusterSet);
+        k8sServices.setMonitoringK8sClusterSet(k8sClusterSet);
         k8sServicesDao.update(k8sServices);
 
         // delete csi in real k8s.
@@ -111,7 +111,7 @@ public class MonitoringServiceImpl implements MonitoringService {
         }
 
         K8sCluster k8sCluster = k8sClusterDao.findOne(clusterId);
-        k8sServices.getK8sClusterSet().add(k8sCluster);
+        k8sServices.getMonitoringK8sClusterSet().add(k8sCluster);
 
         k8sServicesDao.update(k8sServices);
 
@@ -133,7 +133,7 @@ public class MonitoringServiceImpl implements MonitoringService {
             throw new RuntimeException("It is not type of MONITORING");
         }
 
-        Set<K8sCluster> k8sClusterSet = k8sServices.getK8sClusterSet();
+        Set<K8sCluster> k8sClusterSet = k8sServices.getMonitoringK8sClusterSet();
         for(K8sCluster k8sCluster : k8sClusterSet) {
             long id = k8sCluster.getId();
             // remove csi / cluster mapping.
@@ -141,7 +141,7 @@ public class MonitoringServiceImpl implements MonitoringService {
                 k8sClusterSet.remove(k8sCluster);
             }
         }
-        k8sServices.setK8sClusterSet(k8sClusterSet);
+        k8sServices.setMonitoringK8sClusterSet(k8sClusterSet);
         k8sServicesDao.update(k8sServices);
 
         // delete csi in real k8s.

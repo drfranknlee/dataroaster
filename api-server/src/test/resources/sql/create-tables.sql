@@ -400,6 +400,25 @@ VALUES
 	'0.4.1'
 );
 
+-- mapping table of monitoring and cluster.
+create table k8s_monitoring_cluster
+(
+    `id`        bigint(11) unsigned NOT NULL AUTO_INCREMENT,
+    `cluster_id`   bigint(11) unsigned NOT NULL,
+    `service_id`        bigint(11) unsigned NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `k8s_monitoring_cluster_unique` (`cluster_id`, `service_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
+
+ALTER TABLE `k8s_monitoring_cluster`
+    ADD CONSTRAINT `fk_k8s_monitoring_cluster`
+        FOREIGN KEY (`cluster_id`) REFERENCES `k8s_cluster` (`id`);
+
+ALTER TABLE `k8s_monitoring_cluster`
+    ADD CONSTRAINT `fk_k8s_monitoring_services`
+        FOREIGN KEY (`service_id`) REFERENCES `k8s_services` (`id`);
+
 
 -- mapping table of csi and cluster.
 create table k8s_csi_cluster
