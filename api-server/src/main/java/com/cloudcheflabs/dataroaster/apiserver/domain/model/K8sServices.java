@@ -54,6 +54,7 @@ public class K8sServices implements Serializable {
             joinColumns = { @JoinColumn(name = "service_id") },
             inverseJoinColumns = { @JoinColumn(name = "cluster_id") }
     )
+    // csi resource service.
     private Set<K8sCluster> k8sClusterSet = new HashSet<>();
 
 
