@@ -9,15 +9,13 @@ data:
   ROOT_PASSWORD: aWNhcnVzMDMzNw==
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: mysql-deployment
+  name: mysql-statefulset
   namespace: {{ namespace }}
   labels:
     app: mysql
 spec:
-  strategy:
-    type: Recreate
   serviceName: mysql-service
   replicas: 1
   selector:
