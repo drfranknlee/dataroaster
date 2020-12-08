@@ -9,7 +9,7 @@ data:
   ROOT_PASSWORD: aWNhcnVzMDMzNw==
 ---
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Statefulset
 metadata:
   name: mysql-statefulset
   namespace: {{ namespace }}
@@ -41,10 +41,6 @@ spec:
                 secretKeyRef:
                   name: mysql-secrets
                   key: ROOT_PASSWORD
-      volumes:
-        - name: mysql-data
-          persistentVolumeClaim:
-            claimName: mysql-data-disk
   volumeClaimTemplates:
     - metadata:
         name: mysql-data
