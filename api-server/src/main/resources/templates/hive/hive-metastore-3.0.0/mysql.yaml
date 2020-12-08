@@ -9,7 +9,7 @@ data:
   ROOT_PASSWORD: aWNhcnVzMDMzNw==
 ---
 apiVersion: apps/v1
-kind: Statefulset
+kind: StatefulSet
 metadata:
   name: mysql-statefulset
   namespace: {{ namespace }}
