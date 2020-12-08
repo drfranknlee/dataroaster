@@ -8,19 +8,6 @@ type: Opaque
 data:
   ROOT_PASSWORD: aWNhcnVzMDMzNw==
 ---
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: mysql-data-disk
-  namespace: {{ namespace }}
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: {{ storageSize }}Gi
-  storageClassName: {{ storageClass }}
----
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -58,6 +45,16 @@ spec:
         - name: mysql-data
           persistentVolumeClaim:
             claimName: mysql-data-disk
+  volumeClaimTemplates:
+    - metadata:
+        name: mysql-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: {{ storageSize }}Gi
+        storageClassName: {{ storageClass }}
 ---
 apiVersion: v1
 kind: Service
