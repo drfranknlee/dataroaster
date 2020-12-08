@@ -24,11 +24,12 @@ spec:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: mysql-deployment
+  name: mysql-statefulset
   namespace: {{ namespace }}
   labels:
     app: mysql
 spec:
+  serviceName: mysql-service
   replicas: 1
   selector:
     matchLabels:
