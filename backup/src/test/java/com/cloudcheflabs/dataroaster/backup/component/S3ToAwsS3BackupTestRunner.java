@@ -23,6 +23,7 @@ public class S3ToAwsS3BackupTestRunner {
                 .config(sparkConf)
                 .getOrCreate();
 
+        // source s3 configuration.
         Configuration hadoopConfiguration = spark.sparkContext().hadoopConfiguration();
         hadoopConfiguration.set("fs.defaultFS", "s3a://mykidong");
         hadoopConfiguration.set("fs.s3a.endpoint", "https://smartlife-tenant.minio.cloudchef-labs.com");
@@ -36,6 +37,7 @@ public class S3ToAwsS3BackupTestRunner {
         df.show(10);
 
 
+        // target aws s3 configuration.
         hadoopConfiguration = spark.sparkContext().hadoopConfiguration();
         hadoopConfiguration.set("fs.defaultFS", "s3a://cloudcheflabs");
         hadoopConfiguration.set("fs.s3a.endpoint", "https://s3.amazonaws.com");
@@ -45,6 +47,6 @@ public class S3ToAwsS3BackupTestRunner {
         df.write()
                 .format("parquet")
                 .mode(SaveMode.Overwrite)
-                .save("s3a://cloudcheflabs/backup/test-parquet");
+                .save("s3a://cloudcheflabs/slbc/backup/test-parquet");
     }
 }
