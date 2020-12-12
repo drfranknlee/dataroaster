@@ -1,5 +1,6 @@
 package com.cloudcheflabs.dataroaster.backup.component;
 
+import com.cloudcheflabs.dataroaster.backup.util.FileUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.spark.SparkConf;
 import org.apache.spark.sql.Dataset;
@@ -7,6 +8,8 @@ import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SaveMode;
 import org.apache.spark.sql.SparkSession;
 import org.junit.Test;
+
+import java.util.Properties;
 
 public class S3ToAwsS3BackupTestRunner {
 
@@ -24,13 +27,14 @@ public class S3ToAwsS3BackupTestRunner {
                 .getOrCreate();
 
         // source s3 configuration.
+        Properties sourceS3Props = FileUtils.loadProperties("target/classes/resources/s3conf/source-s3.properties");
         Configuration hadoopConfiguration = spark.sparkContext().hadoopConfiguration();
-        hadoopConfiguration.set("fs.defaultFS", "s3a://mykidong");
-        hadoopConfiguration.set("fs.s3a.endpoint", "https://smartlife-tenant.minio.cloudchef-labs.com");
-        hadoopConfiguration.set("fs.s3a.access.key", "bWluaW8=");
-        hadoopConfiguration.set("fs.s3a.secret.key", "bWluaW8xMjM=");
         hadoopConfiguration.set("fs.s3a.path.style.access", "true");
         hadoopConfiguration.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem");
+        for (String key : sourceS3Props.stringPropertyNames()) {
+            String value = sourceS3Props.getProperty(key);
+            hadoopConfiguration.set(key, value);
+        }
 
         Dataset<Row> df = spark.read().format("parquet").load("/test-parquet");
 
@@ -38,11 +42,12 @@ public class S3ToAwsS3BackupTestRunner {
 
 
         // target aws s3 configuration.
+        Properties targetS3Props = FileUtils.loadProperties("target/classes/resources/s3conf/source-s3.properties");
         hadoopConfiguration = spark.sparkContext().hadoopConfiguration();
-        hadoopConfiguration.set("fs.defaultFS", "s3a://cloudcheflabs");
-        hadoopConfiguration.set("fs.s3a.endpoint", "https://s3.amazonaws.com");
-        hadoopConfiguration.set("fs.s3a.access.key", "AKIARJUR6DKSVEB3HZHH");
-        hadoopConfiguration.set("fs.s3a.secret.key", "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");
+        for (String key : targetS3Props.stringPropertyNames()) {
+            String value = targetS3Props.getProperty(key);
+            hadoopConfiguration.set(key, value);
+        }
 
         df.write()
                 .format("parquet")
