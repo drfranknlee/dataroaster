@@ -38,13 +38,13 @@ public class S3ToAwsS3BackupTestRunner {
 
         hadoopConfiguration = spark.sparkContext().hadoopConfiguration();
         hadoopConfiguration.set("fs.defaultFS", "s3a://cloudcheflabs");
-        hadoopConfiguration.set("fs.s3a.endpoint", "s3.amazonaws.com");
+        hadoopConfiguration.set("fs.s3a.endpoint", "https://s3.amazonaws.com");
         hadoopConfiguration.set("fs.s3a.access.key", "AKIARJUR6DKSVEB3HZHH");
         hadoopConfiguration.set("fs.s3a.secret.key", "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");
 
         df.write()
                 .format("parquet")
-                .option("path", "s3a://cloudcheflabs/backup/test-parquet")
-                .mode(SaveMode.Overwrite);
+                .mode(SaveMode.Overwrite)
+                .save("s3a://cloudcheflabs/backup/test-parquet");
     }
 }
