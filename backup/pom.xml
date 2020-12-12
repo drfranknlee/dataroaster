@@ -62,6 +62,9 @@
 
 		<!-- jackson -->
 		<jackson.version>2.10.0</jackson.version>
+
+		<!-- jackson -->
+		<jackson.version>2.10.0</jackson.version>
 	</properties>
 
 	<dependencies>
@@ -288,9 +291,9 @@
 			<version>${jackson.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.fasterxml.jackson.module</groupId>
-			<artifactId>jackson-module-scala_${scala.binary.version}</artifactId>
-			<version>${jackson.version}</version>
+			<groupId>io.delta</groupId>
+			<artifactId>delta-core_${scala.binary.version}</artifactId>
+			<version>${delta-lake.version}</version>
 		</dependency>
 	</dependencies>
 	<build>
