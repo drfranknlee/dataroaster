@@ -1,62 +1,33 @@
 package com.cloudcheflabs.dataroaster.backup.component;
 
-import org.apache.hadoop.conf.Configuration;
-import org.apache.spark.SparkConf;
-import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Row;
-import org.apache.spark.sql.SaveMode;
-import org.apache.spark.sql.SparkSession;
-import org.apache.spark.storage.StorageLevel;
 import org.junit.Test;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.support.PropertiesLoaderUtils;
 
-import java.util.Properties;
+import java.util.ArrayList;
+import java.util.List;
 
 public class S3ToAwsS3BackupTestRunner {
 
     @Test
     public void s3ToAwsS3Backup() throws Exception {
+        List<String> argsList = new ArrayList<>();
+        argsList.add("--master");
+        argsList.add("local[2]");
 
-        String master = "local[2]";
+        argsList.add("--sourceS3Prop");
+        argsList.add("/s3conf/source-s3.properties");
 
-        SparkConf sparkConf = new SparkConf().setAppName(S3ToAwsS3BackupTestRunner.class.getName());
-        sparkConf.setMaster(master);
+        argsList.add("--targetS3Prop");
+        argsList.add("/s3conf/target-s3.properties");
 
-        SparkSession spark = SparkSession
-                .builder()
-                .config(sparkConf)
-                .getOrCreate();
+        argsList.add("--inputBase");
+        argsList.add("/test-parquet");
 
-        // source s3 configuration.
-        Properties sourceS3Props = PropertiesLoaderUtils.loadProperties(new ClassPathResource("/s3conf/source-s3.properties"));
-        sourceS3Props.list(System.out);
-        Configuration hadoopConfiguration = spark.sparkContext().hadoopConfiguration();
-        hadoopConfiguration.set("fs.s3a.path.style.access", "true");
-        hadoopConfiguration.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem");
-        for (String key : sourceS3Props.stringPropertyNames()) {
-            String value = sourceS3Props.getProperty(key);
-            hadoopConfiguration.set(key, value);
-        }
+        argsList.add("--outputBase");
+        argsList.add("/slbc/backup/test-parquet");
 
-        Dataset<Row> df = spark.read().format("parquet").load("/test-parquet");
+        argsList.add("--date");
+        argsList.add("NULL");
 
-        df.show(10);
-
-        df.persist(StorageLevel.DISK_ONLY());
-
-        // target aws s3 configuration.
-        Properties targetS3Props = PropertiesLoaderUtils.loadProperties(new ClassPathResource("/s3conf/target-s3.properties"));
-        targetS3Props.list(System.out);
-        hadoopConfiguration = spark.sparkContext().hadoopConfiguration();
-        for (String key : targetS3Props.stringPropertyNames()) {
-            String value = targetS3Props.getProperty(key);
-            hadoopConfiguration.set(key, value);
-        }
-
-        df.write()
-                .format("parquet")
-                .mode(SaveMode.Overwrite)
-                .save("/slbc/backup/test-parquet");
+        S3ToS3Backup.main(argsList.toArray(new String[0]));
     }
 }

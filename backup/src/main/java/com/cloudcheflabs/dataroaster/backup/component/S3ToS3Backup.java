@@ -79,7 +79,9 @@ public class S3ToS3Backup {
             hadoopConfiguration.set(key, value);
         }
 
-        Dataset<Row> df = spark.read().format("parquet").load(input);
+        String finalInput = sourceS3Props.getProperty("fs.defaultFS") + input;
+        System.out.println("final input: " + finalInput);
+        Dataset<Row> df = spark.read().format("parquet").load(finalInput);
 
         df.show(10);
 
@@ -94,9 +96,11 @@ public class S3ToS3Backup {
             hadoopConfiguration.set(key, value);
         }
 
+        String finalOutput = targetS3Props.getProperty("fs.defaultFS") + output;
+        System.out.println("final output: " + finalOutput);
         df.write()
                 .format("parquet")
                 .mode(SaveMode.Overwrite)
-                .save(output);
+                .save(finalOutput);
     }
 }
