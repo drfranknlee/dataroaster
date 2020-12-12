@@ -1,6 +1,5 @@
 package com.cloudcheflabs.dataroaster.backup.component;
 
-import com.cloudcheflabs.dataroaster.backup.util.FileUtils;
 import com.cloudcheflabs.dataroaster.backup.util.SparkJobUtils;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
@@ -12,20 +11,22 @@ import org.apache.spark.sql.SaveMode;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.storage.StorageLevel;
 import org.joda.time.DateTime;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 import java.text.SimpleDateFormat;
-import java.util.Properties;
 
 public class S3ToS3Backup {
     public static void main(String[] args) throws Exception {
 
         OptionParser parser = new OptionParser();
         parser.accepts("master").withRequiredArg().ofType(String.class);
-        parser.accepts("sourceS3Prop").withRequiredArg().ofType(String.class);
-        parser.accepts("targetS3Prop").withRequiredArg().ofType(String.class);
+        parser.accepts("sourceS3PropDefaultFs").withRequiredArg().ofType(String.class);
+        parser.accepts("sourceS3PropEndpoint").withRequiredArg().ofType(String.class);
+        parser.accepts("sourceS3PropAccessKey").withRequiredArg().ofType(String.class);
+        parser.accepts("sourceS3PropSecretKey").withRequiredArg().ofType(String.class);
+        parser.accepts("targetS3PropDefaultFs").withRequiredArg().ofType(String.class);
+        parser.accepts("targetS3PropEndpoint").withRequiredArg().ofType(String.class);
+        parser.accepts("targetS3PropAccessKey").withRequiredArg().ofType(String.class);
+        parser.accepts("targetS3PropSecretKey").withRequiredArg().ofType(String.class);
         parser.accepts("inputBase").withRequiredArg().ofType(String.class);
         parser.accepts("outputBase").withRequiredArg().ofType(String.class);
         parser.accepts("date").withRequiredArg().ofType(String.class);
@@ -33,8 +34,15 @@ public class S3ToS3Backup {
         OptionSet options = parser.parse(args);
 
         String master = (String) options.valueOf("master");
-        String sourceS3Prop = (String) options.valueOf("sourceS3Prop");
-        String targetS3Prop = (String) options.valueOf("targetS3Prop");
+        String sourceS3PropDefaultFs = (String) options.valueOf("sourceS3PropDefaultFs");
+        String sourceS3PropEndpoint = (String) options.valueOf("sourceS3PropEndpoint");
+        String sourceS3PropAccessKey = (String) options.valueOf("sourceS3PropAccessKey");
+        String sourceS3PropSecretKey = (String) options.valueOf("sourceS3PropSecretKey");
+        String targetS3PropDefaultFs = (String) options.valueOf("targetS3PropDefaultFs");
+        String targetS3PropEndpoint = (String) options.valueOf("targetS3PropEndpoint");
+        String targetS3PropAccessKey = (String) options.valueOf("targetS3PropAccessKey");
+        String targetS3PropSecretKey = (String) options.valueOf("targetS3PropSecretKey");
+
         String inputBase = (String) options.valueOf("inputBase");
         String outputBase = (String) options.valueOf("outputBase");
         String date = (String) options.valueOf("date");
@@ -69,17 +77,15 @@ public class S3ToS3Backup {
                 .getOrCreate();
 
         // source s3 configuration.
-        Properties sourceS3Props = PropertiesLoaderUtils.loadProperties(new ClassPathResource(sourceS3Prop));
-        sourceS3Props.list(System.out);
         Configuration hadoopConfiguration = spark.sparkContext().hadoopConfiguration();
         hadoopConfiguration.set("fs.s3a.path.style.access", "true");
         hadoopConfiguration.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem");
-        for (String key : sourceS3Props.stringPropertyNames()) {
-            String value = sourceS3Props.getProperty(key);
-            hadoopConfiguration.set(key, value);
-        }
+        hadoopConfiguration.set("fs.defaultFS", sourceS3PropDefaultFs);
+        hadoopConfiguration.set("fs.s3a.endpoint", sourceS3PropEndpoint);
+        hadoopConfiguration.set("fs.s3a.access.key", sourceS3PropAccessKey);
+        hadoopConfiguration.set("fs.s3a.secret.key", sourceS3PropSecretKey);
 
-        String finalInput = sourceS3Props.getProperty("fs.defaultFS") + input;
+        String finalInput = sourceS3PropDefaultFs + input;
         System.out.println("final input: " + finalInput);
         Dataset<Row> df = spark.read().format("parquet").load(finalInput);
 
@@ -88,15 +94,13 @@ public class S3ToS3Backup {
         df.persist(StorageLevel.DISK_ONLY());
 
         // target aws s3 configuration.
-        Properties targetS3Props = PropertiesLoaderUtils.loadProperties(new ClassPathResource(targetS3Prop));
-        targetS3Props.list(System.out);
         hadoopConfiguration = spark.sparkContext().hadoopConfiguration();
-        for (String key : targetS3Props.stringPropertyNames()) {
-            String value = targetS3Props.getProperty(key);
-            hadoopConfiguration.set(key, value);
-        }
+        hadoopConfiguration.set("fs.defaultFS", targetS3PropDefaultFs);
+        hadoopConfiguration.set("fs.s3a.endpoint", targetS3PropEndpoint);
+        hadoopConfiguration.set("fs.s3a.access.key", targetS3PropAccessKey);
+        hadoopConfiguration.set("fs.s3a.secret.key", targetS3PropSecretKey);
 
-        String finalOutput = targetS3Props.getProperty("fs.defaultFS") + output;
+        String finalOutput = targetS3PropDefaultFs + output;
         System.out.println("final output: " + finalOutput);
         df.write()
                 .format("parquet")
