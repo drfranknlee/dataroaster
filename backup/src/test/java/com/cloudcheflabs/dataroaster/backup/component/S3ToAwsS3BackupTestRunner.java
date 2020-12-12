@@ -4,6 +4,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.spark.SparkConf;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
+import org.apache.spark.sql.SaveMode;
 import org.apache.spark.sql.SparkSession;
 import org.junit.Test;
 
@@ -33,5 +34,17 @@ public class S3ToAwsS3BackupTestRunner {
         Dataset<Row> df = spark.read().format("parquet").load("/test-parquet");
 
         df.show(10);
+
+
+        hadoopConfiguration = spark.sparkContext().hadoopConfiguration();
+        hadoopConfiguration.set("fs.defaultFS", "s3a://cloudcheflabs");
+        hadoopConfiguration.set("fs.s3a.endpoint", null);
+        hadoopConfiguration.set("fs.s3a.access.key", "AKIARJUR6DKSVEB3HZHH");
+        hadoopConfiguration.set("fs.s3a.secret.key", "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");
+
+        df.write()
+                .format("parquet")
+                .option("path", "s3a://cloudcheflabs/backup/test-parquet")
+                .mode(SaveMode.Overwrite);
     }
 }
