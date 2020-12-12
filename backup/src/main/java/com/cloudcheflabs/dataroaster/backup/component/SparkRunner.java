@@ -15,7 +15,7 @@ public interface SparkRunner {
 
     public static enum DateDirPath
     {
-        App("app="), Year("year="), Month("month="), Day("day="), Hour("hour=");
+        Year("year="), Month("month="), Day("day="), Hour("hour=");
 
         private String dirPath;
 
