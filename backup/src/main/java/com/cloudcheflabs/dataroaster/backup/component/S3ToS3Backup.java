@@ -10,6 +10,7 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SaveMode;
 import org.apache.spark.sql.SparkSession;
+import org.apache.spark.storage.StorageLevel;
 import org.joda.time.DateTime;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -69,6 +70,7 @@ public class S3ToS3Backup {
 
         // source s3 configuration.
         Properties sourceS3Props = PropertiesLoaderUtils.loadProperties(new ClassPathResource(sourceS3Prop));
+        sourceS3Props.list(System.out);
         Configuration hadoopConfiguration = spark.sparkContext().hadoopConfiguration();
         hadoopConfiguration.set("fs.s3a.path.style.access", "true");
         hadoopConfiguration.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem");
@@ -81,9 +83,11 @@ public class S3ToS3Backup {
 
         df.show(10);
 
+        df.persist(StorageLevel.DISK_ONLY());
 
         // target aws s3 configuration.
         Properties targetS3Props = PropertiesLoaderUtils.loadProperties(new ClassPathResource(targetS3Prop));
+        targetS3Props.list(System.out);
         hadoopConfiguration = spark.sparkContext().hadoopConfiguration();
         for (String key : targetS3Props.stringPropertyNames()) {
             String value = targetS3Props.getProperty(key);

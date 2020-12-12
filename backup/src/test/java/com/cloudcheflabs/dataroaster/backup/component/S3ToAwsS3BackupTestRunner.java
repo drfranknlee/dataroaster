@@ -7,7 +7,10 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SaveMode;
 import org.apache.spark.sql.SparkSession;
+import org.apache.spark.storage.StorageLevel;
 import org.junit.Test;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 import java.util.Properties;
 
@@ -27,7 +30,8 @@ public class S3ToAwsS3BackupTestRunner {
                 .getOrCreate();
 
         // source s3 configuration.
-        Properties sourceS3Props = FileUtils.loadProperties("target/test-classes/s3conf/source-s3.properties");
+        Properties sourceS3Props = PropertiesLoaderUtils.loadProperties(new ClassPathResource("/s3conf/source-s3.properties"));
+        sourceS3Props.list(System.out);
         Configuration hadoopConfiguration = spark.sparkContext().hadoopConfiguration();
         hadoopConfiguration.set("fs.s3a.path.style.access", "true");
         hadoopConfiguration.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem");
@@ -40,9 +44,11 @@ public class S3ToAwsS3BackupTestRunner {
 
         df.show(10);
 
+        df.persist(StorageLevel.DISK_ONLY());
 
         // target aws s3 configuration.
-        Properties targetS3Props = FileUtils.loadProperties("target/test-classes/s3conf/target-s3.properties");
+        Properties targetS3Props = PropertiesLoaderUtils.loadProperties(new ClassPathResource("/s3conf/target-s3.properties"));
+        targetS3Props.list(System.out);
         hadoopConfiguration = spark.sparkContext().hadoopConfiguration();
         for (String key : targetS3Props.stringPropertyNames()) {
             String value = targetS3Props.getProperty(key);
