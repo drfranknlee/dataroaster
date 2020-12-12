@@ -38,7 +38,7 @@ public class S3ToAwsS3BackupTestRunner {
 
         hadoopConfiguration = spark.sparkContext().hadoopConfiguration();
         hadoopConfiguration.set("fs.defaultFS", "s3a://cloudcheflabs");
-        hadoopConfiguration.set("fs.s3a.endpoint", null);
+        hadoopConfiguration.set("fs.s3a.endpoint", "s3.amazonaws.com");
         hadoopConfiguration.set("fs.s3a.access.key", "AKIARJUR6DKSVEB3HZHH");
         hadoopConfiguration.set("fs.s3a.secret.key", "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");
 
