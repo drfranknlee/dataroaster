@@ -63,8 +63,8 @@
 		<!-- jackson -->
 		<jackson.version>2.10.0</jackson.version>
 
-		<!-- jackson -->
-		<jackson.version>2.10.0</jackson.version>
+		<!-- delta lake -->
+		<delta-lake.version>0.7.0</delta-lake.version>
 	</properties>
 
 	<dependencies>
