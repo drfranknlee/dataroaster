@@ -52,6 +52,6 @@ public class S3ToAwsS3BackupTestRunner {
         df.write()
                 .format("parquet")
                 .mode(SaveMode.Overwrite)
-                .save("s3a://cloudcheflabs/slbc/backup/test-parquet");
+                .save("/slbc/backup/test-parquet");
     }
 }
