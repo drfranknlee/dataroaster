@@ -27,7 +27,7 @@ public class S3ToAwsS3BackupTestRunner {
                 .getOrCreate();
 
         // source s3 configuration.
-        Properties sourceS3Props = FileUtils.loadProperties("target/classes/resources/s3conf/source-s3.properties");
+        Properties sourceS3Props = FileUtils.loadProperties("target/test-classes/s3conf/source-s3.properties");
         Configuration hadoopConfiguration = spark.sparkContext().hadoopConfiguration();
         hadoopConfiguration.set("fs.s3a.path.style.access", "true");
         hadoopConfiguration.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem");
@@ -42,7 +42,7 @@ public class S3ToAwsS3BackupTestRunner {
 
 
         // target aws s3 configuration.
-        Properties targetS3Props = FileUtils.loadProperties("target/classes/resources/s3conf/source-s3.properties");
+        Properties targetS3Props = FileUtils.loadProperties("target/test-classes/s3conf/target-s3.properties");
         hadoopConfiguration = spark.sparkContext().hadoopConfiguration();
         for (String key : targetS3Props.stringPropertyNames()) {
             String value = targetS3Props.getProperty(key);
