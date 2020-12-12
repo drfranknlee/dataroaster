@@ -11,6 +11,7 @@
     <modules>
         <module>api-server</module>
 		<module>authorizer</module>
+        <module>backup</module>
         <module>examples/spark</module>
         <module>examples/spark-thrift-server</module>
         <module>pod-runner</module>
