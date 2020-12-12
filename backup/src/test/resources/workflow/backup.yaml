@@ -1,14 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  generateName: spark-example-
+  generateName: s3-backup-
 spec:
   entrypoint: main
   templates:
     - name: main
       dag:
         tasks:
-          - name: spark-delta-example
+          - name: s3-backup
             template: spark-job-runner
     - name: spark-job-runner
       container:
