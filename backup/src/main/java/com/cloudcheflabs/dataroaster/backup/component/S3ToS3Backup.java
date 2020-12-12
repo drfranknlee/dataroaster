@@ -11,6 +11,9 @@ import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SaveMode;
 import org.apache.spark.sql.SparkSession;
 import org.joda.time.DateTime;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Properties;
@@ -65,7 +68,7 @@ public class S3ToS3Backup {
                 .getOrCreate();
 
         // source s3 configuration.
-        Properties sourceS3Props = FileUtils.loadProperties(sourceS3Prop);
+        Properties sourceS3Props = PropertiesLoaderUtils.loadProperties(new ClassPathResource(sourceS3Prop));
         Configuration hadoopConfiguration = spark.sparkContext().hadoopConfiguration();
         hadoopConfiguration.set("fs.s3a.path.style.access", "true");
         hadoopConfiguration.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem");
@@ -80,7 +83,7 @@ public class S3ToS3Backup {
 
 
         // target aws s3 configuration.
-        Properties targetS3Props = FileUtils.loadProperties(targetS3Prop);
+        Properties targetS3Props = PropertiesLoaderUtils.loadProperties(new ClassPathResource(targetS3Prop));
         hadoopConfiguration = spark.sparkContext().hadoopConfiguration();
         for (String key : targetS3Props.stringPropertyNames()) {
             String value = targetS3Props.getProperty(key);
