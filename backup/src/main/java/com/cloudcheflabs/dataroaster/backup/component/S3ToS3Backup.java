@@ -11,6 +11,7 @@ import org.apache.spark.sql.SaveMode;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.storage.StorageLevel;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeUtils;
 
 import java.text.SimpleDateFormat;
 
@@ -42,7 +43,6 @@ public class S3ToS3Backup {
         String targetS3PropEndpoint = (String) options.valueOf("targetS3PropEndpoint");
         String targetS3PropAccessKey = (String) options.valueOf("targetS3PropAccessKey");
         String targetS3PropSecretKey = (String) options.valueOf("targetS3PropSecretKey");
-
         String inputBase = (String) options.valueOf("inputBase");
         String outputBase = (String) options.valueOf("outputBase");
         String date = (String) options.valueOf("date");
@@ -52,8 +52,8 @@ public class S3ToS3Backup {
         if(!date.equals("NULL")) {
             long targetTime = -1L;
             if(date.equals("NOW")) {
-                long now = new SimpleDateFormat("yyyy-MM-dd").parse(date).getTime();
-                DateTime nowDt = new DateTime(targetTime);
+                long now = DateTimeUtils.currentTimeMillis();
+                DateTime nowDt = new DateTime(now);
                 targetTime = nowDt.minusDays(1).getMillis();
             } else {
                 targetTime = new SimpleDateFormat("yyyy-MM-dd").parse(date).getTime();
@@ -91,7 +91,7 @@ public class S3ToS3Backup {
 
         df.show(10);
 
-        df.persist(StorageLevel.DISK_ONLY());
+        Dataset<Row> targetDf = df.persist(StorageLevel.DISK_ONLY());
 
         // target aws s3 configuration.
         hadoopConfiguration = spark.sparkContext().hadoopConfiguration();
@@ -102,7 +102,7 @@ public class S3ToS3Backup {
 
         String finalOutput = targetS3PropDefaultFs + output;
         System.out.println("final output: " + finalOutput);
-        df.write()
+        targetDf.write()
                 .format("parquet")
                 .mode(SaveMode.Overwrite)
                 .save(finalOutput);
