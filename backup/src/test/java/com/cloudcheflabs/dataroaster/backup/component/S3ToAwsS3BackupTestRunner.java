@@ -7,14 +7,14 @@ import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.junit.Test;
 
-public class S3ToAWSS3BackupTestRunner {
+public class S3ToAwsS3BackupTestRunner {
 
     @Test
     public void s3ToAwsS3Backup() throws Exception {
 
         String master = "local[2]";
 
-        SparkConf sparkConf = new SparkConf().setAppName(S3ToAWSS3BackupTestRunner.class.getName());
+        SparkConf sparkConf = new SparkConf().setAppName(S3ToAwsS3BackupTestRunner.class.getName());
         sparkConf.setMaster(master);
 
         SparkSession spark = SparkSession
