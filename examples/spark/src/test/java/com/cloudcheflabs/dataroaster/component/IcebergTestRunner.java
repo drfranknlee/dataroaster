@@ -50,7 +50,7 @@ public class IcebergTestRunner {
         SparkSession spark = SparkSession
                 .builder()
                 .config(sparkConf)
-                .enableHiveSupport()
+                //.enableHiveSupport()
                 .getOrCreate();
 
         Configuration hadoopConfiguration = spark.sparkContext().hadoopConfiguration();
