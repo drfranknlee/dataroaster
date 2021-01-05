@@ -65,6 +65,9 @@
 
 		<!-- jackson -->
 		<jackson.version>2.10.0</jackson.version>
+
+		<!-- iceberg -->
+		<iceberg.version>0.10.0</iceberg.version>
 	</properties>
 
 	<dependencies>
@@ -294,6 +297,11 @@
 			<groupId>io.delta</groupId>
 			<artifactId>delta-core_${scala.binary.version}</artifactId>
 			<version>${delta-lake.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.iceberg</groupId>
+			<artifactId>iceberg-spark3-runtime</artifactId>
+			<version>${iceberg.version}</version>
 		</dependency>
 	</dependencies>
 	<build>
