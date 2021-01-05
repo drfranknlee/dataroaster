@@ -41,16 +41,14 @@ public class IcebergTestRunner {
         sparkConf.setMaster(master);
 
         // add iceberg catalog.
-        sparkConf.set("spark.sql.catalog.iceberg_hive", "org.apache.iceberg.spark.SparkSessionCatalog");
-        sparkConf.set("spark.sql.catalog.iceberg_hive.type", "hive");
-        sparkConf.set("spark.sql.catalog.iceberg_hive.default-namespace", "iceberg_test");
-        sparkConf.set("spark.sql.catalog.iceberg_hive.uri", "thrift://localhost:9083");
-        sparkConf.set("spark.sql.catalog.iceberg_hive.warehouse", "s3a://mykidong/iceberg_warehouse");
+        sparkConf.set("spark.sql.catalog.hive_iceberg", "org.apache.iceberg.spark.SparkSessionCatalog");
+        sparkConf.set("spark.sql.catalog.hive_iceberg.type", "hive");
+        sparkConf.set("spark.sql.catalog.hive_iceberg.uri", "thrift://localhost:9083");
 
         SparkSession spark = SparkSession
                 .builder()
                 .config(sparkConf)
-                //.enableHiveSupport()
+                .enableHiveSupport()
                 .getOrCreate();
 
         Configuration hadoopConfiguration = spark.sparkContext().hadoopConfiguration();
@@ -72,7 +70,7 @@ public class IcebergTestRunner {
         df.show(10);
 
         // create table: create table as select...
-        df.writeTo("iceberg_hive.iceberg_test.test_event").create();
+        df.writeTo("iceberg.iceberg_test.test_event").create();
 
 
 
