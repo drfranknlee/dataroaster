@@ -70,7 +70,7 @@ public class IcebergTestRunner {
         df.show(10);
 
         // create table: create table as select...
-        df.writeTo("iceberg.iceberg_test.test_event").create();
+        df.writeTo("iceberg_test.test_event").create();
 
 
 
