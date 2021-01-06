@@ -245,21 +245,21 @@ public class IcebergTestRunner {
         hadoopConfiguration.set("hive.metastore.client.socket.timeout", hiveMetastoreTimeout);
         hadoopConfiguration.set("hive.metastore.uris", hiveMetastoreUri);
 
-//        // show history.
-//        System.out.println("table history...");
-//        spark.sql("SELECT * FROM spark_catalog.iceberg_test.test_event.history").show();
-//
-//        // show snapshots.
-//        System.out.println("table snapshots...");
-//        spark.sql("SELECT * FROM spark_catalog.iceberg_test.test_event.snapshots").show();
-//
-//        // show manifests.
-//        System.out.println("table manifests...");
-//        spark.sql("SELECT * FROM spark_catalog.iceberg_test.test_event.manifests").show();
-//
-//        // show files.
-//        System.out.println("table files...");
-//        spark.sql("SELECT * FROM spark_catalog.iceberg_test.test_event.files").show();
+        // show history.
+        System.out.println("table history...");
+        spark.sql("SELECT * FROM iceberg_test.test_event.history").show(100);
+
+        // show snapshots.
+        System.out.println("table snapshots...");
+        spark.sql("SELECT * FROM iceberg_test.test_event.snapshots").show(100);
+
+        // show manifests.
+        System.out.println("table manifests...");
+        spark.sql("SELECT * FROM iceberg_test.test_event.manifests").show(100);
+
+        // show files.
+        System.out.println("table files...");
+        spark.sql("SELECT * FROM iceberg_test.test_event.files").show(100);
 
         // show files with dataframe.
         System.out.println("table files with dataframe...");
