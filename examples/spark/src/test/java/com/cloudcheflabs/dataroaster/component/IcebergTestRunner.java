@@ -45,9 +45,9 @@ public class IcebergTestRunner {
         sparkConf.setMaster(master);
 
         // add iceberg catalog.
-        sparkConf.set("spark.sql.catalog.hive_iceberg", "org.apache.iceberg.spark.SparkSessionCatalog");
-        sparkConf.set("spark.sql.catalog.hive_iceberg.type", "hive");
-        sparkConf.set("spark.sql.catalog.hive_iceberg.uri", "thrift://localhost:9083");
+        sparkConf.set("spark.sql.catalog.spark_catalog", "org.apache.iceberg.spark.SparkSessionCatalog");
+        sparkConf.set("spark.sql.catalog.spark_catalog.type", "hive");
+        sparkConf.set("spark.sql.catalog.spark_catalog.uri", "thrift://localhost:9083");
 
         SparkSession spark = SparkSession
                 .builder()
@@ -72,9 +72,13 @@ public class IcebergTestRunner {
         Dataset<Row> df = spark.read().json(new JavaSparkContext(spark.sparkContext()).parallelize(Arrays.asList(lines)));
 
         df.show(10);
+        
+        df.printSchema();
 
         // create table: create table as select...
-        df.writeTo("iceberg_test.test_event").create();
+        df.writeTo("spark_catalog.iceberg_test.test_event")
+                .option("path", "s3a://mykidong/test-iceberg")
+                .create();
 
 
 
