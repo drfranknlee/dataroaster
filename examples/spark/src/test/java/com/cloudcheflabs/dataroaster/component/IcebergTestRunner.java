@@ -56,7 +56,7 @@ public class IcebergTestRunner {
         sql += "        baseProperties   STRUCT<uid:             string, ";
         sql += "                                eventType:       string, ";
         sql += "                                version:         string, ";
-        sql += "                                ts:              long> ";
+        sql += "                                ts:              long>, ";
         sql += "        itemId 		string, ";
         sql += "        price 		long, ";
         sql += "        quantity	long, ";
