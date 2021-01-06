@@ -86,7 +86,7 @@ public class IcebergTestRunner {
 
 
     @Test
-    public void append() throws Exception {
+    public void write() throws Exception {
 
         String date = System.getProperty("date", "2020-09-01");
 
