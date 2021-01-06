@@ -10,10 +10,7 @@ import org.apache.iceberg.hive.HiveCatalog;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.FilterFunction;
-import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Row;
-import org.apache.spark.sql.SaveMode;
-import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.*;
 import org.apache.spark.sql.types.StructType;
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -48,7 +45,6 @@ public class IcebergTestRunner {
         sparkConf.set("spark.sql.catalog.spark_catalog", "org.apache.iceberg.spark.SparkSessionCatalog");
         sparkConf.set("spark.sql.catalog.spark_catalog.type", "hive");
         sparkConf.set("spark.sql.catalog.spark_catalog.uri", "thrift://localhost:9083");
-        sparkConf.set("spark.sql.catalog.spark_catalog.warehouse", "s3a://mykidong/iceberg_warehouse");
 
         SparkSession spark = SparkSession
                 .builder()
@@ -72,12 +68,17 @@ public class IcebergTestRunner {
         String lines[] = json.split("\\r?\\n");
         Dataset<Row> df = spark.read().json(new JavaSparkContext(spark.sparkContext()).parallelize(Arrays.asList(lines)));
 
-        df.show(10);
+        // create temp view.
+        df.createOrReplaceTempView("temp_test");
 
-        df.printSchema();
+        // add columns of date.
+        Dataset<Row> newEventDf = spark.sql("select a.*, '2020' as year, '09' as month, '01' as day from temp_test a");
+
+        newEventDf.show(10);
+        newEventDf.printSchema();
 
         // create table: create table as select...
-        df.writeTo("spark_catalog.iceberg_test.test_event")
+        newEventDf.writeTo("spark_catalog.iceberg_test.test_event")
                 .create();
 
 
