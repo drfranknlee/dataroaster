@@ -3,13 +3,20 @@ package com.cloudcheflabs.dataroaster.component;
 import com.cloudcheflabs.dataroaster.util.StringUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
+import org.apache.spark.sql.RowFactory;
 import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.types.StructType;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 public class IcebergTestRunner {
 
@@ -128,14 +135,51 @@ public class IcebergTestRunner {
         // add columns of date.
         Dataset<Row> newEventDf = spark.sql("select baseProperties, itemId, price, quantity, '2020' as year, '09' as month, '01' as day from temp_test");
 
-        newEventDf.show(10);
-        newEventDf.printSchema();
+        // make properties of baseProperties in order according to table schema.
+        JavaRDD<Row> eventRdd = newEventDf.toJavaRDD().flatMap(new BasePropertiesInOrder());
+
+        // get table schema.
+        StructType schema = spark.table("spark_catalog.iceberg_test.test_event").schema();
+        schema.printTreeString();
+
+        // event dataframe whose baseProperties has been in order.
+        Dataset<Row> dfInOrder = spark.createDataFrame(eventRdd, schema);
+        dfInOrder.show(10);
 
         // append.
-        newEventDf.writeTo("spark_catalog.iceberg_test.test_event").append();
+        dfInOrder.writeTo("spark_catalog.iceberg_test.test_event").append();
 
         // show appended rows.
         spark.table("spark_catalog.iceberg_test.test_event").where("year='2020' and month='09' and day='01'")
                 .show();
+    }
+
+    private static class BasePropertiesInOrder implements FlatMapFunction<Row, Row> {
+        @Override
+        public Iterator<Row> call(Row row) throws Exception {
+
+            List<Row> rowList = new ArrayList<>();
+
+            Row basePropRow = row.getAs("baseProperties");
+
+            Row newBasePropRow = RowFactory.create(
+                    basePropRow.getAs("uid"),
+                    basePropRow.getAs("eventType"),
+                    basePropRow.getAs("version"),
+                    basePropRow.getAs("ts")
+            );
+
+            Row newRow = RowFactory.create(
+                    newBasePropRow,
+                    row.getAs("itemId"),
+                    row.getAs("price"),
+                    row.getAs("quantity"),
+                    row.getAs("year"),
+                    row.getAs("month"),
+                    row.getAs("day")
+            );
+
+            return rowList.iterator();
+        }
     }
 }
