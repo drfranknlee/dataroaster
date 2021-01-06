@@ -15,4 +15,8 @@ public class StringUtils {
             throw new RuntimeException(ie);
         }
     }
+
+    public static String addZeroToMonthOrDay(int monthOrDay) {
+        return String.format("%02d", monthOrDay);
+    }
 }

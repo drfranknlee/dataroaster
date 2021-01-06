@@ -8,8 +8,10 @@ import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.sql.*;
 import org.apache.spark.sql.types.StructType;
+import org.joda.time.DateTime;
 import org.junit.Test;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -85,6 +87,9 @@ public class IcebergTestRunner {
 
     @Test
     public void append() throws Exception {
+
+        String date = System.getProperty("date");
+
         String master = System.getProperty("master", "local[2]");
         String s3PropDefaultFs = System.getProperty("s3PropDefaultFs", "s3a://mykidong");
         String s3PropEndpoint = System.getProperty("s3PropEndpoint", "https://smartlife-tenant.minio.cloudchef-labs.com");
@@ -122,6 +127,14 @@ public class IcebergTestRunner {
         hadoopConfiguration.set("hive.metastore.uris", hiveMetastoreUri);
 
 
+        // parse date for year, month and day.
+        long time = new SimpleDateFormat("yyyy-MM-dd").parse(date).getTime();
+        DateTime dt = new DateTime(time);
+        String year = String.valueOf(dt.getYear());
+        String month = StringUtils.addZeroToMonthOrDay(dt.getMonthOfYear());
+        String day = StringUtils.addZeroToMonthOrDay(dt.getDayOfMonth());
+
+
         // read json.
         String json = StringUtils.fileToString("data/test.json");
         String lines[] = json.split("\\r?\\n");
@@ -131,7 +144,8 @@ public class IcebergTestRunner {
         df.createOrReplaceTempView("temp_test");
 
         // add columns of date.
-        Dataset<Row> newEventDf = spark.sql("select baseProperties, itemId, price, quantity, '2020' as year, '09' as month, '01' as day from temp_test");
+        String sql = "select baseProperties, itemId, price, quantity, '" + year + "' as year, '" + month + "' as month, '" + day + "' as day from temp_test";
+        Dataset<Row> newEventDf = spark.sql(sql);
 
         // make properties of baseProperties in order according to table schema.
         JavaRDD<Row> eventRdd = newEventDf.toJavaRDD().flatMap(new BasePropertiesInOrder());
@@ -149,8 +163,14 @@ public class IcebergTestRunner {
         dfInOrder.writeTo("spark_catalog.iceberg_test.test_event").append();
 
         // show appended rows.
-        spark.sql("select * from spark_catalog.iceberg_test.test_event where year='2020' and month='09' and day='01'")
+        System.out.println("show the rows selected by date in the table...");
+        String selectQuery = "select * from spark_catalog.iceberg_test.test_event where year='" + year + "' and month='" + month + "' and day='" + day + "'";
+        spark.sql(selectQuery)
                 .show();
+
+        // show all rows.
+        System.out.println("show all entries in the table...");
+        spark.table("spark_catalog.iceberg_test.test_event").show();
     }
 
     private static class BasePropertiesInOrder implements FlatMapFunction<Row, Row> {
