@@ -88,7 +88,7 @@ public class IcebergTestRunner {
     @Test
     public void append() throws Exception {
 
-        String date = System.getProperty("date");
+        String date = System.getProperty("date", "2020-09-01");
 
         String master = System.getProperty("master", "local[2]");
         String s3PropDefaultFs = System.getProperty("s3PropDefaultFs", "s3a://mykidong");
