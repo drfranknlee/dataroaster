@@ -314,4 +314,59 @@ public class IcebergTestRunner {
                 .format("iceberg")
                 .load("iceberg_test.test_event").show(100);
     }
+
+
+    @Test
+    public void alter() throws Exception {
+
+        String master = System.getProperty("master", "local[2]");
+        String s3PropDefaultFs = System.getProperty("s3PropDefaultFs", "s3a://mykidong");
+        String s3PropEndpoint = System.getProperty("s3PropEndpoint", "https://smartlife-tenant.minio.cloudchef-labs.com");
+        String s3PropAccessKey = System.getProperty("s3PropAccessKey", "bWluaW8=");
+        String s3PropSecretKey = System.getProperty("s3PropSecretKey", "bWluaW8xMjM=");
+        String hiveMetastoreDelay = System.getProperty("hiveMetastoreDelay", "5");
+        String hiveMetastoreTimeout = System.getProperty("hiveMetastoreTimeout", "1800");
+        String hiveMetastoreUri = System.getProperty("hiveMetastoreUri", "thrift://localhost:9083");
+
+
+        SparkConf sparkConf = new SparkConf().setAppName(IcebergTestRunner.class.getName());
+        sparkConf.setMaster(master);
+
+        // add iceberg catalog.
+        sparkConf.set("spark.sql.catalog.spark_catalog", "org.apache.iceberg.spark.SparkSessionCatalog");
+        sparkConf.set("spark.sql.catalog.spark_catalog.type", "hive");
+        sparkConf.set("spark.sql.catalog.spark_catalog.uri", hiveMetastoreUri);
+        sparkConf.set("spark.sql.sources.partitionOverwriteMode", "dynamic");
+
+        SparkSession spark = SparkSession
+                .builder()
+                .config(sparkConf)
+                .enableHiveSupport()
+                .getOrCreate();
+
+        Configuration hadoopConfiguration = spark.sparkContext().hadoopConfiguration();
+        hadoopConfiguration.set("fs.s3a.path.style.access", "true");
+        hadoopConfiguration.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem");
+        hadoopConfiguration.set("fs.defaultFS", s3PropDefaultFs);
+        hadoopConfiguration.set("fs.s3a.endpoint", s3PropEndpoint);
+        hadoopConfiguration.set("fs.s3a.access.key", s3PropAccessKey);
+        hadoopConfiguration.set("fs.s3a.secret.key", s3PropSecretKey);
+        hadoopConfiguration.set("hive.metastore.client.connect.retry.delay", hiveMetastoreDelay);
+        hadoopConfiguration.set("hive.metastore.client.socket.timeout", hiveMetastoreTimeout);
+        hadoopConfiguration.set("hive.metastore.uris", hiveMetastoreUri);
+
+        // alter column name.
+        System.out.println("alter column name itemId...");
+        spark.sql("ALTER TABLE spark_catalog.iceberg_test.test_event RENAME COLUMN itemId TO item_id");
+
+        spark.sql("select * from spark_catalog.iceberg_test.test_event")
+                .show(10);
+
+        // revert column name.
+        System.out.println("revert to column name itemId...");
+        spark.sql("ALTER TABLE spark_catalog.iceberg_test.test_event RENAME COLUMN item_id TO itemId");
+
+        spark.sql("select * from spark_catalog.iceberg_test.test_event")
+                .show(10);
+    }
 }
