@@ -263,6 +263,6 @@ public class IcebergTestRunner {
 
         // show files with dataframe.
         System.out.println("table files with dataframe...");
-        spark.read().format("iceberg").load("spark_catalog.iceberg_test.test_event").show(100);
+        spark.read().format("iceberg").load("iceberg_test.test_event.files").show(100);
     }
 }
