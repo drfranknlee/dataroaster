@@ -126,7 +126,7 @@ public class IcebergTestRunner {
         df.createOrReplaceTempView("temp_test");
 
         // add columns of date.
-        Dataset<Row> newEventDf = spark.sql("select a.*, '2020' as year, '09' as month, '01' as day from temp_test a");
+        Dataset<Row> newEventDf = spark.sql("select baseProperties, itemId, price, quantity, '2020' as year, '09' as month, '01' as day from temp_test");
 
         newEventDf.show(10);
         newEventDf.printSchema();
