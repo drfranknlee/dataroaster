@@ -160,7 +160,8 @@ public class IcebergTestRunner {
         dfInOrder.show(10);
 
         // append.
-        dfInOrder.writeTo("spark_catalog.iceberg_test.test_event").append();
+        dfInOrder.sortWithinPartitions("year", "month", "day")
+                .writeTo("spark_catalog.iceberg_test.test_event").append();
 
         // show appended rows.
         System.out.println("show the rows selected by date in the table...");
@@ -202,5 +203,66 @@ public class IcebergTestRunner {
 
             return rowList.iterator();
         }
+    }
+
+
+    @Test
+    public void inspectTable() throws Exception {
+
+        String master = System.getProperty("master", "local[2]");
+        String s3PropDefaultFs = System.getProperty("s3PropDefaultFs", "s3a://mykidong");
+        String s3PropEndpoint = System.getProperty("s3PropEndpoint", "https://smartlife-tenant.minio.cloudchef-labs.com");
+        String s3PropAccessKey = System.getProperty("s3PropAccessKey", "bWluaW8=");
+        String s3PropSecretKey = System.getProperty("s3PropSecretKey", "bWluaW8xMjM=");
+        String hiveMetastoreDelay = System.getProperty("hiveMetastoreDelay", "5");
+        String hiveMetastoreTimeout = System.getProperty("hiveMetastoreTimeout", "1800");
+        String hiveMetastoreUri = System.getProperty("hiveMetastoreUri", "thrift://localhost:9083");
+
+
+        SparkConf sparkConf = new SparkConf().setAppName(IcebergTestRunner.class.getName());
+        sparkConf.setMaster(master);
+
+        // add iceberg catalog.
+        sparkConf.set("spark.sql.catalog.spark_catalog", "org.apache.iceberg.spark.SparkSessionCatalog");
+        sparkConf.set("spark.sql.catalog.spark_catalog.type", "hive");
+        sparkConf.set("spark.sql.catalog.spark_catalog.uri", "thrift://localhost:9083");
+        sparkConf.set("spark.sql.sources.partitionOverwriteMode", "dynamic");
+
+        SparkSession spark = SparkSession
+                .builder()
+                .config(sparkConf)
+                .enableHiveSupport()
+                .getOrCreate();
+
+        Configuration hadoopConfiguration = spark.sparkContext().hadoopConfiguration();
+        hadoopConfiguration.set("fs.s3a.path.style.access", "true");
+        hadoopConfiguration.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem");
+        hadoopConfiguration.set("fs.defaultFS", s3PropDefaultFs);
+        hadoopConfiguration.set("fs.s3a.endpoint", s3PropEndpoint);
+        hadoopConfiguration.set("fs.s3a.access.key", s3PropAccessKey);
+        hadoopConfiguration.set("fs.s3a.secret.key", s3PropSecretKey);
+        hadoopConfiguration.set("hive.metastore.client.connect.retry.delay", hiveMetastoreDelay);
+        hadoopConfiguration.set("hive.metastore.client.socket.timeout", hiveMetastoreTimeout);
+        hadoopConfiguration.set("hive.metastore.uris", hiveMetastoreUri);
+
+        // show history.
+        System.out.println("table history...");
+        spark.sql("SELECT * FROM spark_catalog.iceberg_test.test_event.history").show();
+
+        // show snapshots.
+        System.out.println("table snapshots...");
+        spark.sql("SELECT * FROM spark_catalog.iceberg_test.test_event.snapshots").show();
+
+        // show manifests.
+        System.out.println("table manifests...");
+        spark.sql("SELECT * FROM spark_catalog.iceberg_test.test_event.manifests").show();
+
+        // show files.
+        System.out.println("table files...");
+        spark.sql("SELECT * FROM spark_catalog.iceberg_test.test_event.files").show();
+
+        // show files with dataframe.
+        System.out.println("table files with dataframe...");
+        spark.read().format("iceberg").load("spark_catalog.iceberg_test.test_event.files").show();
     }
 }
