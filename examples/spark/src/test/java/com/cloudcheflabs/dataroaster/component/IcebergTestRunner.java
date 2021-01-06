@@ -161,7 +161,7 @@ public class IcebergTestRunner {
 
         // append.
         dfInOrder.sortWithinPartitions("year", "month", "day")
-                .writeTo("spark_catalog.iceberg_test.test_event").append();
+                .writeTo("spark_catalog.iceberg_test.test_event").overwritePartitions();
 
         // show appended rows.
         System.out.println("show the rows selected by date in the table...");
