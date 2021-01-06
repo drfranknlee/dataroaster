@@ -148,7 +148,6 @@ public class IcebergTestRunner {
         // append.
         dfInOrder.writeTo("spark_catalog.iceberg_test.test_event").append();
 
-
         // show appended rows.
         spark.sql("select * from spark_catalog.iceberg_test.test_event where year='2020' and month='09' and day='01'")
                 .show();
@@ -178,6 +177,8 @@ public class IcebergTestRunner {
                     row.getAs("month"),
                     row.getAs("day")
             );
+
+            rowList.add(newRow);
 
             return rowList.iterator();
         }
