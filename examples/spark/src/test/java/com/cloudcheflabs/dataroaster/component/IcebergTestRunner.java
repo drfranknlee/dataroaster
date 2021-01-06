@@ -167,11 +167,11 @@ public class IcebergTestRunner {
         System.out.println("show the rows selected by date in the table...");
         String selectQuery = "select * from spark_catalog.iceberg_test.test_event where year='" + year + "' and month='" + month + "' and day='" + day + "'";
         spark.sql(selectQuery)
-                .show();
+                .show(10);
 
         // show all rows.
         System.out.println("show all entries in the table...");
-        spark.table("spark_catalog.iceberg_test.test_event").show();
+        spark.table("spark_catalog.iceberg_test.test_event").show(100);
     }
 
     private static class BasePropertiesInOrder implements FlatMapFunction<Row, Row> {
@@ -263,6 +263,6 @@ public class IcebergTestRunner {
 
         // show files with dataframe.
         System.out.println("table files with dataframe...");
-        spark.read().format("iceberg").load("spark_catalog.iceberg_test.test_event.files").show();
+        spark.read().format("iceberg").load("spark_catalog.iceberg_test.test_event").show(100);
     }
 }
