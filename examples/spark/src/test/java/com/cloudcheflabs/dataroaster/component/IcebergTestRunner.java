@@ -6,10 +6,7 @@ import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.FlatMapFunction;
-import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Row;
-import org.apache.spark.sql.RowFactory;
-import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.*;
 import org.apache.spark.sql.types.StructType;
 import org.junit.Test;
 
@@ -105,6 +102,7 @@ public class IcebergTestRunner {
         sparkConf.set("spark.sql.catalog.spark_catalog", "org.apache.iceberg.spark.SparkSessionCatalog");
         sparkConf.set("spark.sql.catalog.spark_catalog.type", "hive");
         sparkConf.set("spark.sql.catalog.spark_catalog.uri", "thrift://localhost:9083");
+        sparkConf.set("spark.sql.sources.partitionOverwriteMode", "dynamic");
 
         SparkSession spark = SparkSession
                 .builder()
@@ -140,6 +138,7 @@ public class IcebergTestRunner {
 
         // get table schema.
         StructType schema = spark.table("spark_catalog.iceberg_test.test_event").schema();
+        System.out.println("iceberg table schema...");
         schema.printTreeString();
 
         // event dataframe whose baseProperties has been in order.
@@ -149,8 +148,9 @@ public class IcebergTestRunner {
         // append.
         dfInOrder.writeTo("spark_catalog.iceberg_test.test_event").append();
 
+
         // show appended rows.
-        spark.table("spark_catalog.iceberg_test.test_event").where("year='2020' and month='09' and day='01'")
+        spark.sql("select * from spark_catalog.iceberg_test.test_event where year='2020' and month='09' and day='01'")
                 .show();
     }
 
