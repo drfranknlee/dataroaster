@@ -16,7 +16,7 @@ curl -Lb /tmp/cookie "https://drive.google.com/uc?export=download&confirm=${code
 
 # download spark thrift server jar file from google drive.
 # https://drive.google.com/file/d/18DNXmcqvafb82rq-U1VLOJbTrlEGV1F6/view?usp=sharing
-SPARK_THRIFT_SERVER_FILE_NAME=spark-thrift-server-1.0.0-SNAPSHOT-spark-job
+SPARK_THRIFT_SERVER_FILE_NAME=spark-thrift-server-2.0.0-SNAPSHOT-spark-job
 fileId=18DNXmcqvafb82rq-U1VLOJbTrlEGV1F6
 fileName=${SPARK_THRIFT_SERVER_FILE_NAME}.jar
 

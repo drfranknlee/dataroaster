@@ -52,7 +52,7 @@ echo "JOB_TYPE  = ${JOB_TYPE}"
 
 
 # decrypt properties and do something.
-java -cp ./pod-runner-1.0.0-SNAPSHOT-fat.jar \
+java -cp ./pod-runner-2.0.0-SNAPSHOT-fat.jar \
 com.cloudcheflabs.dataroaster.kubernetes.JobRunner \
 --encryption.key ${ENCRYPTION_KEY} \
 --s3.access.key ${S3_ACCESS_KEY} \

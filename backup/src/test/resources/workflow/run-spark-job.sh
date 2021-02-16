@@ -18,7 +18,7 @@ aws s3api --profile=minio --endpoint=$S3_ENDPOINT get-object --bucket ${S3_BUCKE
 
 
 # spark job jar name.
-export SPARK_JOB_JAR=backup-1.0.0-SNAPSHOT-spark-job.jar;
+export SPARK_JOB_JAR=backup-2.0.0-SNAPSHOT-spark-job.jar;
 
 # download spark job jar from s3.
 aws s3api --profile=minio --endpoint=$S3_ENDPOINT get-object --bucket ${S3_BUCKET} --key spark-job/jar/${SPARK_JOB_JAR} ./${SPARK_JOB_JAR};
