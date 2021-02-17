@@ -4,7 +4,7 @@
 
   vars:
   - ansible_ssh_user: "{{ exec_user }}"
-  - ansible_ssh_private_key_file: "~/.ssh/id_rsa"
+  - ansible_ssh_private_key_file: "~/.ssh/oci-minio.key"
     
   vars_files:
   - "roles/{{ role_name }}/defaults/main.yml"
