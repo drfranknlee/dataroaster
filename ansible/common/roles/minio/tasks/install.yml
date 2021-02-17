@@ -44,7 +44,7 @@
   args:
     chdir: "{{ minio_home_dir }}"
   with_items:
-    - "nohup minio server {{ minio_server_url }} >minio.log & echo \$! > pid"
+    - "nohup minio server {{ minio_server_url }} >minio.log & echo $! > pid"
   become_user: "{{ exec_user }}"
 
 
