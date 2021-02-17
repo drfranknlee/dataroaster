@@ -1,10 +1,10 @@
 ---
-raw_disks: "/dev/xvdb,/dev/xvdc,/dev/xvdd"
+raw_disks: "/dev/sdb,/dev/sdb,/dev/sdb,/dev/sdb,/dev/sdb,/dev/sdb"
 vg_name: "share"
-lv_name: "csi"
+lv_name: "minio"
 require_lv_size: "100%FREE"
 fs: "ext4"
-mount_point: "/data"
+mount_point: "/export"
 
 
 
