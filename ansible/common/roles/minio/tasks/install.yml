@@ -1,0 +1,50 @@
+---
+
+- name: Copying minio env to profile
+  template:
+    src: "{{ playbook_dir }}/roles/{{ role_name }}/templates/{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: 0755
+  with_items:
+  - { src: '{{ minio_env_sh }}', dest: '/etc/profile.d/{{ minio_env_sh }}' }
+  become: yes
+
+
+- name: Creating minio directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ exec_user }}"
+    mode: 0755
+  with_items: "{{ minio_data_dirs }}"
+  ignore_errors: true
+  become: yes
+
+- name: Installing minio
+  get_url:
+    url: "https://dl.minio.io/server/minio/release/linux-amd64/minio"
+    dest: "/usr/local/bin/minio"
+    mode: 0755
+  become: yes
+
+- name: Creating minio home directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ exec_user }}"
+    mode: 0755
+  with_items:
+    - "{{ minio_home_dir }}"
+  ignore_errors: true
+  become: yes
+
+
+- name: Starting cerebro
+  shell: "nohup minio server {{ minio_server_url }} >minio.log & echo \$! > pid"
+  args:
+    chdir: "{{ minio_home_dir }}"
+  become_user: "{{ exec_user }}"
+
+
+
+  

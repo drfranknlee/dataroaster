@@ -1,0 +1,5 @@
+- name: Starting cerebro
+  shell: "nohup minio server {{ minio_server_url }} >minio.log & echo \$! > pid"
+  args:
+    chdir: "{{ minio_home_dir }}"
+  become_user: "{{ exec_user }}"
