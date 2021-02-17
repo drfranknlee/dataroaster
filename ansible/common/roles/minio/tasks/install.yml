@@ -40,9 +40,11 @@
 
 
 - name: Starting minio
-  shell: "sudo su - {{ exec_user }} -c 'nohup minio server {{ minio_server_url }} >minio.log & echo \$! > pid'"
+  shell: "{{ item }}"
   args:
     chdir: "{{ minio_home_dir }}"
+  with_items:
+    - "nohup minio server {{ minio_server_url }} >minio.log & echo \$! > pid"
   become_user: "{{ exec_user }}"
 
 
