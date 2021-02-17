@@ -1,5 +1,5 @@
 ---
-raw_disks: "/dev/sdb,/dev/sdb,/dev/sdb,/dev/sdb,/dev/sdb,/dev/sdb"
+raw_disks: "/dev/sdb,/dev/sdc,/dev/sdd,/dev/sde,/dev/sdf,/dev/sdg"
 vg_name: "share"
 lv_name: "minio"
 require_lv_size: "100%FREE"
