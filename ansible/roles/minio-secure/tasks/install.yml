@@ -20,6 +20,17 @@
   ignore_errors: true
   become: yes
 
+- name: Creating cert directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ exec_user }}"
+    mode: 0755
+  with_items:
+    - "/home/{{ exec_user }}/.minio/certs"
+  ignore_errors: true
+  become: yes
+
 - name: Installing minio
   get_url:
     url: "https://dl.minio.io/server/minio/release/linux-amd64/minio"
@@ -59,10 +70,10 @@
   shell: "{{ item }}"
   with_items:
     - "sudo certbot certonly --standalone -d {{ minio_node_0 }} --staple-ocsp -m mykidong@cloudchef-labs.com --agree-tos"
-    - "sudo cp /etc/letsencrypt/live/$(sudo ls /etc/letsencrypt/live | grep {{ minio_node_0 }})/fullchain.pem /home/{{ exec_user }}/.minio/certs/public.crt"
-    - "sudo cp /etc/letsencrypt/live/$(sudo ls /etc/letsencrypt/live | grep {{ minio_node_0 }})/privkey.pem /home/{{ exec_user }}/.minio/certs/private.key"
-    - "sudo chown {{ exec_user }}:{{ exec_user }} /home/{{ exec_user }}/.minio/certs/public.crt"
-    - "sudo chown {{ exec_user }}:{{ exec_user }} /home/{{ exec_user }}/.minio/certs/private.key"
+    - "sudo cp /etc/letsencrypt/live/$(sudo ls /etc/letsencrypt/live | grep {{ minio_node_0 }})/fullchain.pem /home/{{ exec_user }}/.minio/certs/{{ public_key_file }}"
+    - "sudo cp /etc/letsencrypt/live/$(sudo ls /etc/letsencrypt/live | grep {{ minio_node_0 }})/privkey.pem /home/{{ exec_user }}/.minio/certs/{{ private_key_file }}"
+    - "sudo chown {{ exec_user }}:{{ exec_user }} /home/{{ exec_user }}/.minio/certs/{{ public_key_file }}"
+    - "sudo chown {{ exec_user }}:{{ exec_user }} /home/{{ exec_user }}/.minio/certs/{{ private_key_file }}"
   become: yes
   when: (inventory_hostname == hostvars[groups['minio-hosts'][0]]['inventory_hostname'])
 
@@ -70,10 +81,10 @@
   shell: "{{ item }}"
   with_items:
     - "sudo certbot certonly --standalone -d {{ minio_node_1 }} --staple-ocsp -m mykidong@cloudchef-labs.com --agree-tos"
-    - "sudo cp /etc/letsencrypt/live/$(sudo ls /etc/letsencrypt/live | grep {{ minio_node_1 }})/fullchain.pem /home/{{ exec_user }}/.minio/certs/public.crt"
-    - "sudo cp /etc/letsencrypt/live/$(sudo ls /etc/letsencrypt/live | grep {{ minio_node_1 }})/privkey.pem /home/{{ exec_user }}/.minio/certs/private.key"
-    - "sudo chown {{ exec_user }}:{{ exec_user }} /home/{{ exec_user }}/.minio/certs/public.crt"
-    - "sudo chown {{ exec_user }}:{{ exec_user }} /home/{{ exec_user }}/.minio/certs/private.key"
+    - "sudo cp /etc/letsencrypt/live/$(sudo ls /etc/letsencrypt/live | grep {{ minio_node_1 }})/fullchain.pem /home/{{ exec_user }}/.minio/certs/{{ public_key_file }}"
+    - "sudo cp /etc/letsencrypt/live/$(sudo ls /etc/letsencrypt/live | grep {{ minio_node_1 }})/privkey.pem /home/{{ exec_user }}/.minio/certs/{{ private_key_file }}"
+    - "sudo chown {{ exec_user }}:{{ exec_user }} /home/{{ exec_user }}/.minio/certs/{{ public_key_file }}"
+    - "sudo chown {{ exec_user }}:{{ exec_user }} /home/{{ exec_user }}/.minio/certs/{{ private_key_file }}"
   become: yes
   when: (inventory_hostname == hostvars[groups['minio-hosts'][1]]['inventory_hostname'])
 
@@ -81,10 +92,10 @@
   shell: "{{ item }}"
   with_items:
     - "sudo certbot certonly --standalone -d {{ minio_node_2 }} --staple-ocsp -m mykidong@cloudchef-labs.com --agree-tos"
-    - "sudo cp /etc/letsencrypt/live/$(sudo ls /etc/letsencrypt/live | grep {{ minio_node_2 }})/fullchain.pem /home/{{ exec_user }}/.minio/certs/public.crt"
-    - "sudo cp /etc/letsencrypt/live/$(sudo ls /etc/letsencrypt/live | grep {{ minio_node_2 }})//privkey.pem /home/{{ exec_user }}/.minio/certs/private.key"
-    - "sudo chown {{ exec_user }}:{{ exec_user }} /home/{{ exec_user }}/.minio/certs/public.crt"
-    - "sudo chown {{ exec_user }}:{{ exec_user }} /home/{{ exec_user }}/.minio/certs/private.key"
+    - "sudo cp /etc/letsencrypt/live/$(sudo ls /etc/letsencrypt/live | grep {{ minio_node_2 }})/fullchain.pem /home/{{ exec_user }}/.minio/certs/{{ public_key_file }}"
+    - "sudo cp /etc/letsencrypt/live/$(sudo ls /etc/letsencrypt/live | grep {{ minio_node_2 }})//privkey.pem /home/{{ exec_user }}/.minio/certs/{{ private_key_file }}"
+    - "sudo chown {{ exec_user }}:{{ exec_user }} /home/{{ exec_user }}/.minio/certs/{{ public_key_file }}"
+    - "sudo chown {{ exec_user }}:{{ exec_user }} /home/{{ exec_user }}/.minio/certs/{{ private_key_file }}"
   become: yes
   when: (inventory_hostname == hostvars[groups['minio-hosts'][2]]['inventory_hostname'])
 

@@ -11,8 +11,10 @@
     state: absent
   with_items:
     - "/etc/letsencrypt/live"
-    - "/home/{{ exec_user }}/.minio/certs"
+    - "/home/{{ exec_user }}/.minio/certs/{{ public_key_file }}"
+    - "/home/{{ exec_user }}/.minio/certs/{{ private_key_file }}"
   become: true
+  ignore_errors: true
 
 - name: Removing minio home directory
   file:
