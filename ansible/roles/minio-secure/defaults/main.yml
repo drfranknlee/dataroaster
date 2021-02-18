@@ -1,0 +1,20 @@
+---
+minio_root_user: cclminio
+minio_root_password: "rhksflja!@#"
+minio_env_sh: "minio.sh"
+lvm_mount_point: "/export"
+minio_home_dir: "/opt/minio"
+minio_data_path: "{{ lvm_mount_point }}/data"
+minio_data_dirs:
+  - "{{ minio_data_path }}1"
+  - "{{ minio_data_path }}2"
+  - "{{ minio_data_path }}3"
+  - "{{ minio_data_path }}4"
+  - "{{ minio_data_path }}5"
+  - "{{ minio_data_path }}6"
+minio_domain: "cloudchef-labs.com"
+minio_node_0: "minio-test0.{{ minio_domain }}"
+minio_node_1: "minio-test1.{{ minio_domain }}"
+minio_node_2: "minio-test2.{{ minio_domain }}"
+minio_host_range: "minio-test{0...2}.{{ minio_domain }}"
+minio_server_url: "https://{{ minio_host_range }}{{ minio_data_path }}{1...6}"

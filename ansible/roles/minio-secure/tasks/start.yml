@@ -1,0 +1,7 @@
+- name: Starting Secure MinIO
+  shell: "{{ item }}"
+  args:
+    chdir: "{{ minio_home_dir }}"
+  with_items:
+    - "nohup minio server --address \":443\" {{ minio_server_url }} >minio.log & echo $! > pid"
+  become_user: "{{ exec_user }}"

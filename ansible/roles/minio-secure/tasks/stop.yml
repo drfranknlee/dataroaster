@@ -1,0 +1,6 @@
+- name: Stopping MinIO Servers
+  shell: "kill -9 `cat  pid`"
+  args:
+    chdir: "{{ minio_home_dir }}"
+  ignore_errors: true
+  become_user: "{{ exec_user }}"
