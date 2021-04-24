@@ -1,5 +1,5 @@
 nodes:
-  - address: 132.226.237.17
+  - address: 10.0.0.232
     internal_address: 10.0.0.232
     hostname_override: kube-0
     user: opc
@@ -36,7 +36,7 @@ nodes:
       fdsIvzpp0YtofLGYSkSQpIY9AKS5iUhfToWC6fHiDlDVuc55bwym
       -----END RSA PRIVATE KEY-----
     port: 22
-  - address: 132.226.227.132
+  - address: 10.0.0.143
     internal_address: 10.0.0.143
     hostname_override: kube-1
     user: opc
@@ -73,7 +73,7 @@ nodes:
       fdsIvzpp0YtofLGYSkSQpIY9AKS5iUhfToWC6fHiDlDVuc55bwym
       -----END RSA PRIVATE KEY-----
     port: 22
-  - address: 132.226.22.190
+  - address: 10.0.0.167
     internal_address: 10.0.0.167
     hostname_override: kube-2
     user: opc
