@@ -1,0 +1,24 @@
+cluster.name: any-cluster-name
+
+node:
+  name: unique-node-name1
+  master: true
+  data: true
+  ingest: true
+
+network:
+  host: anyhost
+
+discovery.seed_hosts:
+  - 192.168.1.10:9300
+  - 192.168.1.11
+  - seeds.mydomain.com
+
+path:
+  data:
+    - /data01/elasticsearch-1/data
+    - /data02/elasticsearch-1/data
+  logs: /data01/log/elasticsearch-1
+
+bootstrap.memory_lock: true
+indices.query.bool.max_clause_count: 10000
