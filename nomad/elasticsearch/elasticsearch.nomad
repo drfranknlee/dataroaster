@@ -53,7 +53,9 @@ node:
   data: true
   ingest: true
 network:
-  host: es-master-0-comm.service.consul
+  host: 0.0.0.0
+discovery.seed_hosts:
+  - {{ env "NOMAD_IP_communication" }}:{{ env "NOMAD_HOST_PORT_communication" }}
 path:
   data:
     - /srv/data
@@ -65,8 +67,8 @@ EOF
       }
       template {
         data = <<EOF
--Xms1024m
--Xmx1024m
+-Xms512m
+-Xmx512m
 8-13:-XX:+UseConcMarkSweepGC
 8-13:-XX:CMSInitiatingOccupancyFraction=75
 8-13:-XX:+UseCMSInitiatingOccupancyOnly
@@ -99,6 +101,7 @@ EOF
           "communication"
         ]
         ulimit {
+          memlock = "-1"
           nofile = "65536"
           nproc = "65536"
         }
@@ -111,9 +114,17 @@ EOF
         name = "es-master-0-req"
         port = "request"
         check {
+          name = "rest-tcp"
           type = "tcp"
           interval = "10s"
           timeout = "2s"
+        }
+        check {
+          name     = "rest-http"
+          type     = "http"
+          path     = "/"
+          interval = "5s"
+          timeout  = "4s"
         }
       }
       service {
@@ -169,9 +180,10 @@ node:
   data: true
   ingest: true
 network:
-  host: es-master-1-comm.service.consul
+  host: 0.0.0.0
 discovery.seed_hosts:
-  - {{ range service "es-master-0-comm" }}{{ .Address }}:{{ .Port }}{{ end }}
+  - {{ env "NOMAD_IP_communication" }}:{{ env "NOMAD_HOST_PORT_communication" }}
+  - {{ range service "es-master-0-comm" }}{{ .Address }}:{{ .Port }}{{ end }} ##### IT DOES NOT WORK!!!!!!
 path:
   data:
     - /srv/data
@@ -183,8 +195,8 @@ EOF
       }
       template {
         data = <<EOF
--Xms1024m
--Xmx1024m
+-Xms512m
+-Xmx512m
 8-13:-XX:+UseConcMarkSweepGC
 8-13:-XX:CMSInitiatingOccupancyFraction=75
 8-13:-XX:+UseCMSInitiatingOccupancyOnly
@@ -217,6 +229,7 @@ EOF
           "communication"
         ]
         ulimit {
+          memlock = "-1"
           nofile = "65536"
           nproc = "65536"
         }
@@ -229,9 +242,17 @@ EOF
         name = "es-master-1-req"
         port = "request"
         check {
+          name = "rest-tcp"
           type = "tcp"
           interval = "10s"
           timeout = "2s"
+        }
+        check {
+          name     = "rest-http"
+          type     = "http"
+          path     = "/"
+          interval = "5s"
+          timeout  = "4s"
         }
       }
       service {
