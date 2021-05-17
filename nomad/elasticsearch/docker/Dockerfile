@@ -35,3 +35,4 @@ RUN cat /etc/sysctl.conf
 
 USER ${ES_USER}
 WORKDIR ${APP_HOME}
+EXPOSE ["9200", "9300"]
