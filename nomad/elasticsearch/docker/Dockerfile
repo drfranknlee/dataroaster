@@ -15,7 +15,7 @@ RUN set -ex \
     && rm -rf ${APP_HOME}/config/elasticsearch.yml \
     && rm -rf ${APP_HOME}/config/jvm.options \
     && rm -rf ${FILE_NAME} \
-    && rm -rf ${ES_PACK_NAME} 
+    && rm -rf ${ES_PACK_NAME}
 
 RUN mkdir -p ${APP_HOME}/temp
 RUN ls -al ${APP_HOME}
@@ -28,8 +28,10 @@ RUN set -ex \
     && echo '${ES_USER}   - nproc  65536' >> /etc/security/limits.d/elasticsearch.conf \
     && echo 'root  soft  memlock unlimited' >> /etc/security/limits.d/elasticsearch.conf \
     && echo 'root  hard  memlock unlimited' >> /etc/security/limits.d/elasticsearch.conf
+RUN cat /etc/security/limits.d/elasticsearch.conf
 
 RUN echo vm.max_map_count=262144 >> /etc/sysctl.conf
+RUN cat /etc/sysctl.conf
 
 USER ${ES_USER}
 WORKDIR ${APP_HOME}
