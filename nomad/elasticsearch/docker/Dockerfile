@@ -7,12 +7,15 @@ ENV ES_USER elasticsearch
 RUN useradd -ms /bin/bash -d ${APP_HOME} ${ES_USER}
 
 RUN set -ex \
-    && FILE_NAME=elasticsearch-7.12.1-linux-x86_64.tar.gz \
+    && ES_PACK_NAME=elasticsearch-7.12.1 \
+    && FILE_NAME=${ES_PACK_NAME}-linux-x86_64.tar.gz \
     && curl -O https://artifacts.elastic.co/downloads/elasticsearch/${FILE_NAME} \
-    && tar -zxf ${FILE_NAME} -C ${APP_HOME} \
+    && tar -zxf ${FILE_NAME} \
+    && cp -R ${ES_PACK_NAME}/* ${APP_HOME} \
     && rm -rf ${APP_HOME}/config/elasticsearch.yml \
     && rm -rf ${APP_HOME}/config/jvm.options \
-    && rm -rf ${FILE_NAME}
+    && rm -rf ${FILE_NAME} \
+    && rm -rf ${ES_PACK_NAME} 
 
 RUN mkdir -p ${APP_HOME}/temp
 RUN ls -al ${APP_HOME}
