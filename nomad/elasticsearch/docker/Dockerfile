@@ -30,9 +30,6 @@ RUN set -ex \
     && echo 'root  hard  memlock unlimited' >> /etc/security/limits.d/elasticsearch.conf
 RUN cat /etc/security/limits.d/elasticsearch.conf
 
-RUN echo vm.max_map_count=262144 >> /etc/sysctl.conf
-RUN cat /etc/sysctl.conf
-
 USER ${ES_USER}
 WORKDIR ${APP_HOME}
 EXPOSE ["9200", "9300"]
