@@ -24,8 +24,8 @@ RUN chmod a+x -R ${APP_HOME}/bin
 RUN chown ${ES_USER}: -R ${APP_HOME}
 
 RUN set -ex \
-    && echo '${ES_USER}   - nofile 65536' >> /etc/security/limits.d/elasticsearch.conf \
-    && echo '${ES_USER}   - nproc  65536' >> /etc/security/limits.d/elasticsearch.conf \
+    && echo 'elasticsearch   - nofile 65536' >> /etc/security/limits.d/elasticsearch.conf \
+    && echo 'elasticsearch   - nproc  65536' >> /etc/security/limits.d/elasticsearch.conf \
     && echo 'root  soft  memlock unlimited' >> /etc/security/limits.d/elasticsearch.conf \
     && echo 'root  hard  memlock unlimited' >> /etc/security/limits.d/elasticsearch.conf
 RUN cat /etc/security/limits.d/elasticsearch.conf
