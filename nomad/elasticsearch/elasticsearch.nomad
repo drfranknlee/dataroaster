@@ -96,6 +96,11 @@ EOF
           "./local/jvm.options:/opt/elasticsearch/config/jvm.options"
         ]
         command = "bin/elasticsearch"
+        args = [
+          "-Enetwork.publish_host=${NOMAD_IP_request}",
+          "-Ehttp.publish_port=${NOMAD_HOST_PORT_request}",
+          "-Etransport.publish_port=${NOMAD_HOST_PORT_communication}"
+        ]
         ports = [
           "request",
           "communication"
@@ -159,6 +164,23 @@ EOF
       read_only = false
       source = "es-master-1"
     }
+    task "await-es-master-0-comm" {
+      driver = "docker"
+      config {
+        image        = "busybox:1.28"
+        command      = "sh"
+        args         = ["-c", "echo -n 'Waiting for service'; until nslookup es-master-0-comm.service.consul 2>&1 >/dev/null; do echo '.'; sleep 2; done"]
+        network_mode = "host"
+      }
+      resources {
+        cpu    = 200
+        memory = 128
+      }
+      lifecycle {
+        hook    = "prestart"
+        sidecar = false
+      }
+    }
     task "elasticsearch" {
       driver = "docker"
       kill_timeout = "300s"
@@ -183,7 +205,7 @@ network:
   host: 0.0.0.0
 discovery.seed_hosts:
   - {{ env "NOMAD_IP_communication" }}:{{ env "NOMAD_HOST_PORT_communication" }}
-  - {{ range service "es-master-0-comm" }}{{ .Address }}:{{ .Port }}{{ end }} ##### IT DOES NOT WORK!!!!!!
+  - {{ range service "es-master-0-comm" }}{{ .Address }}:{{ .Port }}{{ end }}
 path:
   data:
     - /srv/data
@@ -224,6 +246,11 @@ EOF
           "./local/jvm.options:/opt/elasticsearch/config/jvm.options"
         ]
         command = "bin/elasticsearch"
+        args = [
+          "-Enetwork.publish_host=${NOMAD_IP_request}",
+          "-Ehttp.publish_port=${NOMAD_HOST_PORT_request}",
+          "-Etransport.publish_port=${NOMAD_HOST_PORT_communication}"
+        ]
         ports = [
           "request",
           "communication"

@@ -6,6 +6,8 @@ ENV ES_USER elasticsearch
 
 RUN useradd -ms /bin/bash -d ${APP_HOME} ${ES_USER}
 
+RUN yum install nmap-ncat -y
+
 RUN set -ex \
     && ES_PACK_NAME=elasticsearch-7.12.1 \
     && FILE_NAME=${ES_PACK_NAME}-linux-x86_64.tar.gz \
