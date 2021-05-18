@@ -34,4 +34,4 @@ RUN cat /etc/security/limits.d/elasticsearch.conf
 
 USER ${ES_USER}
 WORKDIR ${APP_HOME}
-EXPOSE ["9200", "9300"]
+EXPOSE 9200 9300
