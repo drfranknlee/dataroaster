@@ -29,12 +29,12 @@ job "kibana" {
       read_only = false
       source = "es-kibana"
     }
-    task "await-es-master-0-req" {
+    task "await-es-req" {
       driver = "docker"
       config {
         image        = "busybox:1.28"
         command      = "sh"
-        args         = ["-c", "echo -n 'Waiting for service'; until nslookup es-master-0-req.service.consul 2>&1 >/dev/null; do echo '.'; sleep 2; done"]
+        args         = ["-c", "echo -n 'Waiting for service'; until nslookup es-req.service.consul 2>&1 >/dev/null; do echo '.'; sleep 2; done"]
         network_mode = "host"
       }
       resources {
@@ -59,7 +59,7 @@ job "kibana" {
         data = <<EOF
 elasticsearch:
   hosts:
-    - http://{{ range service "es-master-0-req" }}{{ .Address }}:{{ .Port }}{{ end }}
+    - http://{{with index (service "es-req") 0}}{{ .Address }}:{{ .Port }}{{ end }}
 path:
   data: /srv/data
 EOF

@@ -126,7 +126,7 @@ EOF
         memory = 1024
       }
       service {
-        name = "es-master-0-req"
+        name = "es-req"
         port = "request"
         check {
           name = "rest-tcp"
@@ -286,7 +286,7 @@ EOF
         memory = 1024
       }
       service {
-        name = "es-master-1-req"
+        name = "es-req"
         port = "request"
         check {
           name = "rest-tcp"
@@ -464,7 +464,7 @@ EOF
         memory = 1024
       }
       service {
-        name = "es-master-2-req"
+        name = "es-req"
         port = "request"
         check {
           name = "rest-tcp"
@@ -657,7 +657,7 @@ EOF
         memory = 1024
       }
       service {
-        name = "es-data-0-req"
+        name = "es-req"
         port = "request"
         check {
           name = "rest-tcp"
@@ -674,7 +674,7 @@ EOF
         }
       }
       service {
-        name = "es-data-0-comm"
+        name = "es-data-comm"
         port = "communication"
         check {
           type = "tcp"
@@ -850,7 +850,7 @@ EOF
         memory = 1024
       }
       service {
-        name = "es-data-1-req"
+        name = "es-req"
         port = "request"
         check {
           name = "rest-tcp"
@@ -867,7 +867,7 @@ EOF
         }
       }
       service {
-        name = "es-data-1-comm"
+        name = "es-data-comm"
         port = "communication"
         check {
           type = "tcp"
