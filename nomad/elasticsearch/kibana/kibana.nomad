@@ -21,12 +21,30 @@ job "kibana" {
     }
     network {
       port "http" {
+        static = 5601
       }
     }
     volume "ceph-volume" {
       type = "csi"
       read_only = false
       source = "es-kibana"
+    }
+    task "await-es-master-0-req" {
+      driver = "docker"
+      config {
+        image        = "busybox:1.28"
+        command      = "sh"
+        args         = ["-c", "echo -n 'Waiting for service'; until nslookup es-master-0-req.service.consul 2>&1 >/dev/null; do echo '.'; sleep 2; done"]
+        network_mode = "host"
+      }
+      resources {
+        cpu    = 200
+        memory = 128
+      }
+      lifecycle {
+        hook    = "prestart"
+        sidecar = false
+      }
     }
     task "kibana" {
       driver = "docker"
@@ -39,12 +57,9 @@ job "kibana" {
       }
       template {
         data = <<EOF
-server:
-  host: "localhost"
-  port: 5601
 elasticsearch:
   hosts:
-    - http://localhost:9200
+    - http://{{ range service "es-master-0-req" }}{{ .Address }}:{{ .Port }}{{ end }}
 path:
   data: /srv/data
 EOF
@@ -57,6 +72,12 @@ EOF
           "./local/kibana.yml:/opt/kibana/config/kibana.yml",
         ]
         command = "bin/kibana"
+        args = [
+          "--host",
+          "0.0.0.0",
+          "--port",
+          "${NOMAD_PORT_http}"
+        ]
         ports = [
           "http"
         ]
