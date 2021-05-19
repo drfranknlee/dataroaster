@@ -59,7 +59,7 @@ job "kibana" {
         data = <<EOF
 elasticsearch:
   hosts:
-    - http://{{with index (service "es-req") 0}}{{ .Address }}:{{ .Port }}{{ end }}
+    - http://{{range $index, $element := service "es-req"}}{{if eq $index 0}}{{ .Address }}:{{ .Port }}{{end}}{{end}}
 path:
   data: /srv/data
 EOF
