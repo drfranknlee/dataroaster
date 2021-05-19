@@ -37,21 +37,26 @@ job "kibana" {
         destination = "/srv"
         read_only   = false
       }
+      template {
+        data = <<EOF
+server:
+  host: "localhost"
+  port: 5601
+elasticsearch:
+  hosts:
+    - http://localhost:9200
+path:
+  data: /srv/data
+EOF
+        destination = "local/kibana.yml"
+      }
       config {
-        image = "docker.elastic.co/kibana/kibana:7.12.1"
+        image = "mykidong/kibana:7.12.1"
         force_pull = false
-        command = "kibana"
-        args = [
-          "--elasticsearch.url=http://${NOMAD_JOB_NAME}.service.consul:80",
-          "--server.host=0.0.0.0",
-          "--server.name=${NOMAD_JOB_NAME}.service.consul",
-          "--server.port=${NOMAD_PORT_http}",
-          "--path.data=/srv/data",
-          "--elasticsearch.preserveHost=false",
-          "--xpack.apm.ui.enabled=false",
-          "--xpack.graph.enabled=false",
-          "--xpack.ml.enabled=false",
+        volumes = [
+          "./local/kibana.yml:/opt/kibana/config/kibana.yml",
         ]
+        command = "bin/kibana"
         ports = [
           "http"
         ]

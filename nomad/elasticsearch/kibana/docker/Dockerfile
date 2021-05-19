@@ -8,8 +8,8 @@ RUN useradd -ms /bin/bash -d ${APP_HOME} ${KIBANA_USER}
 RUN yum install nmap-ncat -y
 
 RUN set -ex \
-    && PACK_NAME=kibana-7.12.1 \
-    && FILE_NAME=${PACK_NAME}-linux-x86_64.tar.gz \
+    && PACK_NAME=kibana-7.12.1-linux-x86_64 \
+    && FILE_NAME=${PACK_NAME}.tar.gz \
     && curl -O https://artifacts.elastic.co/downloads/kibana/${FILE_NAME} \
     && tar -zxf ${FILE_NAME} \
     && cp -R ${PACK_NAME}/* ${APP_HOME} \
