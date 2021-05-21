@@ -287,7 +287,7 @@ EOF
       kill_signal = "SIGTERM"
       config {
         image = "mykidong/trino-cli:356"
-        force_pull = false
+        force_pull = true
         command = "tail"
         args = [
           "-f",
