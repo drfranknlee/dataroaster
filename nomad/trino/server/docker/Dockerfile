@@ -22,7 +22,7 @@ RUN set -ex \
 RUN ls -al ${APP_HOME}
 
 RUN chmod a+x -R ${APP_HOME}/bin
-RUN chown ${TRINO_USER}: -R ${TRINO_USER}
+RUN chown ${TRINO_USER}: -R ${APP_HOME}
 
 RUN set -ex \
     && echo 'trino soft nofile 131072' >> /etc/security/limits.d/trino.conf \

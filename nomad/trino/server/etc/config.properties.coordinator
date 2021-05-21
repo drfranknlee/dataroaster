@@ -7,4 +7,4 @@ query.max-total-memory-per-node=10GB
 query.max-stage-count=200
 task.writer-count=4
 discovery-server.enabled=true
-discovery.uri=http://{{ prestoCoordinatorEndpoint }}
+discovery.uri=http://trino-coordinator:8080
