@@ -34,9 +34,9 @@ job "trino" {
 coordinator=true
 node-scheduler.include-coordinator=false
 http-server.http.port={{ env "NOMAD_HOST_PORT_http" }}
-query.max-memory=50GB
-query.max-memory-per-node=8GB
-query.max-total-memory-per-node=10GB
+query.max-memory=5GB
+query.max-memory-per-node=1GB
+query.max-total-memory-per-node=2GB
 query.max-stage-count=200
 task.writer-count=4
 discovery-server.enabled=true
@@ -48,7 +48,7 @@ EOF
         data = <<EOF
 node.id={{ env "NOMAD_NAMESPACE" }}-{{ env "NOMAD_JOB_NAME" }}-{{ env "NOMAD_GROUP_NAME" }}-{{ env "NOMAD_ALLOC_ID" }}
 node.environment=production
-node.data-dir=/var/trino/data
+node.data-dir=/opt/trino-server/data
 spiller-spill-path=/tmp
 max-spill-per-node=4TB
 query-max-spill-per-node=1TB
@@ -111,8 +111,8 @@ EOF
         }
       }
       resources {
-        cpu = 100
-        memory = 1024
+        cpu = 200
+        memory = 4096
       }
       service {
         name = "trino-coordinator"
@@ -122,13 +122,6 @@ EOF
           type = "tcp"
           interval = "10s"
           timeout = "2s"
-        }
-        check {
-          name = "rest-http"
-          type = "http"
-          path = "/"
-          interval = "5s"
-          timeout = "4s"
         }
       }
     }
@@ -146,6 +139,23 @@ EOF
       port "http" {
       }
     }
+    task "await-coordinator" {
+      driver = "docker"
+      config {
+        image        = "busybox:1.28"
+        command      = "sh"
+        args         = ["-c", "echo -n 'Waiting for service'; until nslookup trino-coordinator.service.consul 2>&1 >/dev/null; do echo '.'; sleep 2; done"]
+        network_mode = "host"
+      }
+      resources {
+        cpu    = 100
+        memory = 128
+      }
+      lifecycle {
+        hook    = "prestart"
+        sidecar = false
+      }
+    }
     task "trino-server" {
       driver = "docker"
       kill_timeout = "300s"
@@ -154,9 +164,9 @@ EOF
         data = <<EOF
 coordinator=false
 http-server.http.port={{ env "NOMAD_HOST_PORT_http" }}
-query.max-memory=50GB
-query.max-memory-per-node=10GB
-query.max-total-memory-per-node=10GB
+query.max-memory=5GB
+query.max-memory-per-node=1GB
+query.max-total-memory-per-node=2GB
 query.max-stage-count=200
 task.writer-count=4
 discovery.uri=http://{{range $index, $element := service "trino-coordinator"}}{{if eq $index 0}}{{ .Address }}:{{ .Port }}{{end}}{{end}}
@@ -167,7 +177,7 @@ EOF
         data = <<EOF
 node.id={{ env "NOMAD_NAMESPACE" }}-{{ env "NOMAD_JOB_NAME" }}-{{ env "NOMAD_GROUP_NAME" }}-{{ env "NOMAD_ALLOC_ID" }}
 node.environment=production
-node.data-dir=/var/trino/data
+node.data-dir=/opt/trino-server/data
 spiller-spill-path=/tmp
 max-spill-per-node=4TB
 query-max-spill-per-node=1TB
@@ -230,8 +240,8 @@ EOF
         }
       }
       resources {
-        cpu = 100
-        memory = 1024
+        cpu = 200
+        memory = 4096
       }
       service {
         name = "trino-worker"
@@ -241,13 +251,6 @@ EOF
           type = "tcp"
           interval = "10s"
           timeout = "2s"
-        }
-        check {
-          name = "rest-http"
-          type = "http"
-          path = "/"
-          interval = "5s"
-          timeout = "4s"
         }
       }
     }
@@ -260,6 +263,23 @@ EOF
       delay = "30s"
       interval = "5m"
       mode = "fail"
+    }
+    task "await-coordinator" {
+      driver = "docker"
+      config {
+        image        = "busybox:1.28"
+        command      = "sh"
+        args         = ["-c", "echo -n 'Waiting for service'; until nslookup trino-coordinator.service.consul 2>&1 >/dev/null; do echo '.'; sleep 2; done"]
+        network_mode = "host"
+      }
+      resources {
+        cpu    = 100
+        memory = 128
+      }
+      lifecycle {
+        hook    = "prestart"
+        sidecar = false
+      }
     }
     task "trino-cli" {
       driver = "docker"
