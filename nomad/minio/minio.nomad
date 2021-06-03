@@ -44,8 +44,8 @@ job "minio" {
         read_only = false
       }
       env {
-        MINIO_ROOT_USER = var.minio_root_user
-        MINIO_ROOT_PASSWORD = var.minio_root_password
+        MINIO_ROOT_USER = "${NOMAD_VAR_minio_root_user}"
+        MINIO_ROOT_PASSWORD = "${NOMAD_VAR_minio_root_password}"
       }
       config {
         image = "minio/minio:RELEASE.2021-03-01T04-20-55Z"
@@ -54,35 +54,22 @@ job "minio" {
           "server",
           "--address",
           ":${NOMAD_HOST_PORT_communication}",
-          "http://localhost:${NOMAD_HOST_PORT_communication}/srv/data{1...6}"
+          "http://minio-svc-0.service.consul:9999/srv/data{1...6}",
+          "http://minio-svc-1.service.consul:9991/srv/data{1...6}",
+          "http://minio-svc-2.service.consul:9992/srv/data{1...6}"
         ]
+        network_mode = "host"
         ports = [
           "communication"
         ]
       }
       resources {
-        cpu = 100
+        cpu = 200
         memory = 2048
       }
       service {
         name = "minio-server-0"
         port = "communication"
-        check {
-          name      = "minio-server-0-live"
-          type      = "http"
-          port      = "communication"
-          path      = "/minio/health/live"
-          interval  = "10s"
-          timeout   = "2s"
-        }
-        check {
-          name      = "minio-server-0-ready"
-          type      = "http"
-          port      = "communication"
-          path      = "/minio/health/ready"
-          interval  = "15s"
-          timeout   = "4s"
-        }
       }
     }
   }
@@ -104,23 +91,6 @@ job "minio" {
       read_only = false
       source = "minio-1"
     }
-    task "await-minio-server-0" {
-      driver = "docker"
-      config {
-        image        = "busybox:1.28"
-        command      = "sh"
-        args         = ["-c", "echo -n 'Waiting for service'; until nslookup minio-server-0.service.consul 2>&1 >/dev/null; do echo '.'; sleep 2; done"]
-        network_mode = "host"
-      }
-      resources {
-        cpu    = 200
-        memory = 128
-      }
-      lifecycle {
-        hook    = "prestart"
-        sidecar = false
-      }
-    }
     task "minio" {
       driver = "docker"
       kill_timeout = "300s"
@@ -131,16 +101,8 @@ job "minio" {
         read_only = false
       }
       env {
-        MINIO_ROOT_USER = var.minio_root_user
-        MINIO_ROOT_PASSWORD = var.minio_root_password
-      }
-      template {
-        data = <<EOF
-MINIO_SERVER_0 = {{range $index, $element := service "minio-server-0"}}{{if eq $index 0}}minio-server-0.service.consul:{{ .Port }}{{end}}{{end}}
-EOF
-        destination = "local/minio.env"
-        env = true
-        change_mode = "noop"
+        MINIO_ROOT_USER = "${NOMAD_VAR_minio_root_user}"
+        MINIO_ROOT_PASSWORD = "${NOMAD_VAR_minio_root_password}"
       }
       config {
         image = "minio/minio:RELEASE.2021-03-01T04-20-55Z"
@@ -149,9 +111,11 @@ EOF
           "server",
           "--address",
           ":${NOMAD_HOST_PORT_communication}",
-          "http://localhost:${NOMAD_HOST_PORT_communication}/srv/data{1...6}",
-          "http://${MINIO_SERVER_0}/srv/data{1...6}"
+          "http://minio-svc-1.service.consul:9991/srv/data{1...6}",
+          "http://minio-svc-0.service.consul:9999/srv/data{1...6}",
+          "http://minio-svc-2.service.consul:9992/srv/data{1...6}"
         ]
+        network_mode = "host"
         ports = [
           "communication"
         ]
@@ -163,22 +127,6 @@ EOF
       service {
         name = "minio-server-1"
         port = "communication"
-        check {
-          name      = "minio-server-1-live"
-          type      = "http"
-          port      = "communication"
-          path      = "/minio/health/live"
-          interval  = "10s"
-          timeout   = "2s"
-        }
-        check {
-          name      = "minio-server-1-ready"
-          type      = "http"
-          port      = "communication"
-          path      = "/minio/health/ready"
-          interval  = "15s"
-          timeout   = "4s"
-        }
       }
     }
   }
@@ -200,40 +148,6 @@ EOF
       read_only = false
       source = "minio-2"
     }
-    task "await-minio-server-0" {
-      driver = "docker"
-      config {
-        image        = "busybox:1.28"
-        command      = "sh"
-        args         = ["-c", "echo -n 'Waiting for service'; until nslookup minio-server-0.service.consul 2>&1 >/dev/null; do echo '.'; sleep 2; done"]
-        network_mode = "host"
-      }
-      resources {
-        cpu    = 100
-        memory = 128
-      }
-      lifecycle {
-        hook    = "prestart"
-        sidecar = false
-      }
-    }
-    task "await-minio-server-1" {
-      driver = "docker"
-      config {
-        image        = "busybox:1.28"
-        command      = "sh"
-        args         = ["-c", "echo -n 'Waiting for service'; until nslookup minio-server-1.service.consul 2>&1 >/dev/null; do echo '.'; sleep 2; done"]
-        network_mode = "host"
-      }
-      resources {
-        cpu    = 100
-        memory = 128
-      }
-      lifecycle {
-        hook    = "prestart"
-        sidecar = false
-      }
-    }
     task "minio" {
       driver = "docker"
       kill_timeout = "300s"
@@ -244,16 +158,8 @@ EOF
         read_only = false
       }
       env {
-        MINIO_ROOT_USER = var.minio_root_user
-        MINIO_ROOT_PASSWORD = var.minio_root_password
-      }
-      template {
-        data = <<EOF
-MINIO_SERVER_0 = {{range $index, $element := service "minio-server-0"}}{{if eq $index 0}}minio-server-0.service.consul:{{ .Port }}{{end}}{{end}}
-MINIO_SERVER_1 = {{range $index, $element := service "minio-server-1"}}{{if eq $index 0}}minio-server-1.service.consul:{{ .Port }}{{end}}{{end}}
-EOF
-        destination = "local/minio.env"
-        env = true
+        MINIO_ROOT_USER = "${NOMAD_VAR_minio_root_user}"
+        MINIO_ROOT_PASSWORD = "${NOMAD_VAR_minio_root_password}"
       }
       config {
         image = "minio/minio:RELEASE.2021-03-01T04-20-55Z"
@@ -262,10 +168,11 @@ EOF
           "server",
           "--address",
           ":${NOMAD_HOST_PORT_communication}",
-          "http://localhost:${NOMAD_HOST_PORT_communication}/srv/data{1...6}",
-          "http://${MINIO_SERVER_0}/srv/data{1...6}",
-          "http://${MINIO_SERVER_1}/srv/data{1...6}"
+          "http://minio-svc-2.service.consul:9992/srv/data{1...6}",
+          "http://minio-svc-0.service.consul:9999/srv/data{1...6}",
+          "http://minio-svc-1.service.consul:9991/srv/data{1...6}"
         ]
+        network_mode = "host"
         ports = [
           "communication"
         ]
@@ -277,22 +184,195 @@ EOF
       service {
         name = "minio-server-2"
         port = "communication"
-        check {
-          name      = "minio-server-2-live"
-          type      = "http"
-          port      = "communication"
-          path      = "/minio/health/live"
-          interval  = "10s"
-          timeout   = "2s"
-        }
-        check {
-          name      = "minio-server-2-ready"
-          type      = "http"
-          port      = "communication"
-          path      = "/minio/health/ready"
-          interval  = "15s"
-          timeout   = "4s"
-        }
+      }
+    }
+  }
+  ##################################### minio-svc-0 ############################################
+  group "nginx-0" {
+    count = 1
+
+    network {
+      port "http" {
+        static = 9999
+      }
+    }
+
+    service {
+      name = "minio-svc-0"
+      port = "http"
+    }
+
+    task "nginx" {
+      driver = "docker"
+
+      config {
+        image = "nginx"
+
+        ports = ["http"]
+
+        volumes = [
+          "local:/etc/nginx/conf.d",
+        ]
+      }
+
+      template {
+        data = <<EOF
+upstream backend {
+{{ range service "minio-server-0" }}
+  server {{ .Address }}:{{ .Port }};
+{{ else }}server 127.0.0.1:65535; # force a 502
+{{ end }}
+}
+
+server {
+   listen 9999;
+   ignore_invalid_headers off;
+   client_max_body_size 0;
+   proxy_buffering off;
+
+   location / {
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+      proxy_set_header Host $http_host;
+      proxy_connect_timeout 300;
+      proxy_http_version 1.1;
+      proxy_set_header Connection "";
+      chunked_transfer_encoding off;
+      proxy_pass http://backend;
+   }
+}
+EOF
+
+        destination   = "local/load-balancer.conf"
+        change_mode   = "signal"
+        change_signal = "SIGHUP"
+      }
+    }
+  }
+  ##################################### minio-svc-1 ############################################
+  group "nginx-1" {
+    count = 1
+
+    network {
+      port "http" {
+        static = 9991
+      }
+    }
+
+    service {
+      name = "minio-svc-1"
+      port = "http"
+    }
+
+    task "nginx" {
+      driver = "docker"
+
+      config {
+        image = "nginx"
+
+        ports = ["http"]
+
+        volumes = [
+          "local:/etc/nginx/conf.d",
+        ]
+      }
+
+      template {
+        data = <<EOF
+upstream backend {
+{{ range service "minio-server-1" }}
+  server {{ .Address }}:{{ .Port }};
+{{ else }}server 127.0.0.1:65535; # force a 502
+{{ end }}
+}
+
+server {
+   listen 9991;
+   ignore_invalid_headers off;
+   client_max_body_size 0;
+   proxy_buffering off;
+
+   location / {
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+      proxy_set_header Host $http_host;
+      proxy_connect_timeout 300;
+      proxy_http_version 1.1;
+      proxy_set_header Connection "";
+      chunked_transfer_encoding off;
+      proxy_pass http://backend;
+   }
+}
+EOF
+
+        destination   = "local/load-balancer.conf"
+        change_mode   = "signal"
+        change_signal = "SIGHUP"
+      }
+    }
+  }
+  ##################################### minio-svc-2 ############################################
+  group "nginx-2" {
+    count = 1
+
+    network {
+      port "http" {
+        static = 9992
+      }
+    }
+
+    service {
+      name = "minio-svc-2"
+      port = "http"
+    }
+
+    task "nginx" {
+      driver = "docker"
+
+      config {
+        image = "nginx"
+
+        ports = ["http"]
+
+        volumes = [
+          "local:/etc/nginx/conf.d",
+        ]
+      }
+
+      template {
+        data = <<EOF
+upstream backend {
+{{ range service "minio-server-2" }}
+  server {{ .Address }}:{{ .Port }};
+{{ else }}server 127.0.0.1:65535; # force a 502
+{{ end }}
+}
+
+server {
+   listen 9992;
+   ignore_invalid_headers off;
+   client_max_body_size 0;
+   proxy_buffering off;
+
+   location / {
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+      proxy_set_header Host $http_host;
+      proxy_connect_timeout 300;
+      proxy_http_version 1.1;
+      proxy_set_header Connection "";
+      chunked_transfer_encoding off;
+      proxy_pass http://backend;
+   }
+}
+EOF
+
+        destination   = "local/load-balancer.conf"
+        change_mode   = "signal"
+        change_signal = "SIGHUP"
       }
     }
   }
@@ -307,15 +387,11 @@ EOF
     }
     task "minio-cli" {
       driver = "docker"
-      kill_timeout = "300s"
-      kill_signal = "SIGTERM"
       config {
-        image = "minio/mc:RELEASE.2021-02-14T04-28-06Z"
+        image = "minio/mc:RELEASE.2021-05-18T03-39-44Z"
         force_pull = false
-        command = "tail"
-        args = [
-          "-f",
-          "/dev/null"
+        entrypoint = [
+          "/bin/sh"
         ]
       }
       resources {
