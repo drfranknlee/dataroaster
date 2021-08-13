@@ -6,30 +6,7 @@ keytool -list -rfc --keystore authorizer.jks | openssl x509 -inform pem -pubkey 
 
 # client password.
 helloAuthAPI: [$2a$08$xIucoQrRBLfgKPJi/irgMelLJaiviKhyyNd6L/fPGcMiOcUErMDsi]
-helloAuthPortal: [$2a$08$calupF2Orv0yCZF.J2BWs.un0VLyxRNJtGb7mwibv2Kx6sm1m4KFi]
-helloAuthConsole: [$2a$08$30csDvG81bk3Lk7MGNc0tucB/MvUG8hmVRT3Pl1wKctRG40alj2w6]
 icarus0337: [$2a$08$jLRJiKPSyuitd1P.QMOYmOc7dcdIGI4GwGlnQzXZTdgs/.Crhmm7m]
-
 
 # base64 encoding of clientId and clientSecret.
 api:helloAuthAPI: [YXBpOmhlbGxvQXV0aEFQSQ==]
-portal:helloAuthPortal: [cG9ydGFsOmhlbGxvQXV0aFBvcnRhbA==]
-console:helloAuthConsole: [Y29uc29sZTpoZWxsb0F1dGhDb25zb2xl]
-
-# authentication.
-curl -XPOST -u api:helloAuthAPI http://localhost:8081/authorizer/oauth/token -d  "grant_type=password&username=mykidong@gmail.com&password=icarus0337!"
-curl -XPOST -H "Authorization: Basic YXBpOmhlbGxvQXV0aEFQSQ==" http://localhost:8081/authorizer/oauth/token -d  "grant_type=password&username=mykidong@gmail.com&password=icarus0337!"
-
-curl -XPOST -u portal:helloAuthPortal http://localhost:8081/authorizer/oauth/token -d  "grant_type=password&username=mykidong@gmail.com&password=icarus0337!"
-curl -XPOST -H "Authorization: Basic cG9ydGFsOmhlbGxvQXV0aFBvcnRhbA==" http://localhost:8081/authorizer/oauth/token -d  "grant_type=password&username=mykidong@gmail.com&password=icarus0337!"
-
-curl -XPOST -u console:helloAuthConsole http://localhost:8081/authorizer/oauth/token -d  "grant_type=password&username=mykidong@gmail.com&password=icarus0337!"
-curl -XPOST -H "Authorization: Basic Y29uc29sZTpoZWxsb0F1dGhDb25zb2xl" http://localhost:8081/authorizer/oauth/token -d  "grant_type=password&username=mykidong@gmail.com&password=icarus0337!"
-
-
-# access token reissuance via refresh token.
-curl -XPOST -u console:helloAuthConsole http://localhost:8081/authorizer/oauth/token -d "grant_type=refresh_token" -d "scope=read" -d "refresh_token=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJteWtpZG9uZ0BnbWFpbC5jb20iLCJzY29wZSI6WyJyZWFkIiwid3JpdGUiXSwiYXRpIjoiYjE3YjViYTMtOGZkNC00MjQ3LTliYTUtNDFmMGMxNmVjODZjIiwiZXhwIjoxNTY2NDY5MzkwLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwianRpIjoiMDQyN2JkN2ItNGZlMi00NzU3LTk4NmEtN2ZmOGQxMTQ0MjU2IiwiY2xpZW50X2lkIjoiY29uc29sZSJ9.E-WKa0ym4BvQFUywr-CaMTmdwApnrqRTE0spcypSkJZYiUWizDOVXzPUQYzDklS9Iwml7mPPSm6LJ8hu5AiWxGRS388Y-FSjkYBgivSRkd9s-MeHGEuWWUUqyIWbvVL5Bg5wIMCDZO5eivRy54nmSgCoUQkQ1ii6UHaK1kSiAmjB75F2Q4feGjOrNguFbn7-2zc819DjO6ByCSJXQ-hI2YfvSMY-Vk7-aGL_g6_k_JCJVwib5aCYSB5UJnXa_bcSQusvy6fnQJFjHzaoVhn_zEJ7YJmWxSCwb77e9ElP52kU-3NbrFhQOGY56vEJMNGRvGmRaDQLFtRcRcn4tduEFA";
-curl -XPOST -H "Authorization: Basic Y29uc29sZTpoZWxsb0F1dGhDb25zb2xl" http://localhost:8081/authorizer/oauth/token -d "grant_type=refresh_token" -d "scope=read" -d "refresh_token=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJteWtpZG9uZ0BnbWFpbC5jb20iLCJzY29wZSI6WyJyZWFkIiwid3JpdGUiXSwiYXRpIjoiYjE3YjViYTMtOGZkNC00MjQ3LTliYTUtNDFmMGMxNmVjODZjIiwiZXhwIjoxNTY2NDY5MzkwLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwianRpIjoiMDQyN2JkN2ItNGZlMi00NzU3LTk4NmEtN2ZmOGQxMTQ0MjU2IiwiY2xpZW50X2lkIjoiY29uc29sZSJ9.E-WKa0ym4BvQFUywr-CaMTmdwApnrqRTE0spcypSkJZYiUWizDOVXzPUQYzDklS9Iwml7mPPSm6LJ8hu5AiWxGRS388Y-FSjkYBgivSRkd9s-MeHGEuWWUUqyIWbvVL5Bg5wIMCDZO5eivRy54nmSgCoUQkQ1ii6UHaK1kSiAmjB75F2Q4feGjOrNguFbn7-2zc819DjO6ByCSJXQ-hI2YfvSMY-Vk7-aGL_g6_k_JCJVwib5aCYSB5UJnXa_bcSQusvy6fnQJFjHzaoVhn_zEJ7YJmWxSCwb77e9ElP52kU-3NbrFhQOGY56vEJMNGRvGmRaDQLFtRcRcn4tduEFA";
-
-# get privileges.
-curl -XGET -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NjY0Mzc5NDgsInVzZXJfbmFtZSI6Im15a2lkb25nQGdtYWlsLmNvbSIsImF1dGhvcml0aWVzIjpbIlJPTEVfVVNFUiJdLCJqdGkiOiI5MjQ0ZjQyOC1mNDAyLTRmZDMtYmE0ZC05ZWE1ZTk0OTUxNmEiLCJjbGllbnRfaWQiOiJjb25zb2xlIiwic2NvcGUiOlsicmVhZCJdfQ.O2tCyaW_4XnoSOnoFk0WNv0JxSh4Zl6ATSu5pWjFRKNw6K_Nk_sJTfHcBia2Vyjv28WTnVRMorgsr_rlVR7_N68tFdMkm65AxRdJ0mT9fXPmtqCZJtBWXf89KZAWls0V8hxBiMipq4RZKi2vq1NLST5teg3rHZdyXyOkm7v_9VVZdqOsp-K15tBy5iY2l8RSTSGSLwseoejQwx2QPVIjksiWFT9X5iMAIFBTQhpdj-7ofvUwrpqRE8zBXeslEP4YznIlI6-HMdYHBmGNzCKH309Y2n-sQmXHd69m_9ctUiKaovb6ZjCSZd-iziyU7ai9ldlJzTOtvO71WXUOxmak5A" http://localhost:8081/authorizer/api/get_privileges?service_type=console;

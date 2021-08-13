@@ -4,16 +4,16 @@
 
   vars:
   - ansible_ssh_user: "{{ exec_user }}"
-    
-  vars_files:
-  - "roles/{{ role_name }}/defaults/main.yml"
-  
-  tasks:
-  - include: "roles/{{ role_name }}/tasks/install.yml"
+
+  roles:
+  - role: "{{ role_prefix }}/install"
     when: ("{{ run_option }}" == "install")
-    
-  - include: "roles/{{ role_name }}/tasks/uninstall.yml"
-    when: ("{{ run_option }}" == "uninstall") 
-    
-  - include: "roles/{{ role_name }}/tasks/main.yml"
-    when: ("{{ run_option }}" == "reinstall") 
+
+  - role: "{{ role_prefix }}/uninstall"
+    when: ("{{ run_option }}" == "uninstall")
+
+  - role: "{{ role_prefix }}/uninstall"
+    when: ("{{ run_option }}" == "reinstall")
+
+  - role: "{{ role_prefix }}/install"
+    when: ("{{ run_option }}" == "reinstall")

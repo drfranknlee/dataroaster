@@ -4,7 +4,7 @@ server:
     context-path: /api
 
 authorizer:
-  url: http://localhost:8091
+  url: http://localhost:8081
 
 client:
   secret: YXBpOmhlbGxvQXV0aEFQSQ==
@@ -12,10 +12,5 @@ client:
 vault:
   host: localhost
   port: 8200
-  trustStore: /home/pcp/vault/work/keystore.jks
-  token: s.pUhTmVSVibeasA9eMlNfXVk1
-
-objectStorage:
-  minio:
-    defaultAccessKey: bWluaW8=
-    defaultSecretKey: bWluaW8xMjM=
+  trustStore: /etc/vault.d/keystore.jks
+  token: s.ZuCVMzRIM4eYjMZuvDXqOBJg

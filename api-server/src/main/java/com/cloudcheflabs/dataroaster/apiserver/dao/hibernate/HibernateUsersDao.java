@@ -1,9 +1,8 @@
 package com.cloudcheflabs.dataroaster.apiserver.dao.hibernate;
 
+import com.cloudcheflabs.dataroaster.apiserver.domain.model.Users;
 import com.cloudcheflabs.dataroaster.apiserver.api.dao.UsersDao;
 import com.cloudcheflabs.dataroaster.apiserver.dao.common.AbstractHibernateDao;
-import com.cloudcheflabs.dataroaster.apiserver.domain.model.Groups;
-import com.cloudcheflabs.dataroaster.apiserver.domain.model.Users;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,13 +27,4 @@ public class HibernateUsersDao extends AbstractHibernateDao<Users> implements Us
         List<Users> list = query.list();
         return (list.size() == 0) ? null : list.get(0);
     }
-
-    @Override
-    public List<Users> findAllByGroup(Groups groups) {
-        Query<Users> query = this.getCurrentSession().createQuery("select u from " + clazz.getName() + " u inner join fetch u.groupsSet g  where g.id = :groupId", Users.class);
-        query.setParameter("groupId", groups.getId());
-
-        return query.list();
-    }
-
 }

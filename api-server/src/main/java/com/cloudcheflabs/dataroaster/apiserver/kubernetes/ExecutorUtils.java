@@ -3,7 +3,6 @@ package com.cloudcheflabs.dataroaster.apiserver.kubernetes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -25,6 +24,7 @@ public class ExecutorUtils {
             }
         } catch (InterruptedException | ExecutionException e) {
             LOG.error(e.getMessage());
+            throw new RuntimeException(e);
         }
 
         executor.shutdown();

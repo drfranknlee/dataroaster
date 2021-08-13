@@ -1,7 +1,7 @@
 package com.cloudcheflabs.dataroaster.apiserver.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.cloudcheflabs.dataroaster.apiserver.api.service.AuthorizerService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.cloudcheflabs.dataroaster.apiserver.domain.AuthorizerResponse;
 import com.cloudcheflabs.dataroaster.apiserver.domain.Roles;
 import com.cloudcheflabs.dataroaster.apiserver.domain.Token;

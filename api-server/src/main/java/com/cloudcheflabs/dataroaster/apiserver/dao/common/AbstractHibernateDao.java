@@ -12,7 +12,8 @@ import java.util.List;
 
 @SuppressWarnings("unchecked")
 @Transactional
-public abstract class AbstractHibernateDao<T extends Serializable> extends AbstractDao<T> implements Operations<T> {
+public abstract class AbstractHibernateDao<T extends Serializable> extends AbstractDao<T>
+        implements Operations<T> {
 
     @Autowired
     protected SessionFactory sessionFactory;

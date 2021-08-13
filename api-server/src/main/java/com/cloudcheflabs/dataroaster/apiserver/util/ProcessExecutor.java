@@ -44,11 +44,7 @@ public class ProcessExecutor {
         } catch (Exception e) {
             e.printStackTrace();
             LOG.error("cmd: [{}], error: [{}]", cmd, e.getMessage());
-            exceptionThrown = true;
-        }
-
-        if(!exceptionThrown) {
-            LOG.info("cmd [{}] done...", cmd);
+            throw new RuntimeException(e.getMessage());
         }
     }
 

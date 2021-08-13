@@ -1,7 +1,7 @@
 package com.cloudcheflabs.dataroaster.apiserver.dao.ehcache;
 
-import com.cloudcheflabs.dataroaster.apiserver.domain.Privileges;
 import com.cloudcheflabs.dataroaster.apiserver.api.dao.PrivilegesDao;
+import com.cloudcheflabs.dataroaster.apiserver.domain.Privileges;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;

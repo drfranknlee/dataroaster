@@ -22,7 +22,7 @@
 		<spring.version>5.2.4.RELEASE</spring.version>
 
 		<!-- fabric8 kubernetes client -->
-		<fabric8.k8s.client.version>4.10.3</fabric8.k8s.client.version>
+		<fabric8.k8s.client.version>5.5.0</fabric8.k8s.client.version>
 
 		<!-- commons io -->
 		<commons-io.version>2.7</commons-io.version>

@@ -1,8 +1,8 @@
 package com.cloudcheflabs.dataroaster.apiserver.dao.http;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.cloudcheflabs.dataroaster.apiserver.api.dao.AuthorizerDao;
 import com.cloudcheflabs.dataroaster.apiserver.domain.AuthorizerResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
