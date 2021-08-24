@@ -29,9 +29,18 @@
 		<!-- for S3 -->
 		<amazonaws.sdk.s3.version>1.11.136</amazonaws.sdk.s3.version>
 		<jets3t.version>0.9.4</jets3t.version>
+
+		<!-- spring -->
+		<spring.version>5.2.4.RELEASE</spring.version>
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${spring.version}</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
