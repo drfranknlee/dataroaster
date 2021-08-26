@@ -148,11 +148,19 @@ do
     check_spark_thrift_server_is_running;
 done
 
+
+echo "wait for spark executor being ready..."
+kubectl wait --namespace ${NAMESPACE} \
+  --for=condition=ready pod \
+  --selector=spark-role=executor \
+  --timeout=600s
+
+
 # kill current spark submit process.
 kill $(cat pid);
 
 # create service.
-kubectl apply -f spark-thrift-server-service.yaml;
+kubectl apply -f /home/opc/dataroaster/components/hive/spark-thrift-server/bin/spark-thrift-server-service.yaml;
 
 unset KUBECONFIG;
 unset SPARK_HOME;
