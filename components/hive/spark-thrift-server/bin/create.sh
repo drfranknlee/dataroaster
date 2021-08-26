@@ -148,6 +148,10 @@ do
     check_spark_thrift_server_is_running;
 done
 
+# wait for a while.
+echo "wait for 30s to initialize executors...";
+sleep 30
+
 
 echo "wait for spark executor being ready..."
 kubectl wait --namespace ${NAMESPACE} \
