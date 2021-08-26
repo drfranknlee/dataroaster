@@ -149,8 +149,8 @@ do
 done
 
 # wait for a while.
-echo "wait for 30s to initialize executors...";
-sleep 30
+echo "wait for 100s to initialize executors...";
+sleep 100
 
 
 echo "wait for spark executor being ready..."
