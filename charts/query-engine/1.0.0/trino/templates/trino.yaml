@@ -32,7 +32,7 @@ data:
 
   node.properties: |
     node.environment=production
-    node.data-dir=/var/trino/data
+    node.data-dir=/opt/trino-server/data
     spiller-spill-path=/tmp
     max-spill-per-node=4TB
     query-max-spill-per-node=1TB
@@ -86,7 +86,7 @@ data:
 
   node.properties: |
     node.environment=production
-    node.data-dir=/var/trino/data
+    node.data-dir=/opt/trino-server/data
     spiller-spill-path=/tmp
     max-spill-per-node=4TB
     query-max-spill-per-node=1TB
@@ -237,7 +237,7 @@ spec:
         - name: trino-tmp-data
           mountPath: /tmp
         - name: trino-data-dir
-          mountPath: /var/trino/data
+          mountPath: /opt/trino-server/data
         command: [ "bin/launcher" ]
         args: [ "run" ]
         resources:
