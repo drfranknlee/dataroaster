@@ -99,60 +99,17 @@ echo "pid created...";
 
 # check if spark thrift server pod is running.
 
-# check if spark thrift server pod is running.
-
-SPARK_THRIFT_SERVER_IS_RUNNING="False";
-check_spark_thrift_server_is_running() {
-    echo "check_spark_thrift_server_is_running is being called...";
-
-    POD_STATUS=$(kubectl get pods -n ${NAMESPACE} -l spark-role=driver -o jsonpath={..status.phase});
-    POD_NAME=$(kubectl get pods -n ${NAMESPACE} -l spark-role=driver -o jsonpath={..metadata.name});
-
-    echo "POD_STATUS: ${POD_STATUS}";
-    echo "POD_NAME: ${POD_NAME}";
-
-    if [[ ${POD_STATUS} != "" ]]
-    then
-      # Set space as the delimiter
-      IFS=' ';
-
-      #Read the split words into an array based on space delimiter
-      read -a POD_STATUS_ARRAY <<< "$POD_STATUS";
-      read -a POD_NAME_ARRAY <<< "$POD_NAME";
-
-      #Count the total words
-      echo "POD_STATUS_ARRAY count: ${#POD_STATUS_ARRAY[*]}";
-      echo "POD_NAME_ARRAY count: ${#POD_NAME_ARRAY[*]}";
-
-      for ((i = 0; i < ${#POD_STATUS_ARRAY[@]}; ++i)); do
-          pod_status=${POD_STATUS_ARRAY[i]};
-          pod_name=${POD_NAME_ARRAY[i]};
-          printf "status: %s, name: %s\n" "${pod_status}" "${pod_name}";
-
-          if [[ $pod_status == "Running" ]]
-          then
-              if [[ $pod_name =~ "spark-thrift-server" ]]
-              then
-                  printf "selected pod - status: %s, name: %s\n" "${pod_status}" "${pod_name}";
-                  SPARK_THRIFT_SERVER_IS_RUNNING="True";
-              fi
-          fi
-      done
-    fi
-}
-
-while [[ $SPARK_THRIFT_SERVER_IS_RUNNING != "True" ]];
-do
-    echo "waiting for spark thrift server being run...";
-    sleep 2;
-    check_spark_thrift_server_is_running;
-done
-
 # wait for a while.
+echo "wait for 20s to initialize driver...";
+sleep 20
+echo "wait for spark executor being ready..."
+kubectl wait --namespace ${NAMESPACE} \
+  --for=condition=ready pod \
+  --selector=spark-role=driver \
+  --timeout=600s
+
 echo "wait for 100s to initialize executors...";
 sleep 100
-
-
 echo "wait for spark executor being ready..."
 kubectl wait --namespace ${NAMESPACE} \
   --for=condition=ready pod \
