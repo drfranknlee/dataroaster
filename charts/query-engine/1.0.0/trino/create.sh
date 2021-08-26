@@ -7,7 +7,7 @@ set -x
 NAMESPACE=dataroaster-trino
 
 ## define helm application name.
-APP_NAME=hivemetastore-trino
+APP_NAME=trino
 
 helm install \
 --create-namespace \

@@ -3,10 +3,10 @@
 set -x
 
 ## define namespace
-NAMESPACE=dataroaster-trino
+NAMESPACE=dataroaster-kafka
 
 ## define helm application name.
-APP_NAME=trino
+APP_NAME=kafka
 
 ## uninstall.
 helm uninstall ${APP_NAME} -n ${NAMESPACE};
