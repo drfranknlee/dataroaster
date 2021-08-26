@@ -25,3 +25,12 @@ bitnami/kafka \
 --create-namespace \
 --namespace ${NAMESPACE} \
 --values dataroaster-values.yaml;
+
+# wait for a while to initialize kafka.
+sleep 5
+
+# wait until kafka is ready.
+kubectl wait --namespace ${NAMESPACE} \
+  --for=condition=ready pod \
+  --selector=app.kubernetes.io/name=kafka \
+  --timeout=120s
