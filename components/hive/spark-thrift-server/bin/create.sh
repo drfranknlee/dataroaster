@@ -2,6 +2,7 @@
 
 # move to temp dir.
 export TEMP_DIR=/tmp/spark-temp
+mkdir -p ${TEMP_DIR};
 cd ${TEMP_DIR};
 
 # install spark.
