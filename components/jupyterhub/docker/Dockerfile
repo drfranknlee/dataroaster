@@ -14,7 +14,7 @@ RUN set -x && \
     export SPARK_BASE=/opt/spark && \
     export SPARK_VERSION=3.0.3 && \
     export SPARK_HOME=${SPARK_BASE}/spark-${SPARK_VERSION} && \
-    mkdir -p SPARK_BASE && \
+    mkdir -p ${SPARK_BASE} && \
     cd ${SPARK_BASE} && \
     curl -L -O https://github.com/cloudcheflabs/spark/releases/download/v${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-custom-spark.tgz && \
     tar zxvf spark-${SPARK_VERSION}-bin-custom-spark.tgz  && \
