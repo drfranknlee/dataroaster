@@ -478,7 +478,6 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
   name: argo-role
-  namespace: {{ .Values.namespace }}
 subjects:
 - kind: ServiceAccount
   name: argo
