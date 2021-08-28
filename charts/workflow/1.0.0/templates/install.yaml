@@ -734,7 +734,7 @@ spec:
   type: LoadBalancer
   ports:
     - name: web
-      port: 2746
+      port: 8080
       targetPort: 2746
   selector:
     app: argo-server
@@ -753,7 +753,6 @@ spec:
       targetPort: 5432
   selector:
     app: postgres
-
 ---
 apiVersion: apps/v1
 kind: StatefulSet
