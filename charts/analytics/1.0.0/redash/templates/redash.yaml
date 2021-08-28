@@ -1,4 +1,5 @@
-kind: ConfigMap 
+---
+kind: ConfigMap
 apiVersion: v1 
 metadata:
   name: redash-cfg
@@ -8,6 +9,20 @@ data:
   REDASH_LOG_LEVEL: "INFO"
   POSTGRES_PASSWORD: "insecure"
   REDASH_DATABASE_URL: "postgresql://postgres:insecure@localhost/postgres"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redash
+  namespace: {{ .Values.namespace }}
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 5000
+  selector:
+    app: redash
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -102,15 +117,4 @@ spec:
   resources:
     requests:
       storage: {{ .Values.storage.size }}Gi
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: redash
-  namespace: {{ .Values.namespace }}
-spec:
-  type: LoadBalancer
-  ports:
-  - port: 5000
-  selector:
-    app: redash
+
