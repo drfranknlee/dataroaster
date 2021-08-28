@@ -17,7 +17,7 @@ ${APP_NAME} \
 ./;
 
 # wait for a while to initialize redash.
-sleep 30
+sleep 5
 
 # wait.
 kubectl wait --namespace ${NAMESPACE} \

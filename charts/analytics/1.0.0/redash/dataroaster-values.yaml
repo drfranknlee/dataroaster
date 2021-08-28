@@ -1,4 +1,4 @@
-namespace: dataroaster-hivemetastore
+namespace: dataroaster-redash
 storage:
   storageClass: ceph-rbd-sc
   size: 1
