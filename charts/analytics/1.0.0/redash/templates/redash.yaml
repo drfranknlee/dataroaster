@@ -43,51 +43,51 @@ spec:
         volumeMounts:
         - name: postgres-for-redash
           mountPath: /var/lib/postgresql/data
-      - name: server
-        image: redash/redash:8.0.0.b32245
-        envFrom:
-        - configMapRef:
-            name: redash-cfg
-        env:
-        - name: REDASH_WEB_WORKERS
-          value: "4"
-        args: ["server"]
-        ports:
-        - containerPort: 5000
-          name: redash
-      - name: scheduler
-        image: redash/redash:8.0.0.b32245
-        envFrom:
-        - configMapRef:
-            name: redash-cfg
-        env:
-        - name: QUEUES
-          value: "celery"
-        - name: WORKERS_COUNT
-          value: "1"
-        args: ["scheduler"]
-      - name: scheduled-worker
-        image: redash/redash:8.0.0.b32245
-        envFrom:
-        - configMapRef:
-            name: redash-cfg
-        env:
-        - name: QUEUES
-          value: "scheduled_queries,schemas"
-        - name: WORKERS_COUNT
-          value: "1"
-        args: ["worker"]
-      - name: adhoc-worker
-        image: redash/redash:8.0.0.b32245
-        envFrom:
-        - configMapRef:
-            name: redash-cfg
-        env:
-        - name: QUEUES
-          value: "queries"
-        - name: WORKERS_COUNT
-          value: "2"
-        args: ["worker"]
+#      - name: server
+#        image: redash/redash:8.0.0.b32245
+#        envFrom:
+#        - configMapRef:
+#            name: redash-cfg
+#        env:
+#        - name: REDASH_WEB_WORKERS
+#          value: "4"
+#        args: ["server"]
+#        ports:
+#        - containerPort: 5000
+#          name: redash
+#      - name: scheduler
+#        image: redash/redash:8.0.0.b32245
+#        envFrom:
+#        - configMapRef:
+#            name: redash-cfg
+#        env:
+#        - name: QUEUES
+#          value: "celery"
+#        - name: WORKERS_COUNT
+#          value: "1"
+#        args: ["scheduler"]
+#      - name: scheduled-worker
+#        image: redash/redash:8.0.0.b32245
+#        envFrom:
+#        - configMapRef:
+#            name: redash-cfg
+#        env:
+#        - name: QUEUES
+#          value: "scheduled_queries,schemas"
+#        - name: WORKERS_COUNT
+#          value: "1"
+#        args: ["worker"]
+#      - name: adhoc-worker
+#        image: redash/redash:8.0.0.b32245
+#        envFrom:
+#        - configMapRef:
+#            name: redash-cfg
+#        env:
+#        - name: QUEUES
+#          value: "queries"
+#        - name: WORKERS_COUNT
+#          value: "2"
+#        args: ["worker"]
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
