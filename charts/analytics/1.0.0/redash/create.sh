@@ -17,13 +17,7 @@ ${APP_NAME} \
 ./;
 
 # wait for a while to initialize redash.
-sleep 5
-
-# wait.
-kubectl wait --namespace ${NAMESPACE} \
-  --for=condition=ready pod \
-  --selector=app=redash \
-  --timeout=120s
+sleep 20
 
 # create tables.
 kubectl exec -it -n ${NAMESPACE} \
