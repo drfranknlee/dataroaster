@@ -15,6 +15,10 @@ ${APP_NAME} \
 ./;
 
 
+# wait for a while to initialize argo workflow.
+sleep 10
+
+
 # wait.
 kubectl wait --namespace ${NAMESPACE} \
   --for=condition=ready pod \
