@@ -123,12 +123,23 @@ data:
 apiVersion: v1
 kind: Service
 metadata:
-  name: trino-coordinator
+  name: trino
   namespace: {{ .Values.namespace }}
 spec:
   type: LoadBalancer
   ports:
   - port: 8080
+  selector:
+    app: trino-coordinator
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: trino-coordinator
+  namespace: {{ .Values.namespace }}
+spec:
+  ports:
+    - port: 8080
   selector:
     app: trino-coordinator
 ---
