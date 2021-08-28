@@ -734,7 +734,7 @@ spec:
   type: LoadBalancer
   ports:
     - name: web
-      port: 8080
+      port: 2746
       targetPort: 2746
   selector:
     app: argo-server
