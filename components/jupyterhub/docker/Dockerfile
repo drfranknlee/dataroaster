@@ -8,7 +8,7 @@ RUN apt-get --allow-unauthenticated -o Acquire::Check-Valid-Until=false update &
     apt-get install libsasl2-2 libsasl2-dev libsasl2-modules -y
 
 RUN /opt/conda/bin/pip install 'pyhive[hive]' && \
-    /opt/conda/bin/pip install 'pyhive[presto]'
+    /opt/conda/bin/pip install 'pyhive[trino]'
 
 USER jovyan
 WORKDIR $HOME
