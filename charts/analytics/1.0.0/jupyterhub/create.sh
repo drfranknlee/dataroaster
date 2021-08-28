@@ -13,6 +13,11 @@ APP_NAME=jupyterhub
 # create config.
 cat <<EOF > dataroaster-values.yaml
 hub:
+  config:
+    GitHubOAuthenticator:
+      client_id: "0b322767446baedb3203"
+      client_secret: "828688ff8be545b6434df2dbb2860a1160ae1517"
+      oauth_callback_url: "https://jupyterhub-test.cloudchef-labs.com/hub/oauth_callback"
   db:
     pvc:
       storageClassName: ceph-rbd-sc
@@ -27,16 +32,6 @@ singleuser:
     capacity: 1Gi
     dynamic:
       storageClass: ceph-rbd-sc
-auth:
-  type: github
-  github:
-    clientId: "0b322767446baedb3203"
-    clientSecret: "828688ff8be545b6434df2dbb2860a1160ae1517"
-    callbackUrl: "https://jupyterhub-test.cloudchef-labs.com/hub/oauth_callback"
-  admin:
-    access: true
-    users:
-    - cloudcheflabs
 ingress:
   enabled: true
   annotations:
