@@ -43,6 +43,7 @@ spec:
         volumeMounts:
         - name: postgres-for-redash
           mountPath: /var/lib/postgresql/data
+          subPath: postgres
       - name: server
         image: redash/redash:8.0.0.b32245
         envFrom:
