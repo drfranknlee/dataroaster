@@ -22,15 +22,15 @@ sleep 10
 # wait.
 kubectl wait --namespace ${NAMESPACE} \
   --for=condition=ready pod \
-  --selector=app=postgres,component=argo-workflow \
+  --selector=app=postgres \
   --timeout=120s
 
 kubectl wait --namespace ${NAMESPACE} \
   --for=condition=ready pod \
-  --selector=app=workflow-controller,component=argo-workflow \
+  --selector=app=workflow-controller \
   --timeout=120s
 
 kubectl wait --namespace ${NAMESPACE} \
   --for=condition=ready pod \
-  --selector=app=argo-server,component=argo-workflow \
+  --selector=app=argo-server \
   --timeout=120s
