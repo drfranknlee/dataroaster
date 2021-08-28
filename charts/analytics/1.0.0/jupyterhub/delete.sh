@@ -1,10 +1,11 @@
 #!/bin/bash
 
-cd {{ tempDirectory }};
+## define namespace
+NAMESPACE=dataroaster-jupyterhub
 
-export KUBECONFIG={{ kubeconfig }};
+## define helm application name.
+APP_NAME=jupyterhub
 
-RELEASE=jhub
-NAMESPACE={{ namespace }}
-helm uninstall $RELEASE --namespace $NAMESPACE;
+# uninstall.
+helm uninstall $APP_NAME --namespace $NAMESPACE;
 

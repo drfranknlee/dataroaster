@@ -1,46 +1,75 @@
 #!/bin/bash
 
-# install helm.
-cd ~;
-curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash;
-
 # add helm repo.
 helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
-helm repo update;
 
-cd {{ tempDirectory }};
-export KUBECONFIG={{ kubeconfig }};
+## define namespace
+NAMESPACE=dataroaster-jupyterhub
+
+## define helm application name.
+APP_NAME=jupyterhub
+
 
 # create config.
-cat <<EOF > config.yaml
+cat <<EOF > dataroaster-values.yaml
+hub:
+  db:
+    pvc:
+      storageClassName: ceph-rbd-sc
 proxy:
   secretToken: $(openssl rand -hex 32)
+singleuser:
+  image:
+    name: cloudcheflabs/dataroaster-jupyter
+    tag: '1.1.3'
+    pullPolicy: Always
+  storage:
+    capacity: 1Gi
+    dynamic:
+      storageClass: ceph-rbd-sc
+auth:
+  type: github
+  github:
+    clientId: "0b322767446baedb3203"
+    clientSecret: "828688ff8be545b6434df2dbb2860a1160ae1517"
+    callbackUrl: "https://jupyterhub-test.cloudchef-labs.com/hub/oauth_callback"
+  admin:
+    access: true
+    users:
+    - cloudcheflabs
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - jupyterhub-test.cloudchef-labs.com
+  pathSuffix:
+  pathType: Prefix
+  tls:
+    - hosts:
+      - jupyterhub-test.cloudchef-labs.com
+      secretName: jupyterhub-test.cloudchef-labs.com-tls
 EOF
 
-# append additional configuration to config.
-cat tempconfig.yaml >> config.yaml
 
-echo "config yaml: "
-cat config.yaml
 
+echo "values.yaml: "
+cat dataroaster-values.yaml
 
 # install jupyterhub.
-RELEASE=jhub
-NAMESPACE={{ namespace }}
-echo "NAMESPACE: $NAMESPACE";
-
 helm upgrade --cleanup-on-fail \
---install $RELEASE jupyterhub/jupyterhub \
+--install $APP_NAME \
+jupyterhub/jupyterhub \
 --namespace $NAMESPACE \
 --create-namespace \
---version={{ version }} \
---set hub.db.pvc.storageClassName=direct.csi.min.io \
---set singleuser.storage.dynamic.storageClass=direct.csi.min.io \
---set singleuser.storage.capacity={{ storage }}Gi \
---values config.yaml;
+--version=1.1.3 \
+--values dataroaster-values.yaml;
 
 
 # wait for jupyterhub being run.
-while [[ $(kubectl get pods -n ${NAMESPACE} -l app=jupyterhub,component=hub -o jsonpath={..status.phase}) != *"Running"* ]]; do echo "waiting for jupyterhub being run" && sleep 2; done
-
-
+kubectl wait --namespace ${NAMESPACE} \
+  --for=condition=ready pod \
+  --selector=app=jupyterhub,component=hub \
+  --timeout=120s
