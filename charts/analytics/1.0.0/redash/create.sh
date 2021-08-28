@@ -16,6 +16,8 @@ ${APP_NAME} \
 --values dataroaster-values.yaml \
 ./;
 
+# wait for a while to initialize redash.
+sleep 30
 
 # wait.
 kubectl wait --namespace ${NAMESPACE} \
