@@ -1,9 +1,9 @@
 package com.cloudcheflabs.dataroaster.apiserver.kubernetes.client;
 
+import com.cloudcheflabs.dataroaster.apiserver.domain.Kubeconfig;
 import io.fabric8.kubernetes.client.Config;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import com.cloudcheflabs.dataroaster.apiserver.domain.Kubeconfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

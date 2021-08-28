@@ -1,4 +1,4 @@
-package com.cloudcheflabs.dataroaster.cli.util;
+package com.cloudcheflabs.dataroaster.common.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

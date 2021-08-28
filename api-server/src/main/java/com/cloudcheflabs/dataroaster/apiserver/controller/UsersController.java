@@ -2,9 +2,9 @@ package com.cloudcheflabs.dataroaster.apiserver.controller;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.cloudcheflabs.dataroaster.apiserver.api.service.UsersService;
+import com.cloudcheflabs.dataroaster.apiserver.domain.Roles;
 import com.cloudcheflabs.dataroaster.apiserver.domain.model.Users;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.cloudcheflabs.dataroaster.apiserver.domain.Roles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.Map;
 
 @RestController
 public class UsersController {

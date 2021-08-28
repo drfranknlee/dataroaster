@@ -12,6 +12,7 @@
         <module>api-server</module>
 		<module>authorizer</module>
         <module>cli</module>
+        <module>common</module>
         <module>components/hive/spark-thrift-server</module>
     </modules>
     <build>

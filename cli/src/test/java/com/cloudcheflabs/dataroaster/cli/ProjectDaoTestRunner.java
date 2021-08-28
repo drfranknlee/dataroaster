@@ -1,10 +1,10 @@
 package com.cloudcheflabs.dataroaster.cli;
 
+import com.cloudcheflabs.dataroaster.cli.api.dao.ProjectDao;
 import com.cloudcheflabs.dataroaster.cli.config.DataRoasterConfig;
 import com.cloudcheflabs.dataroaster.cli.config.SpringContextSingleton;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
-import com.cloudcheflabs.dataroaster.cli.api.dao.ProjectDao;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 

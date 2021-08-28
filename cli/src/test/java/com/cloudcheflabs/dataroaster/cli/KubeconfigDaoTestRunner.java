@@ -5,7 +5,7 @@ import com.cloudcheflabs.dataroaster.cli.config.DataRoasterConfig;
 import com.cloudcheflabs.dataroaster.cli.config.SpringContextSingleton;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
-import com.cloudcheflabs.dataroaster.cli.util.FileUtils;
+import com.cloudcheflabs.dataroaster.common.util.FileUtils;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 

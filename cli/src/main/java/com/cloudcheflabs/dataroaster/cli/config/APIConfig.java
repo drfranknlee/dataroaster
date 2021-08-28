@@ -2,8 +2,6 @@ package com.cloudcheflabs.dataroaster.cli.config;
 
 import com.cloudcheflabs.dataroaster.cli.api.dao.*;
 import com.cloudcheflabs.dataroaster.cli.dao.http.*;
-import com.cloudcheflabs.dataroaster.cli.api.dao.*;
-import com.cloudcheflabs.dataroaster.cli.dao.http.*;
 import com.cloudcheflabs.dataroaster.cli.http.client.SimpleHttpClient;
 import okhttp3.OkHttpClient;
 import org.springframework.context.annotation.Bean;

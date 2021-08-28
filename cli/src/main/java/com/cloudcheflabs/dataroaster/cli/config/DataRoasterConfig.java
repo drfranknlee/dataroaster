@@ -1,7 +1,7 @@
 package com.cloudcheflabs.dataroaster.cli.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 

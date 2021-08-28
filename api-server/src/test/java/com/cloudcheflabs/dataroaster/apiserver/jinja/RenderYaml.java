@@ -1,7 +1,7 @@
 package com.cloudcheflabs.dataroaster.apiserver.jinja;
 
+import com.cloudcheflabs.dataroaster.common.util.FileUtils;
 import com.hubspot.jinjava.Jinjava;
-import com.cloudcheflabs.dataroaster.apiserver.util.FileUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;

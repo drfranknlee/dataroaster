@@ -1,12 +1,11 @@
 package com.cloudcheflabs.dataroaster.cli.dao.http;
 
+import com.cloudcheflabs.dataroaster.cli.api.dao.ResourceControlDao;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
-import com.cloudcheflabs.dataroaster.cli.api.dao.ResourceControlDao;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 
 public class HttpResourceControlDao extends AbstractHttpClient implements ResourceControlDao {
 

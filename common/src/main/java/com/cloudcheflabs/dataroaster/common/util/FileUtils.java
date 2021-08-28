@@ -1,4 +1,4 @@
-package com.cloudcheflabs.dataroaster.apiserver.util;
+package com.cloudcheflabs.dataroaster.common.util;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;

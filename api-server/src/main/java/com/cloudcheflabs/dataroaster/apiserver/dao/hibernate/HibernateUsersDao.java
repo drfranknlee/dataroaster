@@ -1,8 +1,8 @@
 package com.cloudcheflabs.dataroaster.apiserver.dao.hibernate;
 
-import com.cloudcheflabs.dataroaster.apiserver.domain.model.Users;
 import com.cloudcheflabs.dataroaster.apiserver.api.dao.UsersDao;
 import com.cloudcheflabs.dataroaster.apiserver.dao.common.AbstractHibernateDao;
+import com.cloudcheflabs.dataroaster.apiserver.domain.model.Users;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

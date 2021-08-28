@@ -6,7 +6,7 @@ import com.cloudcheflabs.dataroaster.cli.config.DataRoasterConfig;
 import com.cloudcheflabs.dataroaster.cli.config.SpringContextSingleton;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
-import com.cloudcheflabs.dataroaster.cli.util.JsonUtils;
+import com.cloudcheflabs.dataroaster.common.util.JsonUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;

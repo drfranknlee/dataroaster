@@ -1,11 +1,11 @@
 package com.cloudcheflabs.dataroaster.apiserver.controller;
 
 import com.cloudcheflabs.dataroaster.apiserver.api.service.ProjectService;
-import com.cloudcheflabs.dataroaster.apiserver.domain.model.Project;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.cloudcheflabs.dataroaster.apiserver.domain.Roles;
+import com.cloudcheflabs.dataroaster.apiserver.domain.model.Project;
 import com.cloudcheflabs.dataroaster.apiserver.filter.AuthorizationFilter;
-import com.cloudcheflabs.dataroaster.apiserver.util.JsonUtils;
+import com.cloudcheflabs.dataroaster.common.util.JsonUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

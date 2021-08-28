@@ -1,8 +1,8 @@
 package com.cloudcheflabs.dataroaster.authorizer.controller;
 
-import com.cloudcheflabs.dataroaster.authorizer.util.JsonUtils;
 import com.cloudcheflabs.dataroaster.authorizer.api.service.RoleService;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.cloudcheflabs.dataroaster.common.util.JsonUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

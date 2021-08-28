@@ -1,9 +1,9 @@
 package com.cloudcheflabs.dataroaster.apiserver.kubernetes;
 
 import com.cedarsoftware.util.io.JsonWriter;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.cloudcheflabs.dataroaster.apiserver.domain.Kubeconfig;
-import com.cloudcheflabs.dataroaster.apiserver.util.JsonUtils;
+import com.cloudcheflabs.dataroaster.common.util.JsonUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;

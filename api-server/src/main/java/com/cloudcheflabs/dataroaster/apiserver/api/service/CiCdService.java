@@ -1,7 +1,5 @@
 package com.cloudcheflabs.dataroaster.apiserver.api.service;
 
-import java.util.List;
-
 public interface CiCdService {
     void create(long projectId,
                 long serviceDefId,

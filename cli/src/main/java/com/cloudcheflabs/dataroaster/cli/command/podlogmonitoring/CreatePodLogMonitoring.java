@@ -1,15 +1,15 @@
 package com.cloudcheflabs.dataroaster.cli.command.podlogmonitoring;
 
 import com.cloudcheflabs.dataroaster.cli.api.dao.ClusterDao;
+import com.cloudcheflabs.dataroaster.cli.api.dao.PodLogMonitoringDao;
+import com.cloudcheflabs.dataroaster.cli.api.dao.ProjectDao;
+import com.cloudcheflabs.dataroaster.cli.api.dao.ServicesDao;
 import com.cloudcheflabs.dataroaster.cli.config.SpringContextSingleton;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
 import com.cloudcheflabs.dataroaster.cli.domain.ServiceDef;
-import com.cloudcheflabs.dataroaster.cli.util.JsonUtils;
+import com.cloudcheflabs.dataroaster.common.util.JsonUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.cloudcheflabs.dataroaster.cli.api.dao.PodLogMonitoringDao;
-import com.cloudcheflabs.dataroaster.cli.api.dao.ProjectDao;
-import com.cloudcheflabs.dataroaster.cli.api.dao.ServicesDao;
 import org.springframework.context.ApplicationContext;
 import picocli.CommandLine;
 

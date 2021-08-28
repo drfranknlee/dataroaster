@@ -1,11 +1,11 @@
 package com.cloudcheflabs.dataroaster.cli.command.project;
 
+import com.cloudcheflabs.dataroaster.cli.api.dao.ProjectDao;
 import com.cloudcheflabs.dataroaster.cli.config.SpringContextSingleton;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
-import com.cloudcheflabs.dataroaster.cli.util.JsonUtils;
+import com.cloudcheflabs.dataroaster.common.util.JsonUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.cloudcheflabs.dataroaster.cli.api.dao.ProjectDao;
 import org.springframework.context.ApplicationContext;
 import picocli.CommandLine;
 
