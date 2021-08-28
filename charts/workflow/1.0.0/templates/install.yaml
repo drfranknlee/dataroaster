@@ -699,34 +699,6 @@ stringData:
 type: Opaque
 ---
 apiVersion: v1
-kind: Secret
-metadata:
-  name: argo-server-sso
-  namespace: {{ .Values.namespace }}
-stringData:
-  clientID: argo-server
-  clientSecret: ZXhhbXBsZS1hcHAtc2VjcmV0
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: argo-workflows-webhook-clients
-  namespace: {{ .Values.namespace }}
-stringData:
-  bitbucket.org: |
-    type: bitbucket
-    secret: "my-uuid"
-  bitbucketserver: |
-    type: bitbucketserver
-    secret: "shh!"
-  github.com: |
-    type: github
-    secret: "shh!"
-  gitlab.com: |
-    type: gitlab
-    secret: "shh!"
----
-apiVersion: v1
 kind: Service
 metadata:
   name: argo-server
