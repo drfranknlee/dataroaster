@@ -63,6 +63,9 @@ jupyterhub/jupyterhub \
 --values dataroaster-values.yaml;
 
 
+# wait for a while to initialize jupyterhub.
+sleep 30
+
 # wait for jupyterhub being run.
 kubectl wait --namespace ${NAMESPACE} \
   --for=condition=ready pod \
