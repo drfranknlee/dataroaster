@@ -6,7 +6,8 @@ RUN apt-get --allow-unauthenticated -o Acquire::Check-Valid-Until=false update &
     apt-get install -y apt-utils && \
     apt-get -y install gcc && \
     apt-get install libsasl2-2 libsasl2-dev libsasl2-modules -y && \
-    apt-get install -y curl
+    apt-get install -y curl && \
+    apt-get install -y openjdk-8-jdk
 
 RUN /opt/conda/bin/pip install 'pyhive[hive]' && \
     /opt/conda/bin/pip install 'pyhive[trino]'
