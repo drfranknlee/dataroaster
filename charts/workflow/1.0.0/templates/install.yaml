@@ -638,6 +638,28 @@ stringData:
 type: Opaque
 ---
 apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: artifact-repositories
+  namespace: {{ .Values.namespace }}
+  annotations:
+    # you'll want to change the default over time, e.g. when you move to new storage solution,
+    # so we recommend you version them from the outset by suffixing the version
+    workflows.argoproj.io/default-artifact-repository: default-v1
+data:
+  default-v1: |
+    archiveLogs: true
+    s3:
+      bucket: {{ .Values.s3.bucket }}
+      endpoint: {{ .Values.s3.endpoint }}
+      accessKeySecret:
+        name: s3-secret
+        key: accesskey
+      secretKeySecret:
+        name: s3-secret
+        key: secretkey
+---
+apiVersion: v1
 data:
   artifactRepository: |
     archiveLogs: true
