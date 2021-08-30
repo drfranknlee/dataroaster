@@ -13,44 +13,41 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-public class DataCatalogHandler {
+public class QueryEngineHandler {
 
-    private static Logger LOG = LoggerFactory.getLogger(DataCatalogHandler.class);
+    private static Logger LOG = LoggerFactory.getLogger(QueryEngineHandler.class);
 
     private static String moveFiles(Kubeconfig kubeconfig) {
         DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyyMMddHHmmss");
         String formattedDate = fmt.print(DateTime.now());
         String uid = formattedDate + "-" + UUID.randomUUID().toString();
-        String tempDirectory = System.getProperty("java.io.tmpdir") + "/data-catalog/" + uid;
+        String tempDirectory = System.getProperty("java.io.tmpdir") + "/query-engine/" + uid;
 
         // create temp. directory.
         FileUtils.createDirectory(tempDirectory);
 
-        String rootPath = "/templates/data-catalog";
+        String rootPath = "/templates/query-engine";
         FileUtils.copyFilesFromClasspathToFileSystem(rootPath, "1.0.0", tempDirectory);
-        FileUtils.copyFilesFromClasspathToFileSystem(rootPath + "/1.0.0", "init-schema", tempDirectory + "/init-schema");
-        FileUtils.copyFilesFromClasspathToFileSystem(rootPath + "/1.0.0/init-schema", "templates", tempDirectory + "/init-schema/templates");
-        FileUtils.copyFilesFromClasspathToFileSystem(rootPath + "/1.0.0", "metastore", tempDirectory + "/metastore");
-        FileUtils.copyFilesFromClasspathToFileSystem(rootPath + "/1.0.0/metastore", "templates", tempDirectory + "/metastore/templates");
-        FileUtils.copyFilesFromClasspathToFileSystem(rootPath + "/1.0.0", "mysql", tempDirectory + "/mysql");
-        FileUtils.copyFilesFromClasspathToFileSystem(rootPath + "/1.0.0/mysql", "templates", tempDirectory + "/mysql/templates");
-
+        FileUtils.copyFilesFromClasspathToFileSystem(rootPath + "/1.0.0", "spark-thrift-server", tempDirectory + "/spark-thrift-server");
+        FileUtils.copyFilesFromClasspathToFileSystem(rootPath + "/1.0.0/spark-thrift-server", "templates", tempDirectory + "/spark-thrift-server/templates");
+        FileUtils.copyFilesFromClasspathToFileSystem(rootPath + "/1.0.0", "trino", tempDirectory + "/trino");
+        FileUtils.copyFilesFromClasspathToFileSystem(rootPath + "/1.0.0/trino", "templates", tempDirectory + "/trino/templates");
+       
         // kubeconfig raw yaml.
         String kubeconfigName = "kubeconfig";
         String kubeconfigString = kubeconfig.getRawKubeconfig();
 
         // write kubeconfig file.
-        FileUtils.stringToFile(kubeconfigString, tempDirectory + "/init-schema/" + kubeconfigName, false);
-        FileUtils.stringToFile(kubeconfigString, tempDirectory + "/metastore/" + kubeconfigName, false);
-        FileUtils.stringToFile(kubeconfigString, tempDirectory + "/mysql/" + kubeconfigName, false);
-
+        FileUtils.stringToFile(kubeconfigString, tempDirectory + "/spark-thrift-server/" + kubeconfigName, false);
+        FileUtils.stringToFile(kubeconfigString, tempDirectory + "/trino/" + kubeconfigName, false);
+      
         return tempDirectory;
     }
 
     public static String create(Kubeconfig kubeconfig, Map<String, ?> map) {
         try {
             runProcess(kubeconfig, map, "create.sh");
-            return "data catalog created...";
+            return "query engine created...";
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -60,15 +57,9 @@ public class DataCatalogHandler {
     public static String delete(Kubeconfig kubeconfig) {
         try {
             Map<String, Object> map = new HashMap<>();
-            map.put("s3Bucket", "");
-            map.put("s3AccessKey", "");
-            map.put("s3SecretKey", "");
-            map.put("s3Endpoint", "");
-            map.put("storageClass", "");
-            map.put("storageSize", -1);
 
             runProcess(kubeconfig, map, "delete.sh");
-            return "data catalog deleted...";
+            return "query engine deleted...";
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -94,48 +85,38 @@ public class DataCatalogHandler {
                     true);
         }
 
-        // init-schema.
+        // spark-thrift-server.
         files = Arrays.asList(
                 "create.sh",
                 "delete.sh",
-                "dataroaster-values.yaml"
-        );
-        for (String file : files) {
-            Map<String, Object> kv = new HashMap<>();
-            kv.put("kubeconfig", "kubeconfig");
-            kv.put("namespace", K8sNamespace.DEFAULT_NAMESPACE_HIVE_METASTORE);
-
-            TemplateUtils.toFile(tempDirectory + "/init-schema/" + file,
-                    false,
-                    kv,
-                    tempDirectory + "/init-schema/" + file,
-                    true);
-        }
-
-        // metastore.
-        files = Arrays.asList(
-                "create.sh",
-                "delete.sh",
-                "dataroaster-values.yaml"
+                "spark-thrift-server-service.yaml"
         );
 
         for (String file : files) {
             Map<String, Object> kv = new HashMap<>();
+            kv.put("tempDirectory", tempDirectory);
             kv.put("kubeconfig", "kubeconfig");
-            kv.put("namespace", K8sNamespace.DEFAULT_NAMESPACE_HIVE_METASTORE);
+            kv.put("sparkThriftServerNamespace", K8sNamespace.DEFAULT_NAMESPACE_SPARK_THRIFT_SERVER);
+            kv.put("sparkThriftServerStorageClass", (String) map.get("sparkThriftServerStorageClass"));
+            kv.put("k8sServer", kubeconfig.getMasterUrl());
             kv.put("s3Bucket", (String) map.get("s3Bucket"));
             kv.put("s3AccessKey", (String) map.get("s3AccessKey"));
             kv.put("s3SecretKey", (String) map.get("s3SecretKey"));
             kv.put("s3Endpoint", (String) map.get("s3Endpoint"));
+            kv.put("hivemetastoreNamespace", K8sNamespace.DEFAULT_NAMESPACE_HIVE_METASTORE);
+            kv.put("sparkThriftServerExecutors", (Integer) map.get("sparkThriftServerExecutors"));
+            kv.put("sparkThriftServerExecutorMemory", (Integer) map.get("sparkThriftServerExecutorMemory"));
+            kv.put("sparkThriftServerExecutorCores", (Integer) map.get("sparkThriftServerExecutorCores"));
+            kv.put("sparkThriftServerDriverMemory", (Integer) map.get("sparkThriftServerDriverMemory"));
 
-            TemplateUtils.toFile(tempDirectory + "/metastore/" + file,
+            TemplateUtils.toFile(tempDirectory + "/spark-thrift-server/" + file,
                     false,
                     kv,
-                    tempDirectory + "/metastore/" + file,
+                    tempDirectory + "/spark-thrift-server/" + file,
                     true);
         }
 
-        // mysql.
+        // trino.
         files = Arrays.asList(
                 "create.sh",
                 "delete.sh",
@@ -145,14 +126,23 @@ public class DataCatalogHandler {
         for (String file : files) {
             Map<String, Object> kv = new HashMap<>();
             kv.put("kubeconfig", "kubeconfig");
-            kv.put("namespace", K8sNamespace.DEFAULT_NAMESPACE_HIVE_METASTORE);
-            kv.put("storageClass", (String) map.get("storageClass"));
-            kv.put("storageSize", (Integer) map.get("storageSize"));
+            kv.put("trinoNamespace", K8sNamespace.DEFAULT_NAMESPACE_TRINO);
+            kv.put("trinoWorkers", (Integer) map.get("trinoWorkers"));
+            kv.put("trinoServerMaxMemory", (Integer) map.get("trinoServerMaxMemory"));
+            kv.put("trinoCores", (Integer) map.get("trinoCores"));
+            kv.put("trinoTempDataStorage", (Integer) map.get("trinoTempDataStorage"));
+            kv.put("trinoDataStorage", (Integer) map.get("trinoDataStorage"));
+            kv.put("trinoStorageClass", (String) map.get("trinoStorageClass"));
+            kv.put("s3AccessKey", (String) map.get("s3AccessKey"));
+            kv.put("s3SecretKey", (String) map.get("s3SecretKey"));
+            kv.put("s3Endpoint", (String) map.get("s3Endpoint"));
+            kv.put("hivemetastoreNamespace", K8sNamespace.DEFAULT_NAMESPACE_HIVE_METASTORE);
 
-            TemplateUtils.toFile(tempDirectory + "/mysql/" + file,
+
+            TemplateUtils.toFile(tempDirectory + "/trino/" + file,
                     false,
                     kv,
-                    tempDirectory + "/mysql/" + file,
+                    tempDirectory + "/trino/" + file,
                     true);
         }
 

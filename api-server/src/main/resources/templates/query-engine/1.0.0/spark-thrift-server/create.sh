@@ -1,10 +1,10 @@
 #!/bin/sh
 
 ## define namespace
-NAMESPACE=dataroaster-spark-thrift-server;
+NAMESPACE={{ sparkThriftServerNamespace }};
 
 # move to temp dir.
-export TEMP_DIR=/tmp/spark-temp
+export TEMP_DIR={{ tempDirectory }}/spark-temp
 mkdir -p ${TEMP_DIR};
 cd ${TEMP_DIR};
 
@@ -30,7 +30,7 @@ cd ${TEMP_DIR};
 echo "whoami: $(whoami), java: $JAVA_HOME"
 
 # export kubeconfig.
-export KUBECONFIG=/home/opc/.kube/config;
+export KUBECONFIG={{ kubeconfig }};
 
 echo "KUBECONFIG: $KUBECONFIG";
 
@@ -55,7 +55,7 @@ spec:
   resources:
     requests:
       storage: 2Gi
-  storageClassName: nfs
+  storageClassName: {{ sparkThriftServerStorageClass }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -70,7 +70,7 @@ spec:
   resources:
     requests:
       storage: 50Gi
-  storageClassName: nfs
+  storageClassName: {{ sparkThriftServerStorageClass }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -85,7 +85,7 @@ spec:
   resources:
     requests:
       storage: 2Gi
-  storageClassName: nfs
+  storageClassName: {{ sparkThriftServerStorageClass }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -100,7 +100,7 @@ spec:
   resources:
     requests:
       storage: 50Gi
-  storageClassName: nfs
+  storageClassName: {{ sparkThriftServerStorageClass }}
 EOF
 
 kubectl apply -f spark-pvc.yml;
@@ -109,12 +109,12 @@ kubectl apply -f spark-pvc.yml;
 
 # submit spark thrift server job.
 SPARK_IMAGE=cloudcheflabs/spark:v${SPARK_VERSION};
-SPARK_MASTER=k8s://https://146.56.182.160:6443
-S3_BUCKET=mykidong;
-S3_ACCESS_KEY=TOW32G9ULH63MTUI6NNW;
-S3_SECRET_KEY=jXqViVmSqIDTEKKKzdgSssHVykBrX4RrlnSeVgMi;
-S3_ENDPOINT=https://ceph-rgw-test.cloudchef-labs.com;
-HIVE_METASTORE=metastore.dataroaster-hivemetastore.svc:9083;
+SPARK_MASTER=k8s://{{ k8sServer }}
+S3_BUCKET={{ s3Bucket }};
+S3_ACCESS_KEY={{ s3AccessKey }};
+S3_SECRET_KEY={{ s3SecretKey }};
+S3_ENDPOINT={{ s3Endpoint }};
+HIVE_METASTORE=metastore.{{ hivemetastoreNamespace }}.svc:9083;
 
 spark-submit \
 --master $SPARK_MASTER \
@@ -160,10 +160,10 @@ spark-submit \
 --conf spark.hadoop.fs.s3a.fast.upload=true \
 --conf spark.hadoop.fs.s3a.path.style.access=true \
 --conf spark.driver.extraJavaOptions="-Divy.cache.dir=/tmp -Divy.home=/tmp" \
---conf spark.executor.instances=2 \
---conf spark.executor.memory=2G \
---conf spark.executor.cores=1 \
---conf spark.driver.memory=1G \
+--conf spark.executor.instances={{ sparkThriftServerExecutors }} \
+--conf spark.executor.memory={{ sparkThriftServerExecutorMemory }}G \
+--conf spark.executor.cores={{ sparkThriftServerExecutorCores }} \
+--conf spark.driver.memory={{ sparkThriftServerDriverMemory }}G \
 file://${TEMP_DIR}/${SPARK_THRIFT_SERVER_FILE_NAME}.jar \
 > /dev/null 2>&1 &
 
@@ -196,13 +196,12 @@ kubectl wait --namespace ${NAMESPACE} \
 kill $(cat pid);
 
 # create service.
-kubectl apply -f /home/opc/dataroaster/charts/query-engine/1.0.0/spark-thrift-server/spark-thrift-server-service.yaml;
+kubectl apply -f spark-thrift-server-service.yaml;
 
 unset KUBECONFIG;
 unset SPARK_HOME;
 
-cd /tmp;
-rm -rf ${TEMP_DIR};
+
 
 
 

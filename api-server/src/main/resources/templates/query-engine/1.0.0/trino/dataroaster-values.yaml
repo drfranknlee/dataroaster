@@ -1,14 +1,14 @@
-namespace: dataroaster-trino
-workers: 3
-serverMaxMemory: 16
-cpu: 1
-tempDataStorage: 1
-dataStorage: 1
-storageClass: ceph-rbd-sc
+namespace: {{ trinoNamespace }}
+workers: {{ trinoWorkers }}
+serverMaxMemory: {{ trinoServerMaxMemory }}
+cpu: {{ trinoCores }}
+tempDataStorage: {{ trinoTempDataStorage }}
+dataStorage: {{ trinoDataStorage }}
+storageClass: {{ trinoStorageClass }}
 s3:
-  accessKey: TOW32G9ULH63MTUI6NNW
-  secretKey: jXqViVmSqIDTEKKKzdgSssHVykBrX4RrlnSeVgMi
-  endpoint: https://ceph-rgw-test.cloudchef-labs.com
+  accessKey: {{ s3AccessKey }}
+  secretKey: {{ s3SecretKey }}
+  endpoint: {{ s3Endpoint }}
 hive:
   metastore:
-    endpoint: metastore.dataroaster-hivemetastore.svc:9083
+    endpoint: metastore.{{ hivemetastoreNamespace }}.svc:9083
