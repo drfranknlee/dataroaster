@@ -83,6 +83,11 @@ INSERT INTO service_def (`id`, `type`, `name`, `version`, `external`) VALUES (4,
 INSERT INTO service_def (`id`, `type`, `name`, `version`, `external`) VALUES (5, 'PRIVATE_REGISTRY', 'Harbor', '1.0.0', false);
 INSERT INTO service_def (`id`, `type`, `name`, `version`, `external`) VALUES (6, 'CI_CD', 'Jenkins, ArgoCD', '1.0.0', false);
 INSERT INTO service_def (`id`, `type`, `name`, `version`, `external`) VALUES (7, 'BACKUP', 'Velero', '1.0.0', false);
+INSERT INTO service_def (`id`, `type`, `name`, `version`, `external`) VALUES (8, 'DATA_CATALOG', 'Hive Metastore', '1.0.0', false);
+INSERT INTO service_def (`id`, `type`, `name`, `version`, `external`) VALUES (9, 'QUERY_ENGINE', 'Spark Thrift Server, Trino', '1.0.0', false);
+INSERT INTO service_def (`id`, `type`, `name`, `version`, `external`) VALUES (10, 'STREAMING', 'Kafka', '1.0.0', false);
+INSERT INTO service_def (`id`, `type`, `name`, `version`, `external`) VALUES (11, 'ANALYTICS', 'JupyterHub, Redash', '1.0.0', false);
+INSERT INTO service_def (`id`, `type`, `name`, `version`, `external`) VALUES (12, 'WORKFLOW', 'Argo Workflow', '1.0.0', false);
 
 
 -- services.
