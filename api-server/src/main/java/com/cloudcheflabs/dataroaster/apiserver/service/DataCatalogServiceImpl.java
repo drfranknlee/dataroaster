@@ -5,7 +5,7 @@ import com.cloudcheflabs.dataroaster.apiserver.api.service.DataCatalogService;
 import com.cloudcheflabs.dataroaster.apiserver.domain.Kubeconfig;
 import com.cloudcheflabs.dataroaster.apiserver.domain.model.*;
 import com.cloudcheflabs.dataroaster.apiserver.kubernetes.ExecutorUtils;
-import com.cloudcheflabs.dataroaster.apiserver.kubernetes.handler.PodLogMonitoringHandler;
+import com.cloudcheflabs.dataroaster.apiserver.kubernetes.handler.DataCatalogHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,7 +108,7 @@ public class DataCatalogServiceImpl implements DataCatalogService {
             if(k8sKubeconfig.getUsers().getUserName().equals(userName)) {
                 Kubeconfig kubeconfig = secretDao.readSecret(k8sKubeconfig.getSecretPath(), Kubeconfig.class);
                 ExecutorUtils.runTask(() -> {
-                    return PodLogMonitoringHandler.create(kubeconfig, map);
+                    return DataCatalogHandler.create(kubeconfig, map);
                 });
 
                 return;
@@ -140,7 +140,7 @@ public class DataCatalogServiceImpl implements DataCatalogService {
             if(k8sKubeconfig.getUsers().getUserName().equals(userName)) {
                 Kubeconfig kubeconfig = secretDao.readSecret(k8sKubeconfig.getSecretPath(), Kubeconfig.class);
                 ExecutorUtils.runTask(() -> {
-                    return PodLogMonitoringHandler.delete(kubeconfig);
+                    return DataCatalogHandler.delete(kubeconfig);
                 });
 
                 return;
