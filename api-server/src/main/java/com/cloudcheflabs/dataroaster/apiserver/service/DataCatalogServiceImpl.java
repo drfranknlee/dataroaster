@@ -51,6 +51,7 @@ public class DataCatalogServiceImpl implements DataCatalogService {
                        long serviceDefId,
                        long clusterId,
                        String userName,
+                       String s3Bucket,
                        String s3AccessKey,
                        String s3SecretKey,
                        String s3Endpoint,
@@ -95,6 +96,7 @@ public class DataCatalogServiceImpl implements DataCatalogService {
 
         // build map.
         Map<String, Object> map = new HashMap<>();
+        map.put("s3Bucket", s3Bucket);
         map.put("s3AccessKey", s3AccessKey);
         map.put("s3SecretKey", s3SecretKey);
         map.put("s3Endpoint", s3Endpoint);

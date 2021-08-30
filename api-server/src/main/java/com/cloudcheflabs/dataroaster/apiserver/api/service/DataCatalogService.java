@@ -6,6 +6,7 @@ public interface DataCatalogService {
                 long serviceDefId,
                 long clusterId,
                 String userName,
+                String s3Bucket,
                 String s3AccessKey,
                 String s3SecretKey,
                 String s3Endpoint,

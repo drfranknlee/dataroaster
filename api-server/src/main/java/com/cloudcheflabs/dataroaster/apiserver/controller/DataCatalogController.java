@@ -36,6 +36,7 @@ public class DataCatalogController {
             String projectId = params.get("project_id");
             String serviceDefId = params.get("service_def_id");
             String clusterId = params.get("cluster_id");
+            String s3Bucket = params.get("s3_bucket");
             String s3AccessKey = params.get("s3_access_key");
             String s3SecretKey = params.get("s3_secret_key");
             String s3Endpoint = params.get("s3_endpoint");
@@ -49,6 +50,7 @@ public class DataCatalogController {
                     Long.valueOf(serviceDefId),
                     Long.valueOf(clusterId),
                     userName,
+                    s3Bucket,
                     s3AccessKey,
                     s3SecretKey,
                     s3Endpoint,
