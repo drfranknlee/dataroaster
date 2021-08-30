@@ -27,8 +27,8 @@ public class HttpBackupDao extends AbstractHttpClient implements BackupDao {
         content += "&service_def_id=" + serviceDefId;
         content += "&cluster_id=" + clusterId;
         content += "&s3_bucket=" + s3Bucket;
-        content += "&s3_accessKey=" + s3AccessKey;
-        content += "&s3_secretKey=" + s3SecretKey;
+        content += "&s3_access_key=" + s3AccessKey;
+        content += "&s3_secret_key=" + s3SecretKey;
         content += "&s3_endpoint=" + s3Endpoint;
 
         RequestBody body = RequestBody.create(mediaType, content);

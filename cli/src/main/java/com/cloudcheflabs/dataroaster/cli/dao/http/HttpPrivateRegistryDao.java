@@ -36,8 +36,8 @@ public class HttpPrivateRegistryDao extends AbstractHttpClient implements Privat
         content += "&redis_storage_size=" + redisStorageSize;
         content += "&trivy_storage_size=" + trivyStorageSize;
         content += "&s3_bucket=" + s3Bucket;
-        content += "&s3_accessKey=" + s3AccessKey;
-        content += "&s3_secretKey=" + s3SecretKey;
+        content += "&s3_access_key=" + s3AccessKey;
+        content += "&s3_secret_key=" + s3SecretKey;
         content += "&s3_endpoint=" + s3Endpoint;
 
         RequestBody body = RequestBody.create(mediaType, content);

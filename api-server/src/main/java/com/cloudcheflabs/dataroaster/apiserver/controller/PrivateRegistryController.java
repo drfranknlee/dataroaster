@@ -46,8 +46,8 @@ public class PrivateRegistryController {
             String redisStorageSize = params.get("redis_storage_size");
             String trivyStorageSize = params.get("trivy_storage_size");
             String s3Bucket = params.get("s3_bucket");
-            String s3AccessKey = params.get("s3_accessKey");
-            String s3SecretKey = params.get("s3_secretKey");
+            String s3AccessKey = params.get("s3_access_key");
+            String s3SecretKey = params.get("s3_secret_key");
             String s3Endpoint = params.get("s3_endpoint");
             String userName = (String) context.getAttribute(AuthorizationFilter.KEY_USER_NAME);
 
