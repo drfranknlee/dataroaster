@@ -30,7 +30,7 @@ cd ${TEMP_DIR};
 echo "whoami: $(whoami), java: $JAVA_HOME"
 
 # export kubeconfig.
-export KUBECONFIG={{ kubeconfig }};
+export KUBECONFIG={{ tempDirectory }}/spark-thrift-server/{{ kubeconfig }};
 
 echo "KUBECONFIG: $KUBECONFIG";
 
