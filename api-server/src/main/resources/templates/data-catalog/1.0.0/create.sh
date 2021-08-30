@@ -2,6 +2,8 @@
 
 set -x
 
+cd {{ tempDirectory }};
+
 cd mysql;
 ./create.sh;
 
