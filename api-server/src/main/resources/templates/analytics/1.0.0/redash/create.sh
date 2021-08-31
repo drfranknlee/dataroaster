@@ -28,8 +28,7 @@ kubectl wait --namespace ${NAMESPACE} \
 --kubeconfig={{ kubeconfig }};
 
 # create tables.
-kubectl exec -it -n ${NAMESPACE} \
+kubectl --kubeconfig={{ kubeconfig }} \
+exec -it -n ${NAMESPACE} \
 $(kubectl get po -l app=redash -n ${NAMESPACE} -o jsonpath={.items[0].metadata.name}) \
--c server \
---kubeconfig={{ kubeconfig }} \
--- /app/bin/docker-entrypoint create_db;
+-c server -- /app/bin/docker-entrypoint create_db;
