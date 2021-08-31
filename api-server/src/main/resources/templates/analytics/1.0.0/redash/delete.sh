@@ -3,10 +3,10 @@
 set -x
 
 ## define namespace
-NAMESPACE=dataroaster-redash
+NAMESPACE={{ redashNamespace }}
 
 ## define helm application name.
 APP_NAME=redash
 
 ## uninstall.
-helm uninstall ${APP_NAME} -n ${NAMESPACE};
+helm uninstall ${APP_NAME} -n ${NAMESPACE} --kubeconfig={{ kubeconfig }};

@@ -2,6 +2,8 @@
 
 set -x
 
+cd {{ tempDirectory }};
+
 cd redash;
 ./create.sh;
 

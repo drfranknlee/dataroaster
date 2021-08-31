@@ -4,7 +4,7 @@
 helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
 
 ## define namespace
-NAMESPACE=dataroaster-jupyterhub
+NAMESPACE={{ jupyterhubNamespace }}
 
 ## define helm application name.
 APP_NAME=jupyterhub
@@ -15,12 +15,12 @@ cat <<EOF > dataroaster-values.yaml
 hub:
   config:
     GitHubOAuthenticator:
-      client_id: "0b322767446baedb3203"
-      client_secret: "828688ff8be545b6434df2dbb2860a1160ae1517"
-      oauth_callback_url: "https://jupyterhub-test.cloudchef-labs.com/hub/oauth_callback"
+      client_id: "{{ jupyterhubGithubClientId }}"
+      client_secret: "{{ jupyterhubGithubClientSecret }}"
+      oauth_callback_url: "https://{{ jupyterhubIngressHost }}/hub/oauth_callback"
   db:
     pvc:
-      storageClassName: ceph-rbd-sc
+      storageClassName: {{ storageClass }}
 proxy:
   secretToken: $(openssl rand -hex 32)
 singleuser:
@@ -29,9 +29,9 @@ singleuser:
     tag: '1.1.3'
     pullPolicy: Always
   storage:
-    capacity: 1Gi
+    capacity: {{ jupyterhubStorageSize }}Gi
     dynamic:
-      storageClass: ceph-rbd-sc
+      storageClass: {{ storageClass }}
 ingress:
   enabled: true
   annotations:
@@ -39,13 +39,13 @@ ingress:
     kubernetes.io/tls-acme: "true"
     cert-manager.io/cluster-issuer: letsencrypt-prod
   hosts:
-    - jupyterhub-test.cloudchef-labs.com
+    - {{ jupyterhubIngressHost }}
   pathSuffix:
   pathType: Prefix
   tls:
     - hosts:
-      - jupyterhub-test.cloudchef-labs.com
-      secretName: jupyterhub-test.cloudchef-labs.com-tls
+      - {{ jupyterhubIngressHost }}
+      secretName: {{ jupyterhubIngressHost }}-tls
 EOF
 
 
@@ -60,7 +60,8 @@ jupyterhub/jupyterhub \
 --namespace $NAMESPACE \
 --create-namespace \
 --version=1.1.3 \
---values dataroaster-values.yaml;
+--values dataroaster-values.yaml \
+--kubeconfig={{ kubeconfig }};
 
 
 # wait for a while to initialize jupyterhub.
@@ -68,6 +69,7 @@ sleep 30
 
 # wait for jupyterhub being run.
 kubectl wait --namespace ${NAMESPACE} \
-  --for=condition=ready pod \
-  --selector=app=jupyterhub,component=hub \
-  --timeout=120s
+--for=condition=ready pod \
+--selector=app=jupyterhub,component=hub \
+--timeout=120s \
+--kubeconfig={{ kubeconfig }};
