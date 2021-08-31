@@ -1,10 +1,10 @@
-replicaCount: 3
+replicaCount: {{ kafkaReplicaCount }}
 persistence:
   enabled: true
-  size: 8Gi
-  storageClass: ceph-rbd-sc
+  size: {{ kafkaStorageSize }}Gi
+  storageClass: {{ storageClass }}
 zookeeper:
-  replicaCount: 3
+  replicaCount: {{ zkReplicaCount }}
   persistence:
     enabled: true
-    storageClass: ceph-rbd-sc
+    storageClass: {{ storageClass }}

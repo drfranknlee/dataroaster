@@ -2,8 +2,10 @@
 
 set -x
 
+cd {{ tempDirectory }};
+
 ## define namespace
-NAMESPACE=dataroaster-kafka
+NAMESPACE={{ namespace }}
 
 ## define helm application name.
 APP_NAME=kafka
@@ -24,13 +26,15 @@ bitnami/kafka \
 --version 13.0.4 \
 --create-namespace \
 --namespace ${NAMESPACE} \
---values dataroaster-values.yaml;
+--values dataroaster-values.yaml \
+--kubeconfig={{ kubeconfig }};
 
 # wait for a while to initialize kafka.
 sleep 5
 
 # wait until kafka is ready.
 kubectl wait --namespace ${NAMESPACE} \
-  --for=condition=ready pod \
-  --selector=app.kubernetes.io/name=kafka \
-  --timeout=120s
+--for=condition=ready pod \
+--selector=app.kubernetes.io/name=kafka \
+--timeout=120s \
+--kubeconfig={{ kubeconfig }};
