@@ -1,5 +1,6 @@
 package com.cloudcheflabs.dataroaster.spark;
 
+import com.cloudcheflabs.dataroaster.util.StringUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -42,7 +43,7 @@ public class JsonToParquetTestRunner {
 
 
         // read json.
-        String json = com.cloudcheflabs.dataroaster.common.util.FileUtils.fileToString("data/test.json", true);
+        String json = StringUtils.fileToString("data/test.json", true);
         String lines[] = json.split("\\r?\\n");
         Dataset<Row> df = spark.read().json(new JavaSparkContext(spark.sparkContext()).parallelize(Arrays.asList(lines)));
 
