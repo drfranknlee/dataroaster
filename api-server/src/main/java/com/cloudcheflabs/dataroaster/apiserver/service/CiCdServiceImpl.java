@@ -133,14 +133,14 @@ public class CiCdServiceImpl implements CiCdService {
             throw new RuntimeException("user [" + userName + "] not allowed to update.");
         }
 
+        // delete services.
+        servicesDao.delete(services);
+
         // delete namespaces.
         K8sNamespace argocdNamespace = k8sNamespaceDao.findByNameAndClusterId(K8sNamespace.DEFAULT_NAMESPACE_ARGOCD, k8sCluster.getId());
         k8sNamespaceDao.delete(argocdNamespace);
         K8sNamespace jenkinsNamespace = k8sNamespaceDao.findByNameAndClusterId(K8sNamespace.DEFAULT_NAMESPACE_JENKINS, k8sCluster.getId());
         k8sNamespaceDao.delete(jenkinsNamespace);
-
-        // delete services.
-        servicesDao.delete(services);
 
         // get kubeconfig.
         for(K8sKubeconfig k8sKubeconfig : k8sCluster.getK8sKubeconfigSet()) {

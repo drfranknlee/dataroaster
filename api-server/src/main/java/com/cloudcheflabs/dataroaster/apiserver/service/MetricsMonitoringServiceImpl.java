@@ -114,12 +114,12 @@ public class MetricsMonitoringServiceImpl implements MetricsMonitoringService {
             throw new RuntimeException("user [" + userName + "] not allowed to update.");
         }
 
+        // delete services.
+        servicesDao.delete(services);
+
         // delete namespaces.
         K8sNamespace promStackNamespace = k8sNamespaceDao.findByNameAndClusterId(K8sNamespace.DEFAULT_NAMESPACE_PROM_STACK, k8sCluster.getId());
         k8sNamespaceDao.delete(promStackNamespace);
-
-        // delete services.
-        servicesDao.delete(services);
 
         // get kubeconfig.
         for(K8sKubeconfig k8sKubeconfig : k8sCluster.getK8sKubeconfigSet()) {

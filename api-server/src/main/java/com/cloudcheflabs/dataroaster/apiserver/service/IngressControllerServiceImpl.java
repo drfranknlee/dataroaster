@@ -119,14 +119,14 @@ public class IngressControllerServiceImpl implements IngressControllerService {
             throw new RuntimeException("user [" + userName + "] not allowed to update.");
         }
 
+        // delete services.
+        servicesDao.delete(services);
+
         // delete namespaces.
         K8sNamespace certManagerNamespace = k8sNamespaceDao.findByNameAndClusterId(K8sNamespace.DEFAULT_NAMESPACE_CERT_MANAGER, k8sCluster.getId());
         k8sNamespaceDao.delete(certManagerNamespace);
         K8sNamespace ingressNginxNamespace = k8sNamespaceDao.findByNameAndClusterId(K8sNamespace.DEFAULT_NAMESPACE_INGRESS_CONTROLLER_NGINX, k8sCluster.getId());
         k8sNamespaceDao.delete(ingressNginxNamespace);
-
-        // delete services.
-        servicesDao.delete(services);
 
         // get kubeconfig.
         for(K8sKubeconfig k8sKubeconfig : k8sCluster.getK8sKubeconfigSet()) {

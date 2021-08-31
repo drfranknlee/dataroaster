@@ -126,14 +126,14 @@ public class PodLogMonitoringServiceImpl implements PodLogMonitoringService {
             throw new RuntimeException("user [" + userName + "] not allowed to update.");
         }
 
+        // delete services.
+        servicesDao.delete(services);
+
         // delete namespaces.
         K8sNamespace filebeatNamespace = k8sNamespaceDao.findByNameAndClusterId(K8sNamespace.DEFAULT_NAMESPACE_FILEBEAT, k8sCluster.getId());
         k8sNamespaceDao.delete(filebeatNamespace);
         K8sNamespace logstashNamespace = k8sNamespaceDao.findByNameAndClusterId(K8sNamespace.DEFAULT_NAMESPACE_LOGSTASH, k8sCluster.getId());
         k8sNamespaceDao.delete(logstashNamespace);
-
-        // delete services.
-        servicesDao.delete(services);
 
         // get kubeconfig.
         for(K8sKubeconfig k8sKubeconfig : k8sCluster.getK8sKubeconfigSet()) {
