@@ -27,8 +27,8 @@ import picocli.CommandLine;
                 Backup.class,
                 CommandLine.HelpCommand.class
         },
-        version = "dataroaster 1.0.0",
-        description = "dataroaster CLI Console.")
+        version = "dataroaster 3.0.0",
+        description = "DataRoaster CLI Console.")
 public class Console implements Runnable {
 
     @Override
