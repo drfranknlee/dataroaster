@@ -196,7 +196,7 @@ kubectl wait --namespace ${NAMESPACE} \
 kill $(cat pid);
 
 # create service.
-kubectl apply -f spark-thrift-server-service.yaml;
+kubectl apply -f {{ tempDirectory }}/spark-thrift-server/spark-thrift-server-service.yaml;
 
 unset KUBECONFIG;
 unset SPARK_HOME;
