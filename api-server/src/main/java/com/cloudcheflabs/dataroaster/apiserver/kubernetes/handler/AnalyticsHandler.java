@@ -133,6 +133,6 @@ public class AnalyticsHandler {
         ProcessExecutor.doExec(tempDirectory + "/" + runShell);
 
         // delete temp directory.
-        FileUtils.deleteDirectory(tempDirectory);
+        //FileUtils.deleteDirectory(tempDirectory);
     }
 }
