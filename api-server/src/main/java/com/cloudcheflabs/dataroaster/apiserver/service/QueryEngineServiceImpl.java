@@ -158,14 +158,14 @@ public class QueryEngineServiceImpl implements QueryEngineService {
             throw new RuntimeException("user [" + userName + "] not allowed to update.");
         }
 
+        // delete services.
+        servicesDao.delete(services);
+
         // delete namespaces.
         K8sNamespace sparkThriftServerNamespace = k8sNamespaceDao.findByNameAndClusterId(K8sNamespace.DEFAULT_NAMESPACE_SPARK_THRIFT_SERVER, k8sCluster.getId());
         k8sNamespaceDao.delete(sparkThriftServerNamespace);
         K8sNamespace trinoNamespace = k8sNamespaceDao.findByNameAndClusterId(K8sNamespace.DEFAULT_NAMESPACE_TRINO, k8sCluster.getId());
         k8sNamespaceDao.delete(trinoNamespace);
-
-        // delete services.
-        servicesDao.delete(services);
 
         // get kubeconfig.
         for(K8sKubeconfig k8sKubeconfig : k8sCluster.getK8sKubeconfigSet()) {
