@@ -13,22 +13,24 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-public class StreamingHandler {
+public class WorkflowHandler {
 
-    private static Logger LOG = LoggerFactory.getLogger(StreamingHandler.class);
+    private static Logger LOG = LoggerFactory.getLogger(WorkflowHandler.class);
 
     private static String moveFiles(Kubeconfig kubeconfig) {
         DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyyMMddHHmmss");
         String formattedDate = fmt.print(DateTime.now());
         String uid = formattedDate + "-" + UUID.randomUUID().toString();
-        String tempDirectory = System.getProperty("java.io.tmpdir") + "/streaming/" + uid;
+        String tempDirectory = System.getProperty("java.io.tmpdir") + "/workflow/" + uid;
 
         // create temp. directory.
         FileUtils.createDirectory(tempDirectory);
 
-        String rootPath = "/templates/streaming";
+        String rootPath = "/templates/workflow";
         FileUtils.copyFilesFromClasspathToFileSystem(rootPath, "1.0.0", tempDirectory);
-      
+        FileUtils.copyFilesFromClasspathToFileSystem(rootPath + "/1.0.0", "templates", tempDirectory + "/templates");
+     
+
         // kubeconfig raw yaml.
         String kubeconfigName = "kubeconfig";
         String kubeconfigString = kubeconfig.getRawKubeconfig();
@@ -42,7 +44,7 @@ public class StreamingHandler {
     public static String create(Kubeconfig kubeconfig, Map<String, ?> map) {
         try {
             runProcess(kubeconfig, map, "create.sh");
-            return "streaming created...";
+            return "workflow created...";
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -54,7 +56,7 @@ public class StreamingHandler {
             Map<String, Object> map = new HashMap<>();
 
             runProcess(kubeconfig, map, "delete.sh");
-            return "streaming deleted...";
+            return "workflow deleted...";
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -75,11 +77,13 @@ public class StreamingHandler {
             Map<String, Object> kv = new HashMap<>();
             kv.put("tempDirectory", tempDirectory);
             kv.put("kubeconfig", "kubeconfig");
-            kv.put("namespace", K8sNamespace.DEFAULT_NAMESPACE_KAFKA);
-            kv.put("kafkaReplicaCount", (Integer) map.get("kafkaReplicaCount"));
-            kv.put("kafkaStorageSize", (Integer) map.get("kafkaStorageSize"));
+            kv.put("namespace", K8sNamespace.DEFAULT_NAMESPACE_ARGO_WORKFLOW);
             kv.put("storageClass", (String) map.get("storageClass"));
-            kv.put("zkReplicaCount", (Integer) map.get("zkReplicaCount"));
+            kv.put("storageSize", (Integer) map.get("storageSize"));
+            kv.put("s3Bucket", (String) map.get("s3Bucket"));
+            kv.put("s3AccessKey", (String) map.get("s3AccessKey"));
+            kv.put("s3SecretKey", (String) map.get("s3SecretKey"));
+            kv.put("s3Endpoint", (String) map.get("s3Endpoint"));
 
 
             TemplateUtils.toFile(tempDirectory + "/" + file,
