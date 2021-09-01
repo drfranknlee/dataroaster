@@ -14,6 +14,7 @@ import com.cloudcheflabs.dataroaster.cli.command.privateregistry.PrivateRegistry
 import com.cloudcheflabs.dataroaster.cli.command.project.Project;
 import com.cloudcheflabs.dataroaster.cli.command.queryengine.QueryEngine;
 import com.cloudcheflabs.dataroaster.cli.command.streaming.Streaming;
+import com.cloudcheflabs.dataroaster.cli.command.workflow.Workflow;
 import picocli.CommandLine;
 
 
@@ -33,6 +34,7 @@ import picocli.CommandLine;
                 QueryEngine.class,
                 Streaming.class,
                 Analytics.class,
+                Workflow.class,
                 CommandLine.HelpCommand.class
         },
         version = "dataroaster 3.0.0",
