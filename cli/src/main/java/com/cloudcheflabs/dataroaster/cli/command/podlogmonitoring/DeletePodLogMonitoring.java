@@ -69,7 +69,7 @@ public class DeletePodLogMonitoring implements Callable<Integer> {
 
         System.out.printf("\n");
 
-        // delete pod log monitoring.
+        // delete.
         PodLogMonitoringDao podLogMonitoringDao = applicationContext.getBean(PodLogMonitoringDao.class);
         restResponse = podLogMonitoringDao.deletePodLogMonitoring(configProps, Long.valueOf(serviceId));
 

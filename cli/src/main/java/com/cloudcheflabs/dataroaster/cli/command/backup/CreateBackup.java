@@ -140,7 +140,7 @@ public class CreateBackup implements Callable<Integer> {
         System.out.printf("\n");
 
 
-        // create backup.
+        // create.
         BackupDao backupDao = applicationContext.getBean(BackupDao.class);
         restResponse = backupDao.createBackup(
                 configProps,

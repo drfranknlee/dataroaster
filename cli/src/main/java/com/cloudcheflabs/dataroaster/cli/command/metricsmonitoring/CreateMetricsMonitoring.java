@@ -133,7 +133,7 @@ public class CreateMetricsMonitoring implements Callable<Integer> {
 
         System.out.printf("\n");
 
-        // create metrics monitoring.
+        // create.
         MetricsMonitoringDao metricsMonitoringDao = applicationContext.getBean(MetricsMonitoringDao.class);
         restResponse = metricsMonitoringDao.createMetricsMonitoring(configProps,
                 Long.valueOf(projectId),

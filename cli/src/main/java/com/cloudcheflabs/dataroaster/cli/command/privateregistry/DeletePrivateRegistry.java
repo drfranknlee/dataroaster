@@ -69,7 +69,7 @@ public class DeletePrivateRegistry implements Callable<Integer> {
 
         System.out.printf("\n");
 
-        // delete private registry.
+        // delete.
         PrivateRegistryDao privateRegistryDao = applicationContext.getBean(PrivateRegistryDao.class);
         restResponse = privateRegistryDao.deletePrivateRegistry(configProps, Long.valueOf(serviceId));
 

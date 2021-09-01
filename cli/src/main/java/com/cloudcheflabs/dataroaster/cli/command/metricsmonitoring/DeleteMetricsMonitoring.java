@@ -69,7 +69,7 @@ public class DeleteMetricsMonitoring implements Callable<Integer> {
 
         System.out.printf("\n");
 
-        // delete metrics monitoring.
+        // delete.
         MetricsMonitoringDao metricsMonitoringDao = applicationContext.getBean(MetricsMonitoringDao.class);
         restResponse = metricsMonitoringDao.deleteMetricsMonitoring(configProps, Long.valueOf(serviceId));
 

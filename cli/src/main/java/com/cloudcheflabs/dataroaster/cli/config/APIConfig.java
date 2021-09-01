@@ -76,7 +76,11 @@ public class APIConfig {
     @Bean
     public QueryEngineDao queryEngineDao() { return new HttpQueryEngineDao(httpClient()); }
 
-    @Bean StreamingDao streamingDao() { return new HttpStreamingDao(httpClient()); }
+    @Bean
+    public StreamingDao streamingDao() { return new HttpStreamingDao(httpClient()); }
+
+    @Bean
+    public AnalyticsDao analyticsDao() { return new HttpAnalyticsDao(httpClient()); }
 
     @Bean
     public OkHttpClient httpClient() {

@@ -146,7 +146,7 @@ public class CreateCiCd implements Callable<Integer> {
         System.out.printf("\n");
 
 
-        // create cicd.
+        // create.
         CiCdDao ciCdDao = applicationContext.getBean(CiCdDao.class);
         restResponse = ciCdDao.createCiCd(
                 configProps,

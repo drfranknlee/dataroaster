@@ -69,7 +69,7 @@ public class DeleteDistributedTracing implements Callable<Integer> {
 
         System.out.printf("\n");
 
-        // delete distributed tracing.
+        // delete.
         DistributedTracingDao distributedTracingDao = applicationContext.getBean(DistributedTracingDao.class);
         restResponse = distributedTracingDao.deleteDistributedTracing(configProps, Long.valueOf(serviceId));
 

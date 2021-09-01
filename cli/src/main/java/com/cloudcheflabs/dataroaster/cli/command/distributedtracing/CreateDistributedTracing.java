@@ -133,7 +133,7 @@ public class CreateDistributedTracing implements Callable<Integer> {
         System.out.printf("\n");
 
 
-        // create distributed tracing.
+        // create.
         DistributedTracingDao distributedTracingDao = applicationContext.getBean(DistributedTracingDao.class);
         restResponse = distributedTracingDao.createDistributedTracing(configProps,
                 Long.valueOf(projectId),

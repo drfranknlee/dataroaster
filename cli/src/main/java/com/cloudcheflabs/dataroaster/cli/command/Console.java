@@ -1,5 +1,6 @@
 package com.cloudcheflabs.dataroaster.cli.command;
 
+import com.cloudcheflabs.dataroaster.cli.command.analytics.Analytics;
 import com.cloudcheflabs.dataroaster.cli.command.backup.Backup;
 import com.cloudcheflabs.dataroaster.cli.command.cicd.CiCd;
 import com.cloudcheflabs.dataroaster.cli.command.cluster.Cluster;
@@ -31,6 +32,7 @@ import picocli.CommandLine;
                 DataCatalog.class,
                 QueryEngine.class,
                 Streaming.class,
+                Analytics.class,
                 CommandLine.HelpCommand.class
         },
         version = "dataroaster 3.0.0",

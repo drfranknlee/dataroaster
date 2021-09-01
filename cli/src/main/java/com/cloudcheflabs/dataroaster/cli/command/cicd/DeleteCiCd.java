@@ -69,7 +69,7 @@ public class DeleteCiCd implements Callable<Integer> {
 
         System.out.printf("\n");
 
-        // delete ci cd.
+        // delete.
         CiCdDao ciCdDao = applicationContext.getBean(CiCdDao.class);
         restResponse = ciCdDao.deleteCiCd(configProps, Long.valueOf(serviceId));
 

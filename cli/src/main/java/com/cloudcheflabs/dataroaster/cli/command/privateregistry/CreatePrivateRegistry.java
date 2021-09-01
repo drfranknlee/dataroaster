@@ -164,7 +164,7 @@ public class CreatePrivateRegistry implements Callable<Integer> {
         System.out.printf("\n");
 
 
-        // create private registry.
+        // create.
         PrivateRegistryDao privateRegistryDao = applicationContext.getBean(PrivateRegistryDao.class);
         restResponse = privateRegistryDao.createPrivateRegistry(
                 configProps,

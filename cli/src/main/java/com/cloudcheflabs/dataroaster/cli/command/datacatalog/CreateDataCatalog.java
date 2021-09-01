@@ -154,7 +154,7 @@ public class CreateDataCatalog implements Callable<Integer> {
         System.out.printf("\n");
 
 
-        // create cicd.
+        // create.
         DataCatalogDao dataCatalogDao = applicationContext.getBean(DataCatalogDao.class);
         restResponse = dataCatalogDao.createDataCatalog(
                 configProps,

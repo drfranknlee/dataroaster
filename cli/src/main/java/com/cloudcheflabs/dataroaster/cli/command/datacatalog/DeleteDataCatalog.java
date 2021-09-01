@@ -69,7 +69,7 @@ public class DeleteDataCatalog implements Callable<Integer> {
 
         System.out.printf("\n");
 
-        // delete ci cd.
+        // delete.
         DataCatalogDao dataCatalogDao = applicationContext.getBean(DataCatalogDao.class);
         restResponse = dataCatalogDao.deleteDataCatalog(configProps, Long.valueOf(serviceId));
 

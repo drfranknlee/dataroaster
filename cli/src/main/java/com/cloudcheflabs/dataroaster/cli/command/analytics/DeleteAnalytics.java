@@ -1,6 +1,6 @@
-package com.cloudcheflabs.dataroaster.cli.command.backup;
+package com.cloudcheflabs.dataroaster.cli.command.analytics;
 
-import com.cloudcheflabs.dataroaster.cli.api.dao.BackupDao;
+import com.cloudcheflabs.dataroaster.cli.api.dao.AnalyticsDao;
 import com.cloudcheflabs.dataroaster.cli.api.dao.ServicesDao;
 import com.cloudcheflabs.dataroaster.cli.config.SpringContextSingleton;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
@@ -17,11 +17,11 @@ import java.util.concurrent.Callable;
 
 @CommandLine.Command(name = "delete",
         subcommands = { CommandLine.HelpCommand.class },
-        description = "Delete Backup.")
-public class DeleteBackup implements Callable<Integer> {
+        description = "Delete Analytics.")
+public class DeleteAnalytics implements Callable<Integer> {
 
     @CommandLine.ParentCommand
-    private Backup parent;
+    private Analytics parent;
 
     @Override
     public Integer call() throws Exception {
@@ -51,7 +51,7 @@ public class DeleteBackup implements Callable<Integer> {
         System.out.printf(format,"SERVICE ID", "SERVICE TYPE", "CLUSTER NAME", "PROJECT NAME");
         for(Map<String, Object> map : servicesList) {
             String serviceType = (String) map.get("serviceDefType");
-            if(serviceType.equals(ServiceDef.ServiceTypeEnum.BACKUP.name())) {
+            if(serviceType.equals(ServiceDef.ServiceTypeEnum.ANALYTICS.name())) {
                 System.out.printf(format,
                         String.valueOf(map.get("id")),
                         (String) map.get("serviceDefType"),
@@ -70,11 +70,11 @@ public class DeleteBackup implements Callable<Integer> {
         System.out.printf("\n");
 
         // delete.
-        BackupDao backupDao = applicationContext.getBean(BackupDao.class);
-        restResponse = backupDao.deleteBackup(configProps, Long.valueOf(serviceId));
+        AnalyticsDao analyticsDao = applicationContext.getBean(AnalyticsDao.class);
+        restResponse = analyticsDao.deleteAnalytics(configProps, Long.valueOf(serviceId));
 
         if(restResponse.getStatusCode() == 200) {
-            System.out.println("backup service deleted successfully!");
+            System.out.println("analytics service deleted successfully!");
             return 0;
         } else {
             System.err.println(restResponse.getErrorMessage());
