@@ -123,12 +123,12 @@ public class StreamingServiceImpl implements StreamingService {
             throw new RuntimeException("user [" + userName + "] not allowed to update.");
         }
 
-        // delete services.
-        servicesDao.delete(services);
-
         // delete namespaces.
         K8sNamespace kafkaNamespace = k8sNamespaceDao.findByNameAndClusterId(K8sNamespace.DEFAULT_NAMESPACE_KAFKA, k8sCluster.getId());
         k8sNamespaceDao.delete(kafkaNamespace);
+
+        // delete services.
+        servicesDao.delete(services);
 
         // get kubeconfig.
         for(K8sKubeconfig k8sKubeconfig : k8sCluster.getK8sKubeconfigSet()) {
