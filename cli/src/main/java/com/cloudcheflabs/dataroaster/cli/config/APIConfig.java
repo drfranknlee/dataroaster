@@ -83,6 +83,9 @@ public class APIConfig {
     public AnalyticsDao analyticsDao() { return new HttpAnalyticsDao(httpClient()); }
 
     @Bean
+    public WorkflowDao workflowDao() { return new HttpWorkflowDao(httpClient()); }
+
+    @Bean
     public OkHttpClient httpClient() {
         return new SimpleHttpClient().getClient();
     }
