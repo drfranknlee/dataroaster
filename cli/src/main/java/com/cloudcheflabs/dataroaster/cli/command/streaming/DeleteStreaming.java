@@ -1,7 +1,7 @@
 package com.cloudcheflabs.dataroaster.cli.command.streaming;
 
-import com.cloudcheflabs.dataroaster.cli.api.dao.DataCatalogDao;
 import com.cloudcheflabs.dataroaster.cli.api.dao.ServicesDao;
+import com.cloudcheflabs.dataroaster.cli.api.dao.StreamingDao;
 import com.cloudcheflabs.dataroaster.cli.config.SpringContextSingleton;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
@@ -69,9 +69,9 @@ public class DeleteStreaming implements Callable<Integer> {
 
         System.out.printf("\n");
 
-        // delete ci cd.
-        DataCatalogDao dataCatalogDao = applicationContext.getBean(DataCatalogDao.class);
-        restResponse = dataCatalogDao.deleteDataCatalog(configProps, Long.valueOf(serviceId));
+        // delete.
+        StreamingDao streamingDao = applicationContext.getBean(StreamingDao.class);
+        restResponse = streamingDao.deleteStreaming(configProps, Long.valueOf(serviceId));
 
         if(restResponse.getStatusCode() == 200) {
             System.out.println("streaming service deleted successfully!");
