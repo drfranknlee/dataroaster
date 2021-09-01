@@ -10,6 +10,11 @@ public class ServiceDef {
         CI_CD,
         BACKUP,
         SECRET_MANAGEMENT,
-        STORAGE
+        STORAGE,
+        DATA_CATALOG,
+        QUERY_ENGINE,
+        STREAMING,
+        ANALYTICS,
+        WORKFLOW
     }
 }

@@ -21,13 +21,13 @@ import java.util.concurrent.Callable;
 
 @CommandLine.Command(name = "login",
         subcommands = { CommandLine.HelpCommand.class },
-        description = "Login to dataroaster.")
+        description = "Login to DataRoaster API Server.")
 public class Login implements Callable<Integer> {
 
     @CommandLine.ParentCommand
     private Console parent;
 
-    @CommandLine.Parameters(index = "0", description = "dataroaster API Server URL", defaultValue = "http://localhost:8082")
+    @CommandLine.Parameters(index = "0", description = "DataRoaster API Server URL", defaultValue = "http://localhost:8082")
     private String server;
 
     @Override

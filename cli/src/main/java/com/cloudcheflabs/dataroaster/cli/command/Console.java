@@ -3,6 +3,7 @@ package com.cloudcheflabs.dataroaster.cli.command;
 import com.cloudcheflabs.dataroaster.cli.command.backup.Backup;
 import com.cloudcheflabs.dataroaster.cli.command.cicd.CiCd;
 import com.cloudcheflabs.dataroaster.cli.command.cluster.Cluster;
+import com.cloudcheflabs.dataroaster.cli.command.datacatalog.DataCatalog;
 import com.cloudcheflabs.dataroaster.cli.command.distributedtracing.DistributedTracing;
 import com.cloudcheflabs.dataroaster.cli.command.kubeconfig.Kubeconfig;
 import com.cloudcheflabs.dataroaster.cli.command.login.Login;
@@ -25,6 +26,7 @@ import picocli.CommandLine;
                 PrivateRegistry.class,
                 CiCd.class,
                 Backup.class,
+                DataCatalog.class,
                 CommandLine.HelpCommand.class
         },
         version = "dataroaster 3.0.0",

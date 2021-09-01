@@ -71,6 +71,9 @@ public class APIConfig {
     }
 
     @Bean
+    public DataCatalogDao dataCatalogDao() { return new HttpDataCatalogDao(httpClient()); }
+
+    @Bean
     public OkHttpClient httpClient() {
         return new SimpleHttpClient().getClient();
     }
