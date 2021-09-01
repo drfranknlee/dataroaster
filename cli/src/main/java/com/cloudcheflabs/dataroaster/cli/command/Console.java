@@ -12,6 +12,7 @@ import com.cloudcheflabs.dataroaster.cli.command.podlogmonitoring.PodLogMonitori
 import com.cloudcheflabs.dataroaster.cli.command.privateregistry.PrivateRegistry;
 import com.cloudcheflabs.dataroaster.cli.command.project.Project;
 import com.cloudcheflabs.dataroaster.cli.command.queryengine.QueryEngine;
+import com.cloudcheflabs.dataroaster.cli.command.streaming.Streaming;
 import picocli.CommandLine;
 
 
@@ -29,6 +30,7 @@ import picocli.CommandLine;
                 Backup.class,
                 DataCatalog.class,
                 QueryEngine.class,
+                Streaming.class,
                 CommandLine.HelpCommand.class
         },
         version = "dataroaster 3.0.0",

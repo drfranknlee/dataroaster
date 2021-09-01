@@ -1,4 +1,4 @@
-package com.cloudcheflabs.dataroaster.cli.command.queryengine;
+package com.cloudcheflabs.dataroaster.cli.command.streaming;
 
 import com.cloudcheflabs.dataroaster.cli.api.dao.*;
 import com.cloudcheflabs.dataroaster.cli.config.SpringContextSingleton;
@@ -16,50 +16,20 @@ import java.util.concurrent.Callable;
 
 @CommandLine.Command(name = "create",
         subcommands = { CommandLine.HelpCommand.class },
-        description = "Create Data Catalog.")
-public class CreateQueryEngine implements Callable<Integer> {
+        description = "Create Streaming.")
+public class CreateStreaming implements Callable<Integer> {
 
     @CommandLine.ParentCommand
-    private QueryEngine parent;
+    private Streaming parent;
 
-    @CommandLine.Option(names = {"--s3-bucket"}, description = "S3 Bucket Name", required = true)
-    private String s3Bucket;
+    @CommandLine.Option(names = {"--kafka-replica-count"}, description = "Kafka Replica Count", required = true)
+    private int kafkaReplicaCount;
 
-    @CommandLine.Option(names = {"--s3-access-key"}, description = "S3 Access Key", required = true)
-    private String s3AccessKey;
+    @CommandLine.Option(names = {"--kafka-storage-size"}, description = "Kafka Storage Size in GiB", required = true)
+    private int kafkaStorageSize;
 
-    @CommandLine.Option(names = {"--s3-secret-key"}, description = "S3 Secret Key", required = true)
-    private String s3SecretKey;
-
-    @CommandLine.Option(names = {"--s3-endpoint"}, description = "S3 Endpoint", required = true)
-    private String s3Endpoint;
-
-    @CommandLine.Option(names = {"--spark-thrift-server-executors"}, description = "Spark Thrift Server Executor Count", required = true)
-    private int sparkThriftServerExecutors;
-
-    @CommandLine.Option(names = {"--spark-thrift-server-executor-memory"}, description = "Spark Thrift Server Executor Memory in GB", required = true)
-    private int sparkThriftServerExecutorMemory;
-
-    @CommandLine.Option(names = {"--spark-thrift-server-executor-cores"}, description = "Spark Thrift Server Executor Core Count", required = true)
-    private int sparkThriftServerExecutorCores;
-
-    @CommandLine.Option(names = {"--spark-thrift-server-driver-memory"}, description = "Spark Thrift Server Driver Memory in GB", required = true)
-    private int sparkThriftServerDriverMemory;
-
-    @CommandLine.Option(names = {"--trino-workers"}, description = "Trino Worker Count", required = true)
-    private int trinoWorkers;
-
-    @CommandLine.Option(names = {"--trino-server-max-memory"}, description = "Trino Server Max. Memory in GB", required = true)
-    private int trinoServerMaxMemory;
-
-    @CommandLine.Option(names = {"--trino-cores"}, description = "Trino Server Core Count", required = true)
-    private int trinoCores;
-
-    @CommandLine.Option(names = {"--trino-temp-data-storage"}, description = "Trino Temporary Data Storage in GB", required = true)
-    private int trinoTempDataStorage;
-
-    @CommandLine.Option(names = {"--trino-data-storage"}, description = "Trino Data Storage in GiB", required = true)
-    private int trinoDataStorage;
+    @CommandLine.Option(names = {"--zk-replica-count"}, description = "Zookeeper Replica Count", required = true)
+    private int zkReplicaCount;
 
     @Override
     public Integer call() throws Exception {
@@ -139,7 +109,7 @@ public class CreateQueryEngine implements Callable<Integer> {
                 JsonUtils.toMapList(new ObjectMapper(), restResponse.getSuccessMessage());
         for(Map<String, Object> map : serviceDefLists) {
             String type = (String) map.get("type");
-            if(type.equals(ServiceDef.ServiceTypeEnum.QUERY_ENGINE.name())) {
+            if(type.equals(ServiceDef.ServiceTypeEnum.STREAMING.name())) {
                 serviceDefId = String.valueOf(map.get("id"));
                 break;
             }
@@ -170,58 +140,28 @@ public class CreateQueryEngine implements Callable<Integer> {
 
         System.out.printf("\n");
 
-        String sparkThriftServerStorageClass = cnsl.readLine("Select Storage Class for Spark Thrift Server(for instance, nfs) : ");
-        if(sparkThriftServerStorageClass == null) {
-            throw new RuntimeException("spark thrift server storage class is required!");
-        }
-
-        System.out.printf("\n");
-
-
-        System.out.printf(format,"STORAGE CLASS NAME", "RECLAIM POLICY", "VOLUME BIDING MODE", "PROVISIONER");
-        for(Map<String, Object> map : storageClasses) {
-            System.out.printf(format,
-                    String.valueOf(map.get("name")),
-                    (String) map.get("reclaimPolicy"),
-                    (String) map.get("volumeBindingMode"),
-                    (String) map.get("provisioner"));
-        }
-
-        System.out.printf("\n");
-
-        String trinoStorageClass = cnsl.readLine("Select Storage Class for Trino : ");
-        if(trinoStorageClass == null) {
-            throw new RuntimeException("trino storage class is required!");
+        String storageClass = cnsl.readLine("Select Storage Class : ");
+        if(storageClass == null) {
+            throw new RuntimeException("storage class is required!");
         }
 
         System.out.printf("\n");
 
 
         // create.
-        QueryEngineDao queryEngineDao = applicationContext.getBean(QueryEngineDao.class);
-        restResponse = queryEngineDao.createQueryEngine(
+        StreamingDao streamingDao = applicationContext.getBean(StreamingDao.class);
+        restResponse = streamingDao.createStreaming(
                 configProps,
                 Long.valueOf(projectId),
                 Long.valueOf(serviceDefId),
                 Long.valueOf(clusterId),
-                s3Bucket,
-                s3AccessKey,
-                s3SecretKey,
-                s3Endpoint,
-                sparkThriftServerStorageClass,
-                sparkThriftServerExecutors,
-                sparkThriftServerExecutorMemory,
-                sparkThriftServerExecutorCores,
-                sparkThriftServerDriverMemory,
-                trinoWorkers,
-                trinoServerMaxMemory,
-                trinoCores,
-                trinoTempDataStorage,
-                trinoDataStorage,
-                trinoStorageClass);
+                kafkaReplicaCount,
+                kafkaStorageSize,
+                storageClass,
+                zkReplicaCount);
 
         if(restResponse.getStatusCode() == 200) {
-            System.out.println("query engine service created successfully!");
+            System.out.println("streaming service created successfully!");
             return 0;
         } else {
             System.err.println(restResponse.getErrorMessage());
