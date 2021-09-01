@@ -74,6 +74,9 @@ public class APIConfig {
     public DataCatalogDao dataCatalogDao() { return new HttpDataCatalogDao(httpClient()); }
 
     @Bean
+    public QueryEngineDao queryEngineDao() { return new HttpQueryEngineDao(httpClient()); }
+
+    @Bean
     public OkHttpClient httpClient() {
         return new SimpleHttpClient().getClient();
     }
