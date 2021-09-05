@@ -18,6 +18,47 @@ This demo shows how to create the components like hive metastore, spark thrift s
 [![IMAGE DataRoaster Demo](https://i9.ytimg.com/vi/AeqkkQDwPqY/mq1.jpg?sqp=CJSr04kG&rs=AOn4CLDn62JeeaC4Iqf3IekeZfMtXWYr_w)](https://youtu.be/AeqkkQDwPqY "DataRoaster Demo")
 
 
+## Services provided by DataRoaster
+
+### Data Catalog
+* Hive Metastore: Standard Data Catalog in Data Lake
+
+### Query Engine
+* Spark Thrift Server: used as Hive Server, namely Hive on Spark. Interface to query data in Data Lake
+* Trino: Fast Interactive Query Engine to query data in Data Lake
+
+### Streaming
+* Kafka: Popular Streaming Platform
+
+### Analytics
+* JupyterHub: Controller to serve Jupyter Notebook which is most popular web based interactive analytics tool for multiple users
+* Redash: Visual Data Analytics SQL Engine which provides a lot of data sources connectors
+
+### Workflow
+* Argo Workflow: Workflow engine running on Kubernetes, with which containerized long running batch jobs, ETL Jobs, ML Jobs, etc can be scheduled to run on Kubernetes
+
+### CI / CD
+* Jenkins: Popular continuous Integration Server
+* Argo CD: Continuous Delivery tool for Kubernetes
+
+### Metrics Monitoring
+* Prometheus: Popular monitoring tool
+* Grafana: Popular metrics visibility tool
+
+### Pod Log Monitoring
+* ELK: Elasticsearch, Logstash and Kibana
+* Filebeat: used to fetch log files
+
+### Distributed Tracing
+* Jaeger: Popular microservices distributed tracing platform
+
+### Backup
+* Velero: used to backup Kubernetes Resources and Persistent Volumes
+
+### Private Registry
+* Harbor: used as private registry to manage docker images and helm charts
+
+
 ## Install DataRoaster with ansible
 
 TODO: coming soon.
