@@ -644,6 +644,8 @@ api_secret    1a2b3c4d
 mysql -u root -p;
 ...
 source <dataroaster-src>/authorizer/sql/create-db-user.sql;
+
+use dataroaster;
 source <dataroaster-src>/authorizer/sql/creat-auth.sql;
 ...
 ```
@@ -674,6 +676,7 @@ nohup java -jar ./authorizer-*.jar >/dev/null &
 ```
 mysql -u root -p;
 ...
+use dataroaster;
 source <dataroaster-src>/api-server/sql/create-tables.sql;
 ...
 ```
