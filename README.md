@@ -643,7 +643,10 @@ api_secret    1a2b3c4d
 ```
 mysql -u root -p;
 ...
-source <dataroaster-src>/authorizer/sql/create-db-user.sql;
+CREATE DATABASE dataroaster; 
+CREATE USER 'dataroaster'@'localhost' IDENTIFIED BY 'icarus0337';
+GRANT ALL PRIVILEGES ON *.* TO 'dataroaster'@'localhost' WITH GRANT OPTION;
+flush privileges;
 
 use dataroaster;
 source <dataroaster-src>/authorizer/sql/creat-auth.sql;
