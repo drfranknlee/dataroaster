@@ -713,8 +713,13 @@ cp $DATAROASTER_SRC/api-server/src/main/resources/application-prod.yml conf;
 # copy all the template.
 mkdir -p templates;
 cp -R $DATAROASTER_SRC/api-server/src/main/resources/templates/* templates/;
+```
 
-# run with setting loader path as additional classpath in spring boot.
+Replace the value of `vault.token` in `$APISERVER_HOME/conf/application-prod.yml` with the initial root token generated when vault was initialized.
+
+
+Run API Server:
+```
 nohup java \
 -cp api-server-*.jar \
 -Dloader.path=$APISERVER_HOME/ \
