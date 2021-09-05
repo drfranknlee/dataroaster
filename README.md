@@ -655,6 +655,10 @@ source <dataroaster-src>/authorizer/sql/creat-auth.sql;
 export AUTHORIZER_HOME=~/authorizer;
 mkdir -p $AUTHORIZER_HOME;
 
+# create log directory.
+sudo mkdir -p /data/dataroaster/logs;
+sudo chown $(whoami): -R /data/dataroaster/logs;
+
 export DATAROASTER_SRC=~/dataroaster;
 
 # build all.
