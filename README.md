@@ -12,10 +12,6 @@ DataRoaster consists of the following components.
 * Secret Manager: manages secrets like kubeconfig using Vault.
 * Resource Controller: manages remote kubernetes resources with kubectl, helm and kubernetes client like fabric8 k8s client.
 
-## DataRoaster Demo
-This demo shows how to create the components like hive metastore, spark thrift server, trino, redash and jupyterhub deployed on Kubernetes with ease using DataRoaster.
-
-[![IMAGE DataRoaster Demo](https://i9.ytimg.com/vi/AeqkkQDwPqY/mq1.jpg?sqp=CJSr04kG&rs=AOn4CLDn62JeeaC4Iqf3IekeZfMtXWYr_w)](https://youtu.be/AeqkkQDwPqY "DataRoaster Demo")
 
 
 ## Services provided by DataRoaster
@@ -57,6 +53,18 @@ This demo shows how to create the components like hive metastore, spark thrift s
 
 ### Private Registry
 * Harbor: used as private registry to manage docker images and helm charts
+
+
+
+
+## DataRoaster Demo
+This demo shows how to create the components like hive metastore, spark thrift server, trino, redash and jupyterhub deployed on Kubernetes with ease using DataRoaster.
+
+[![IMAGE DataRoaster Demo](https://i9.ytimg.com/vi/AeqkkQDwPqY/mq1.jpg?sqp=CJSr04kG&rs=AOn4CLDn62JeeaC4Iqf3IekeZfMtXWYr_w)](https://youtu.be/AeqkkQDwPqY "DataRoaster Demo")
+
+
+
+
 
 
 ## Install DataRoaster with ansible
