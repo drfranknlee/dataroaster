@@ -60,7 +60,7 @@ DataRoaster consists of the following components.
 ## DataRoaster Demo
 This demo shows how to create the components like hive metastore, spark thrift server, trino, redash and jupyterhub deployed on Kubernetes with ease using DataRoaster.
 
-[![IMAGE DataRoaster Demo](https://i9.ytimg.com/vi/AeqkkQDwPqY/mq1.jpg?sqp=CJSr04kG&rs=AOn4CLDn62JeeaC4Iqf3IekeZfMtXWYr_w)](https://youtu.be/AeqkkQDwPqY "DataRoaster Demo")
+[![DataRoaster Demo](https://i9.ytimg.com/vi/AeqkkQDwPqY/mq1.jpg?sqp=CMCO1YkG&rs=AOn4CLCO0q_79fWHOk9a8ZYFx5HxANRSJw)](https://youtu.be/AeqkkQDwPqY "DataRoaster Demo")
 
 
 
