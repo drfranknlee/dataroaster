@@ -792,10 +792,17 @@ See DataRoaster CLI usage how to create services.
 
 ## DataRoaster CLI Usage
 
-TODO: add description of command parameters.
 
 ### Login
+Login to API server.
 
+```
+dataroaster login <server>
+```
+* `server`: API Server URL.
+ 
+
+Example:
 ```
 dataroaster login http://localhost:8082;
 ...
@@ -805,81 +812,180 @@ dataroaster login http://localhost:8082;
 
 
 ### Cluster
+Register Kubernetes Clusters.
+
+#### Create Cluster
 ```
-# create
+dataroaster cluster create <params>
+```
+* `name`: kubernetes cluster name.
+* `description`: description of the kubernetes cluster.
+
+Example: 
+```
 dataroaster cluster create --name dataroaster-cluster --description dataroaster-desc...;
+```
 
-# update
+#### Update Cluster
+```
 dataroaster cluster update;
+```
 
-# delete
+#### Delete Cluster
+```
 dataroaster cluster delete;
 ```
 
-### Kubeconfig
-```
-# create.
-dataroaster kubeconfig create --kubeconfig ~/.kube/config
 
-# update.
+### Kubeconfig
+Upload kubeconfig file for the kubernetes cluster.
+
+#### Create Kubeconfig
+```
+dataroaster kubeconfig create <params>
+```
+* `kubeconfig`: kubeconfig file path.
+
+Example: 
+```
+dataroaster kubeconfig create --kubeconfig ~/.kube/config
+```
+
+#### Update Kubeconfig
+```
+dataroaster kubeconfig update <params>
+```
+* `kubeconfig`: kubeconfig file path.
+
+Example: 
+```
 dataroaster kubeconfig update --kubeconfig ~/.kube/config
 ```
 
+
 ### Project
+Manage Project where services will be created.
+
+#### Create Project
 ```
-# create.
+dataroaster project create <params>
+```
+* `name`: kubernetes cluster name.
+* `description`: description of the kubernetes cluster.
+
+Example: 
+```
 dataroaster project create  --name new-test-project --description new-test-desc;
+```
 
-# update.
+#### Update Project
+```
 dataroaster project update;
+```
 
-# delete.
+#### Delete Project
+```
 dataroaster project delete;
 ```
 
-### Ingress Controller
-```
-# create.
-dataroaster ingresscontroller create;
 
-# delete.
+### Ingress Controller
+Manage Ingress Controller NGINX and Cert Manager.
+
+#### Create Ingress Controller
+Ingress controller nginx and cert manager will be created.
+```
+dataroaster ingresscontroller create;
+```
+
+#### Delete Ingress Controller
+```
 dataroaster ingresscontroller delete;
 ```
 
 
 ### Pod Log Monitoring
+Manage Pod Log Monitoring.
+
+#### Create Pod Log Monitoring
+Logstash and filebeat will be created.
 ```
-# create.
+dataroaster podlogmonitoring create <params>
+```
+* `elasticsearch-hosts`: List of Elasticsearch hosts.
+
+Example:
+```
 dataroaster podlogmonitoring create \
 --elasticsearch-hosts 192.168.10.10:9200,192.168.10.134:9200,192.168.10.145:9200;
+```
 
-# delete
+#### Delete Pod Log Monitoring
+```
 dataroaster podlogmonitoring delete;
 ```
 
-### Metrics Monitoring
-```
-# create.
-dataroaster metricsmonitoring create;
 
-# delete.
+### Metrics Monitoring
+Manage Metrics Monitoring.
+
+#### Create Metrics Monitoring
+Prometheus, grafana, metrics server will be created.
+```
+dataroaster metricsmonitoring create;
+```
+
+#### Delete Metrics Monitoring
+```
 dataroaster metricsmonitoring delete;
 ```
 
 ### Distributed Tracing
+Manage Distributed Tracing.
+
+#### Create Distributed Tracing
+Jaeger will be created.
 ```
-# create.
+dataroaster distributedtracing create <params>
+```
+* `ingress-host`: Host name of jaeger ingress.
+* `elasticsearch-host-port`: an elasticsearch host and port.
+
+Example:
+```
 dataroaster distributedtracing create \
 --ingress-host ingress-nginx-jaeger-test.cloudchef-labs.com \
 --elasticsearch-host-port 192.168.10.10:9200;
+```
 
-# delete
+#### Delete Distributed Tracing
+```
 dataroaster distributedtracing delete;
 ```
 
 ### Private Registry
+Manage private registry for docker images and helm charts.
+
+#### Create Private Registry
+Harbor will be created.
 ```
-# create.
+dataroaster privateregistry create <params>
+```
+* `core-host`: Harbor core ingress host name.
+* `notary-host`: Harbor notary ingress host name.
+* `registry-storage-size`: regisry storage size in GiB.
+* `chartmuseum-storage-size`: chart museum storage size in GiB.
+* `jobservice-storage-size`: job service storage size in GiB.
+* `database-storage-size`: database storage size in GiB.
+* `redis-storage-size`: redis storage size in GiB.
+* `trivy-storage-size`: trivy storage size in GiB.
+* `s3-bucket`: name of s3 bucket where artifacts of harbor will be saved.
+* `s3-access-key`: s3 access key.
+* `s3-secret-key`: s3 secret key.
+* `s3-endpoint`: s3 endpoint.
+
+Example:
+```
 dataroaster privateregistry create \
 --core-host harbor-core-test.cloudchef-labs.com \
 --notary-host harbor-notary-test.cloudchef-labs.com \
@@ -890,55 +996,119 @@ dataroaster privateregistry create \
 --redis-storage-size 1 \
 --trivy-storage-size 5 \
 --s3-bucket harbor \
---s3-accessKey TOW32G9ULH63MTUI6NNW \
---s3-secretKey jXqViVmSqIDTEKKKzdgSssHVykBrX4RrlnSeVgMi \
+--s3-access-key TOW32G9ULH63MTUI6NNW \
+--s3-secret-key jXqViVmSqIDTEKKKzdgSssHVykBrX4RrlnSeVgMi \
 --s3-endpoint https://ceph-rgw-test.cloudchef-labs.com;
+```
 
-# delete.
+#### Delete Private Registry
+```
 dataroaster privateregistry delete;
 ```
 
 ### CI / CD
+Manage CI / CD.
+
+#### Create CI / CD
+Argo cd and jenkins will be created.
 ```
-# create.
+dataroaster cicd create <params>
+```
+* `argocd-ingress-host`: ingress host name of Argo CD.
+* `jenkins-ingress-host`: ingress host name of Jenkins.
+
+Example:
+```
 dataroaster cicd create \
 --argocd-ingress-host argocd-test.cloudchef-labs.com \
 --jenkins-ingress-host jenkins-test.cloudchef-labs.com;
+```
 
-# delete.
+#### Delete CI / CD
+```
 dataroaster cicd delete;
 ```
 
 ### Backup
+Manage Backup for Persistent Volumes and resources.
+
+#### Create Backup
+Velero will be created.
 ```
-# create.
+dataroaster backup create <params>
+```
+* `s3-bucket`: s3 bucket for backup.
+* `s3-access-key`: s3 access key.
+* `s3-secret-key`: s3 secret key.
+* `s3-endpoint`: s3 endpoint.
+
+Example:
+```
 dataroaster backup create \
 --s3-bucket velero-backups \
---s3-accessKey TOW32G9ULH63MTUI6NNW \
---s3-secretKey jXqViVmSqIDTEKKKzdgSssHVykBrX4RrlnSeVgMi \
+--s3-access-key TOW32G9ULH63MTUI6NNW \
+--s3-secret-key jXqViVmSqIDTEKKKzdgSssHVykBrX4RrlnSeVgMi \
 --s3-endpoint https://ceph-rgw-test.cloudchef-labs.com;
+```
 
-# delete.
+#### Delete Backup
+```
 dataroaster backup delete;
 ```
 
 ### Data Catalog
+Manage Data Catalog.
+
+#### Create Data Catalog
+Hive metastore and mysql server will be created.
 ```
-# create.
+dataroaster datacatalog create <params>
+```
+* `s3-bucket`: s3 bucket for hive metastore warehouse.
+* `s3-access-key`: s3 access key.
+* `s3-secret-key`: s3 secret key.
+* `s3-endpoint`: s3 endpoint.
+* `storage-size`: mysql storage size in GiB.
+
+Example:
+```
 dataroaster datacatalog create \
 --s3-bucket mykidong \
 --s3-access-key TOW32G9ULH63MTUI6NNW \
 --s3-secret-key jXqViVmSqIDTEKKKzdgSssHVykBrX4RrlnSeVgMi \
 --s3-endpoint https://ceph-rgw-test.cloudchef-labs.com \
 --storage-size 1;
+```
 
-# delete.
+#### Delete Data Catalog
+```
 dataroaster datacatalog delete;
 ```
 
 ### Query Engine
+Manage Query Engine.
+
+#### Create Query Engine
+Spark thrift server(hive on spark) and trino will be created.
 ```
-# create.
+dataroaster queryengine create <params>
+```
+* `s3-bucket`: s3 bucket where spark thrift server jar will be uploaded.
+* `s3-access-key`: s3 access key.
+* `s3-secret-key`: s3 secret key.
+* `s3-endpoint`: s3 endpoint.
+* `spark-thrift-server-executors`: executor count of spark thrift server.
+* `spark-thrift-server-executor-memory`: spark thrift server executor memory in GB.
+* `spark-thrift-server-executor-cores`: spark thrift server executor core count.
+* `spark-thrift-server-driver-memory`: spark thrift server driver memory in GB.
+* `trino-workers`: trino worker count.
+* `trino-server-max-memory`: trino server max. memory in GB.
+* `trino-cores`: trino server core count.
+* `trino-temp-data-storage`: trino temporary data storage size in GiB.
+* `trino-data-storage`: trino data storage size in GB.
+
+Example: 
+```
 dataroaster queryengine create \
 --s3-bucket mykidong \
 --s3-access-key TOW32G9ULH63MTUI6NNW \
@@ -953,49 +1123,94 @@ dataroaster queryengine create \
 --trino-cores 1 \
 --trino-temp-data-storage 1 \
 --trino-data-storage 1;
+```
 
-# delete.
+
+#### Delete Query Engine
+```
 dataroaster queryengine delete;
 ```
 
 ### Streaming
+Manage Streaming.
+
+#### Create Streaming
+Kafka will be created.
 ```
-# create.
+dataroaster streaming create <params>
+```
+* `kafka-replica-count`: kafka node count.
+* `kafka-storage-size`: kafka storage size in GiB.
+* `zk-replica-count`: zookeeper node count.
+
+Example:
+```
 dataroaster streaming create \
 --kafka-replica-count 3 \
 --kafka-storage-size 4 \
 --zk-replica-count 3;
+```
 
-
-# delete.
+#### Delete Streaming
+```
 dataroaster streaming delete;
 ```
 
 ### Analytics
+Manage Analytics.
+
+#### Create Analytics
+Redash and jupyterhub will be created.
 ```
-# create.
+dataroaster analytics create <params>
+```
+* `jupyterhub-github-client-id`: jupyterhub github oauth client id.
+* `jupyterhub-github-client-secret`: jupyterhub github oauth client secret.
+* `jupyterhub-ingress-host`: jupyterhub ingress host name.
+* `jupyterhub-storage-size`: storage size in GiB of single jupyter instance.
+* `redash-storage-size`: redash database storage size in GiB.
+
+Example:
+```
 dataroaster analytics create \
 --jupyterhub-github-client-id 0b322767446baedb3203 \
 --jupyterhub-github-client-secret 828688ff8be545b6434df2dbb2860a1160ae1517 \
 --jupyterhub-ingress-host jupyterhub-test.cloudchef-labs.com \
 --jupyterhub-storage-size 1 \
 --redash-storage-size 1;
+```
 
-# delete.
+#### Delete Analytics
+```
 dataroaster analytics delete;
 ```
 
 ### Workflow
+Manage Workflow.
+
+#### Create Workflow
+Argo Workflow will be created.
 ```
-# create.
+dataroaster workflow create <params>
+```
+* `storage-size`: database storage size in GiB.
+* `s3-bucket`: s3 bucket where application logs of workflow will be saved.
+* `s3-access-key`: s3 access key.
+* `s3-secret-key`: s3 secret key.
+* `s3-endpoint`: s3 endpoint.
+
+Example:
+```
 dataroaster workflow create \
 --storage-size 1 \
 --s3-bucket mykidong \
 --s3-access-key TOW32G9ULH63MTUI6NNW \
 --s3-secret-key jXqViVmSqIDTEKKKzdgSssHVykBrX4RrlnSeVgMi \
 --s3-endpoint ceph-rgw-test.cloudchef-labs.com;
+```
 
-# delete.
+#### Delete Workflow
+```
 dataroaster workflow delete;
 ```
 
