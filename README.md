@@ -54,6 +54,10 @@ DataRoaster consists of the following components.
 ### Private Registry
 * Harbor: used as private registry to manage docker images and helm charts
 
+### Ingress Controller
+* Ingress Controller NGINX: Popular Ingress Controller
+* Cert Manager: manage certificates for ingress resources
+
 
 
 
@@ -827,6 +831,16 @@ dataroaster project update;
 # delete.
 dataroaster project delete;
 ```
+
+### Ingress Controller
+```
+# create.
+dataroaster ingresscontroller create;
+
+# delete.
+dataroaster ingresscontroller delete;
+```
+
 
 ### Pod Log Monitoring
 ```
