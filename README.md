@@ -780,7 +780,12 @@ dataroaster kubeconfig create --kubeconfig ~/.kube/config
 dataroaster project create  --name my-project --description my-project-desc;
 ```
 
-### Step 5: Create Services like Data Catalog, Query Engine, etc in your Project
+### Step 5: Create Ingress Controller NGINX and Cert Manager in your kubernetes cluster
+```
+dataroaster ingresscontroller create;
+```
+
+### Step 6: Create Services like Data Catalog, Query Engine, etc in your Project
 See DataRoaster CLI usage how to create services.
 
 
