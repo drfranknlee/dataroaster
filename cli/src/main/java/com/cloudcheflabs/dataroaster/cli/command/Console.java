@@ -6,6 +6,7 @@ import com.cloudcheflabs.dataroaster.cli.command.cicd.CiCd;
 import com.cloudcheflabs.dataroaster.cli.command.cluster.Cluster;
 import com.cloudcheflabs.dataroaster.cli.command.datacatalog.DataCatalog;
 import com.cloudcheflabs.dataroaster.cli.command.distributedtracing.DistributedTracing;
+import com.cloudcheflabs.dataroaster.cli.command.ingresscontroller.IngressController;
 import com.cloudcheflabs.dataroaster.cli.command.kubeconfig.Kubeconfig;
 import com.cloudcheflabs.dataroaster.cli.command.login.Login;
 import com.cloudcheflabs.dataroaster.cli.command.metricsmonitoring.MetricsMonitoring;
@@ -35,6 +36,7 @@ import picocli.CommandLine;
                 Streaming.class,
                 Analytics.class,
                 Workflow.class,
+                IngressController.class,
                 CommandLine.HelpCommand.class
         },
         version = "dataroaster 3.0.0",

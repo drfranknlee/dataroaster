@@ -86,6 +86,9 @@ public class APIConfig {
     public WorkflowDao workflowDao() { return new HttpWorkflowDao(httpClient()); }
 
     @Bean
+    public IngressControllerDao ingressControllerDao() { return new HttpIngressControllerDao(httpClient()); }
+
+    @Bean
     public OkHttpClient httpClient() {
         return new SimpleHttpClient().getClient();
     }
