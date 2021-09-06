@@ -1,6 +1,5 @@
 package com.cloudcheflabs.dataroaster.cli.dao.http;
 
-import com.cloudcheflabs.dataroaster.cli.api.dao.DataCatalogDao;
 import com.cloudcheflabs.dataroaster.cli.api.dao.StreamingDao;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
