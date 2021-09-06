@@ -25,6 +25,7 @@ import picocli.CommandLine;
                 Cluster.class,
                 Kubeconfig.class,
                 Project.class,
+                IngressController.class,
                 PodLogMonitoring.class,
                 MetricsMonitoring.class,
                 DistributedTracing.class,
@@ -36,7 +37,6 @@ import picocli.CommandLine;
                 Streaming.class,
                 Analytics.class,
                 Workflow.class,
-                IngressController.class,
                 CommandLine.HelpCommand.class
         },
         version = "dataroaster 3.0.0",
