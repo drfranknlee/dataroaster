@@ -25,10 +25,10 @@ public class CreateBackup implements Callable<Integer> {
     @CommandLine.Option(names = {"--s3-bucket"}, description = "S3 Bucket Name", required = true)
     private String s3Bucket;
 
-    @CommandLine.Option(names = {"--s3-accessKey"}, description = "S3 Access Key", required = true)
+    @CommandLine.Option(names = {"--s3-access-key"}, description = "S3 Access Key", required = true)
     private String s3AccessKey;
 
-    @CommandLine.Option(names = {"--s3-secretKey"}, description = "S3 Secret Key", required = true)
+    @CommandLine.Option(names = {"--s3-secret-key"}, description = "S3 Secret Key", required = true)
     private String s3SecretKey;
 
     @CommandLine.Option(names = {"--s3-endpoint"}, description = "S3 Endpoint URL", required = true)
