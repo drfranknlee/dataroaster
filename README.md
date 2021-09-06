@@ -781,6 +781,8 @@ dataroaster project create  --name my-project --description my-project-desc;
 ```
 
 ### Step 5: Create Ingress Controller NGINX and Cert Manager in your kubernetes cluster
+All the ingresses of DataRoaster services will be created with this ingress controller, 
+and all the certificates for the ingresses will be managed by this cert manager.
 ```
 dataroaster ingresscontroller create;
 ```
