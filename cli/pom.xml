@@ -195,7 +195,7 @@
                 <version>3.3.0</version>
                 <configuration>
                     <descriptors>
-                        <descriptor>cli/assembly-stand-alone.xml</descriptor>
+                        <descriptor>assembly-stand-alone.xml</descriptor>
                     </descriptors>
                 </configuration>
             </plugin>
