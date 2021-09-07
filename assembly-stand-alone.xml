@@ -60,11 +60,19 @@
 				<include>logback.xml</include>
 			</includes>
 		</fileSet>
+		<!-- cli -->
+		<fileSet>
+			<directory>${project.basedir}/cli/target</directory>
+			<outputDirectory>cli</outputDirectory>
+			<includes>
+				<include>cli-*-executable.jar</include>
+			</includes>
+		</fileSet>
 	</fileSets>
 	<!-- cli -->
 	<files>
 		<file>
-			<source>${project.basedir}/cli/target/cli-*-executable.jar</source>
+			<source>${project.basedir}/cli/target/cli-${project.version}-executable.jar</source>
 			<outputDirectory>cli</outputDirectory>
 			<destName>dataroaster</destName>
 		</file>
