@@ -674,11 +674,16 @@ mvn -e -DskipTests=true clean install;
 
 # build authorizer.
 cd  $DATAROASTER_SRC/authorizer;
-mvn -e clean install -P prod;
-cp target/*.jar $AUTHORIZER_HOME;
+mvn -e -DskipTests=true clean install assembly:single;
+
+cp target/authorizer-*-dist.tgz $AUTHORIZER_HOME;
 
 cd $AUTHORIZER_HOME;
-nohup java -jar ./authorizer-*.jar >/dev/null &
+tar zxvf authorizer-*-dist.tgz;
+cd authorizer;
+
+# start authorizer.
+./start-authorizer.sh;
 ```
 
 ### Install API Server
@@ -705,32 +710,22 @@ mvn -e -DskipTests=true clean install;
 
 # build api server.
 cd $DATAROASTER_SRC/api-server;
-mvn -e clean install -P prod;
-cp target/*.jar $APISERVER_HOME;
+mvn -e -DskipTests=true clean install assembly:single;
+
+cp target/api-server-*-dist.tgz $APISERVER_HOME;
+
 cd $APISERVER_HOME;
-
-# copy all the necessary confs.
-mkdir -p conf;
-cp $DATAROASTER_SRC/api-server/src/main/resources/application.properties conf;
-cp $DATAROASTER_SRC/api-server/src/main/resources/application-prod.yml conf;
-
-# copy all the template.
-mkdir -p templates;
-cp -R $DATAROASTER_SRC/api-server/src/main/resources/templates/* templates/;
+tar zxvf api-server-*-dist.tgz;
 ```
 
-Replace the value of `vault.token` in `$APISERVER_HOME/conf/application-prod.yml` with the initial root token generated when vault was initialized.
+Replace the value of `vault.token` in `$APISERVER_HOME/apiserver/conf/application-prod.yml` with the initial root token generated when vault was initialized.
 
 
 Run API Server:
 ```
-nohup java \
--cp api-server-*.jar \
--Dloader.path=$APISERVER_HOME/ \
--Dspring.config.location=file://$APISERVER_HOME/conf/application.properties \
--Dspring.config.location=file://$APISERVER_HOME/conf/application-prod.yml \
--Dspring.profiles.active=prod \
-org.springframework.boot.loader.PropertiesLauncher >/dev/null &
+cd apiserver;
+
+./start-apiserver.sh;
 ```
 
 ### Install CLI
@@ -744,13 +739,17 @@ mvn -e -DskipTests=true clean install;
 # move to cli source.
 cd $DATAROASTER_SRC/cli;
 
-# package executable jar.
-mvn -e -DskipTests=true clean install shade:shade;
+# package dist.
+mvn -e -DskipTests=true clean install assembly:single;
 
-# install dataroaster.
-cp target/cli-*-executable.jar ~/bin/dataroaster
+# untar.
+cd target;
+tar zxvf cli-*-dist.tgz;
 
-# check.
+# install cli.
+cp cli/dataroaster ~/bin/dataroaster;
+
+# check commands.
 dataroaster;
 ```
 
