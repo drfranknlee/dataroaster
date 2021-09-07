@@ -1,0 +1,11 @@
+- name: install mysql server
+  yum:
+    name: http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
+    state: present
+  become: true
+
+- name: start mysql server
+  service:
+    name: mysql
+    state: started
+  become: true

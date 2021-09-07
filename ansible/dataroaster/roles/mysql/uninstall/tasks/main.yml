@@ -1,0 +1,11 @@
+- name: start mysql server
+  service:
+    name: mysql
+    state: stopped
+  become: true
+
+- name: remove mysql
+  yum:
+    name: mysql
+    state: absent
+  become: true
