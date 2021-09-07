@@ -9,5 +9,5 @@
   args:
     executable: /bin/bash
   with_items:
-    - "yum remove mysql-community\* -y"
+    - "yum remove mysql-community\\* -y"
   become: true
