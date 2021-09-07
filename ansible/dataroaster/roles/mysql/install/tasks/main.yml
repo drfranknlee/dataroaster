@@ -1,8 +1,15 @@
+- name: download mysql rpm
+  shell: "{{ item }}"
+  args:
+    executable: /bin/bash
+  with_items:
+    - "wget http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm && rpm -ivh mysql-community-release-el7-5.noarch.rpm"
+  become: true
+
 - name: install mysql server
   yum:
-    name: http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
+    name: mysql-server
     state: present
-  become: true
 
 - name: start mysql server
   service:
