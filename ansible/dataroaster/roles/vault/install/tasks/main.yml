@@ -99,3 +99,72 @@
 - debug:
     msg: "{{ vault_init_out }}"
 
+- name: prompt for unseal vault 1
+  pause:
+    prompt: "Enter 1. Unseal Key "
+    echo: yes
+  register: unseal_vault_key_1
+- set_fact:
+    unseal_vault_key_1_input: "{{ unseal_vault_key_1.user_input }}"
+- debug:
+    var: "{{ unseal_vault_key_1_input }}"
+- name: execute 1. unseal vault
+  shell: "{{ item }}"
+  args:
+    executable: /bin/bash
+  with_items:
+    - "vault operator unseal {{ unseal_vault_key_1_input }}"
+  environment:
+    VAULT_ADDR: https://localhost:8200
+    VAULT_SKIP_VERIFY: true
+  register: unseal_vault_1_exec
+  become: true
+- debug:
+    msg: "{{ unseal_vault_1_exec }}"
+
+- name: prompt for unseal vault 2
+  pause:
+    prompt: "Enter 2. Unseal Key "
+    echo: yes
+  register: unseal_vault_key_2
+- set_fact:
+    unseal_vault_key_2_input: "{{ unseal_vault_key_2.user_input }}"
+- debug:
+    var: "{{ unseal_vault_key_2_input }}"
+- name: execute 2. unseal vault
+  shell: "{{ item }}"
+  args:
+    executable: /bin/bash
+  with_items:
+    - "vault operator unseal {{ unseal_vault_key_2_input }}"
+  environment:
+    VAULT_ADDR: https://localhost:8200
+    VAULT_SKIP_VERIFY: true
+  register: unseal_vault_2_exec
+  become: true
+- debug:
+    msg: "{{ unseal_vault_2_exec }}"
+
+- name: prompt for unseal vault 3
+  pause:
+    prompt: "Enter 3. Unseal Key "
+    echo: yes
+  register: unseal_vault_key_3
+- set_fact:
+    unseal_vault_key_3_input: "{{ unseal_vault_key_3.user_input }}"
+- debug:
+    var: "{{ unseal_vault_key_3_input }}"
+- name: execute 3. unseal vault
+  shell: "{{ item }}"
+  args:
+    executable: /bin/bash
+  with_items:
+    - "vault operator unseal {{ unseal_vault_key_3_input }}"
+  environment:
+    VAULT_ADDR: https://localhost:8200
+    VAULT_SKIP_VERIFY: true
+  register: unseal_vault_3_exec
+  become: true
+- debug:
+    msg: "{{ unseal_vault_3_exec }}"
+
