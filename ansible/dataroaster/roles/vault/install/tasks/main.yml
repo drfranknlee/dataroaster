@@ -167,4 +167,27 @@
     msg: "{{ unseal_vault_3_exec }}"
   ignore_errors: true
 
+- name: prompt for initial root token
+  pause:
+    prompt: "Enter Initial Root Token "
+    echo: yes
+  register: init_root_token
+- set_fact:
+    init_root_token_input: "{{ init_root_token.user_input }}"
+- debug:
+    var: "{{ init_root_token_input }}"
+  ignore_errors: true
+- name: enable kv secret engine
+  shell: "{{ item }}"
+  args:
+    executable: /bin/bash
+  with_items:
+    - "export VAULT_TOKEN={{ init_root_token_input }} && vault secrets enable -path=secret/ kv"
+  environment: "{{ vault_env }}"
+  register: enable_secret_engine
+  become: true
+- debug:
+    msg: "{{ enable_secret_engine }}"
+  ignore_errors: true
+
 
