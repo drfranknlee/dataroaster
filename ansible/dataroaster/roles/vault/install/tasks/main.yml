@@ -1,252 +1,80 @@
-- name: Creating elasticsearch user
-  user:
-    name: elasticsearch
-    state: present
-    createhome: yes
-    home: "{{ es_home }}"
-  become: true
-
-- name: Set VM Map Count
+- name: install vault binary
   shell: "{{ item }}"
   args:
     executable: /bin/bash
   with_items:
-    - "sysctl -w vm.max_map_count=262144"
+    - "yum install -y yum-utils"
+    - "yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo"
+    - "yum -y install vault-1.6.3-1.x86_64"
   become: true
+  ignore_errors: true
 
-- name: Setting files and procs number
-  shell: "{{ item }}"
-  args:
-    executable: /bin/bash
+- name: create temp directory
+  file:
+    path: "{{ item }}"
+    state: directory
   with_items:
-    - "echo elasticsearch   - nofile 65536 >> /etc/security/limits.d/elasticsearch.conf"
-    - "echo elasticsearch   - nproc  65536 >> /etc/security/limits.d/elasticsearch.conf"
-    - "echo root  soft  memlock unlimited >> /etc/security/limits.d/elasticsearch.conf"
-    - "echo root  hard  memlock unlimited >> /etc/security/limits.d/elasticsearch.conf"
+    - "{{ vault_temp_dir }}"
 
-- name: Copying elasticsearch env to profile
+- name: copy sql files
   template:
-    src: "templates/{{ item.src }}"
-    dest: "{{ item.dest }}"
+    src: "templates/{{ item }}"
+    dest: "{{ vault_temp_dir }}/{{ item }}"
     mode: 0755
   with_items:
-    - { src: 'es.sh', dest: '/etc/profile.d/es.sh' }
-  become: yes
+    - "create-cert.sh"
+    - "intermediate.cnf"
+    - "openssl.cnf"
 
-- name: wake up env.
+- name: create cert
   shell: "{{ item }}"
   args:
     executable: /bin/bash
+    chdir: "{{ vault_temp_dir }}"
   with_items:
-    - "source /etc/profile"
+    - "create-cert.sh"
+  become: true
 
-- name: Creating elasticsearch directories
-  file:
-    path: "{{ item }}"
-    state: directory
-    owner: elasticsearch
-    group: elasticsearch
-    mode: 0755
-  with_items:
-    - "{{ es_data_dir }}"
-    - "{{ es_log_dir }}"
-    - "{{ es_tmp_dir }}"
-
-- name: Creating elasticsearch temp directories
-  file:
-    path: "{{ item }}"
-    state: directory
-  with_items:
-    - "{{ es_install_temp_dir }}"
-
-- name: Copying elasticsearch Distribution
-  copy:
-    src: "files/{{ item.src }}"
-    dest: "{{ item.dest }}"
-  with_items:
-    - { src: '{{ es_file_name }}', dest: '{{ es_install_temp_dir }}'}
-
-- name: Extracting elasticsearch files
+- name: copy certs to vault conf directory
   shell: "{{ item }}"
   args:
     executable: /bin/bash
-    chdir: "{{ es_install_temp_dir }}"
+    chdir: "{{ vault_temp_dir }}"
   with_items:
-    - "tar -zxf {{ es_file_name }}"
-    - "cp -R {{ es_pack_name }}/* {{ es_home }}"
+    - "cp work/ca/certs/localhost.cert.pem {{ vault_conf_dir }}/localhost.cert.pem"
+    - "cp work/ca/private/localhost.decrypted.key.pem {{ vault_conf_dir }}/localhost.decrypted.key.pem"
+    - "cp work/keystore.jks {{ vault_conf_dir }}/keystore.jks"
+    - "chown vault:vault -R {{ vault_conf_dir }}"
+    - "chmod 777 -R {{ vault_conf_dir }}/"
+  become: true
 
-- name: Removing elasticsearch temp dir
+- name: copy vault configuration
+  template:
+    src: "templates/{{ item }}"
+    dest: "{{ vault_conf_dir }}/{{ item }}"
+    mode: 0755
+  with_items:
+    - "vault.hcl"
+  become: true
+
+- name: copy vault service
+  template:
+    src: "templates/{{ item }}"
+    dest: "/etc/systemd/system/{{ item }}"
+    mode: 0755
+  with_items:
+    - "vault.service"
+  become: true
+
+- name: start vault
+  service:
+    name: vault
+    state: started
+  become: true
+
+- name: remove temp dir
   file:
     path: "{{ item }}"
     state: absent
   with_items:
-    - "{{ es_install_temp_dir }}"
-
-- name: Copying elasticsearch confs
-  template:
-    src: "templates/{{ item.src }}"
-    dest: "{{ item.dest }}"
-    owner: elasticsearch
-    group: elasticsearch
-    mode: 0755
-  with_items:
-    - { src: 'elasticsearch.yml', dest: '{{ es_home }}/config/elasticsearch.yml' }
-    - { src: 'jvm.options', dest: '{{ es_home }}/config/jvm.options' }
-
-- name: "setting node.name and network.publish_host"
-  shell: "{{ item }}"
-  args:
-    executable: /bin/bash
-  with_items:
-    - "echo network.publish_host: {{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }} >> {{ es_home }}/config/elasticsearch.yml"
-    - "echo node.name: {{ inventory_hostname }} >> {{ es_home }}/config/elasticsearch.yml"
-
-- name: "setting master node"
-  shell: "{{ item }}"
-  args:
-    executable: /bin/bash
-  with_items:
-    - "echo node.master: true >> {{ es_home }}/config/elasticsearch.yml"
-  when: inventory_hostname in groups['master']
-
-- name: "setting data node"
-  shell: "{{ item }}"
-  args:
-    executable: /bin/bash
-  with_items:
-    - "echo node.data: true >> {{ es_home }}/config/elasticsearch.yml"
-  when: inventory_hostname in groups['data']
-
-- name: "setting ingest node"
-  shell: "{{ item }}"
-  args:
-    executable: /bin/bash
-  with_items:
-    - "echo node.ingest: true >> {{ es_home }}/config/elasticsearch.yml"
-  when: inventory_hostname in groups['ingest']
-
-- name: "setting client node"
-  shell: "{{ item }}"
-  args:
-    executable: /bin/bash
-  with_items:
-    - "echo node.master: false >> {{ es_home }}/config/elasticsearch.yml"
-    - "echo node.data: false >> {{ es_home }}/config/elasticsearch.yml"
-    - "echo node.ingest: false >> {{ es_home }}/config/elasticsearch.yml"
-  when: inventory_hostname in groups['client']
-
-- name: chown es home dir.
-  file:
-    path: "{{ item }}"
-    recurse: true
-    owner: elasticsearch
-    group: elasticsearch
-    mode: 0755
-  with_items:
-    - "{{ es_home }}"
-
-- name: Starting elasticsearch
-  shell: sudo su - elasticsearch -c "source /etc/profile && bin/elasticsearch -d -p pid"
-  args:
-    chdir: "{{ es_home }}"
-
-
-- name: Creating kibana user
-  user:
-    name: kibana
-    state: present
-    createhome: yes
-    home: "{{ kibana_home }}"
-  become: true
-  when: inventory_hostname in groups['kibana']
-
-- name: Copying kibana env to profile
-  template:
-    src: "templates/{{ item.src }}"
-    dest: "{{ item.dest }}"
-    mode: 0755
-  with_items:
-    - { src: 'kibana.sh', dest: '/etc/profile.d/kibana.sh' }
-  become: yes
-  when: inventory_hostname in groups['kibana']
-
-- name: wake up env.
-  shell: "{{ item }}"
-  args:
-    executable: /bin/bash
-  with_items:
-    - "source /etc/profile"
-  when: inventory_hostname in groups['kibana']
-
-- name: Creating kibana directories
-  file:
-    path: "{{ item }}"
-    state: directory
-    owner: kibana
-    group: kibana
-    mode: 0755
-  with_items:
-    - "{{ kibana_data_dir }}"
-  when: inventory_hostname in groups['kibana']
-
-- name: Creating kibana temp directories
-  file:
-    path: "{{ item }}"
-    state: directory
-  with_items:
-    - "{{ kibana_install_temp_dir }}"
-  when: inventory_hostname in groups['kibana']
-
-- name: Copying kibana Distribution
-  copy:
-    src: "files/{{ item.src }}"
-    dest: "{{ item.dest }}"
-  with_items:
-    - { src: '{{ kibana_file_name }}', dest: '{{ kibana_install_temp_dir }}'}
-  when: inventory_hostname in groups['kibana']
-
-- name: Extracting kibana files
-  shell: "{{ item }}"
-  args:
-    executable: /bin/bash
-    chdir: "{{ kibana_install_temp_dir }}"
-  with_items:
-    - "tar -zxf {{ kibana_file_name }}"
-    - "cp -R {{ kibana_pack_name }}/* {{ kibana_home }}"
-  when: inventory_hostname in groups['kibana']
-
-- name: Removing kibana temp dir
-  file:
-    path: "{{ item }}"
-    state: absent
-  with_items:
-    - "{{ kibana_install_temp_dir }}"
-  when: inventory_hostname in groups['kibana']
-
-- name: Copying kibana confs
-  template:
-    src: "templates/{{ item.src }}"
-    dest: "{{ item.dest }}"
-    owner: kibana
-    group: kibana
-    mode: 0755
-  with_items:
-    - { src: 'kibana.yml', dest: '{{ kibana_home }}/config/kibana.yml' }
-  when: inventory_hostname in groups['kibana']
-
-- name: chown kibana home dir.
-  file:
-    path: "{{ item }}"
-    recurse: true
-    owner: kibana
-    group: kibana
-    mode: 0755
-  with_items:
-    - "{{ kibana_home }}"
-  when: inventory_hostname in groups['kibana']
-
-- name: Starting kibana
-  shell: sudo su - kibana -c "nohup bin/kibana > /dev/null 2>&1 & echo \$! > pid"
-  args:
-    chdir: "{{ kibana_home }}"
-  when: inventory_hostname in groups['kibana']
+    - "{{ vault_temp_dir }}"

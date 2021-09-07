@@ -1,2 +1,5 @@
-es_home: /opt/elasticsearch
-kibana_home: /opt/kibana
+- name: stop mysql server
+  service:
+    name: mysql
+    state: stopped
+  become: true
