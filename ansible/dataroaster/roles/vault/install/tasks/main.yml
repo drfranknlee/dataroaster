@@ -98,3 +98,4 @@
 
 - debug:
     var: "{{ vault_init_out.stdout_lines }}"
+  loop: "{{ vault_init_out.results }}"
