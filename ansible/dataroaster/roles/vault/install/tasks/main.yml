@@ -37,7 +37,7 @@
     executable: /bin/bash
     chdir: "{{ vault_temp_dir }}"
   with_items:
-    - "create-cert.sh"
+    - "./create-cert.sh"
   become: true
 
 - name: copy certs to vault conf directory
