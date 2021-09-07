@@ -7,14 +7,14 @@
 	<fileSets>
 		<!-- api server -->
 		<fileSet>
-			<directory>${project.basedir}/api-server/target</directory>
+			<directory>./api-server/target</directory>
 			<outputDirectory>apiserver</outputDirectory>
 			<includes>
 				<include>api-server-*.jar</include>
 			</includes>
 		</fileSet>
 		<fileSet>
-			<directory>${project.basedir}/api-server/target/classes/</directory>
+			<directory>./api-server/target/classes/</directory>
 			<outputDirectory>apiserver/conf</outputDirectory>
 			<includes>
 				<include>application.properties</include>
@@ -22,7 +22,7 @@
 			</includes>
 		</fileSet>
 		<fileSet>
-			<directory>${project.basedir}/api-server/target/classes/</directory>
+			<directory>./api-server/target/classes/</directory>
 			<outputDirectory>apiserver</outputDirectory>
 			<includes>
 				<include>ehcache.xml</include>
@@ -31,7 +31,7 @@
 			</includes>
 		</fileSet>
 		<fileSet>
-			<directory>${project.basedir}/api-server/target/classes/templates</directory>
+			<directory>./api-server/target/classes/templates</directory>
 			<outputDirectory>apiserver/templates</outputDirectory>
 			<includes>
 				<include>**/*</include>
@@ -39,14 +39,14 @@
 		</fileSet>
 		<!-- authorizer -->
 		<fileSet>
-			<directory>${project.basedir}/authorizer/target</directory>
+			<directory>./authorizer/target</directory>
 			<outputDirectory>authorizer</outputDirectory>
 			<includes>
 				<include>authorizer-*.jar</include>
 			</includes>
 		</fileSet>
 		<fileSet>
-			<directory>${project.basedir}/authorizer/target/classes/</directory>
+			<directory>./authorizer/target/classes/</directory>
 			<outputDirectory>authorizer/conf</outputDirectory>
 			<includes>
 				<include>application.properties</include>
@@ -54,7 +54,7 @@
 			</includes>
 		</fileSet>
 		<fileSet>
-			<directory>${project.basedir}/authorizer/target/classes/</directory>
+			<directory>./authorizer/target/classes/</directory>
 			<outputDirectory>authorizer</outputDirectory>
 			<includes>
 				<include>logback.xml</include>
@@ -62,7 +62,7 @@
 		</fileSet>
 		<!-- cli -->
 		<fileSet>
-			<directory>${project.basedir}/cli/target</directory>
+			<directory>./cli/target</directory>
 			<outputDirectory>cli</outputDirectory>
 			<includes>
 				<include>cli-*-executable.jar</include>
@@ -72,7 +72,7 @@
 	<!-- cli -->
 	<files>
 		<file>
-			<source>${project.basedir}/cli/target/cli-${project.version}-executable.jar</source>
+			<source>./cli/target/cli-${project.version}-executable.jar</source>
 			<outputDirectory>cli</outputDirectory>
 			<destName>dataroaster</destName>
 		</file>
