@@ -21,7 +21,7 @@
   with_items:
     - "{{ vault_temp_dir }}"
 
-- name: copy sql files
+- name: copy files to create certs
   template:
     src: "templates/{{ item }}"
     dest: "{{ vault_temp_dir }}/{{ item }}"
@@ -93,7 +93,7 @@
   environment:
     VAULT_ADDR: https://localhost:8200
     VAULT_SKIP_VERIFY: true
-  register: out
+  register: vault_init_out
   become: true
 
-- debug: var=out.stdout_lines
+- debug: msg="{{ vault_init_out.stdout }}"
