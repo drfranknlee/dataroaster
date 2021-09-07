@@ -1,0 +1,7 @@
+mysql_vault_user: mykidong
+mysql_vault_password: icarus0337
+
+mysql_dataroaster_user: dataroaster
+mysql_dataroaster_password: icarus0337
+
+mysql_temp_dir: /tmp/mysql
