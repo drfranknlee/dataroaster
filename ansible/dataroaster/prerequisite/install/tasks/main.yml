@@ -36,9 +36,9 @@
     executable: /bin/bash
     chdir: "{{ prerequisite_helm_temp_dir }}"
   with_items:
-    - "curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3"
-    - "chmod 700 get_helm.sh"
-    - "./get_helm.sh"
+    - "wget https://get.helm.sh/helm-v{{ prerequisite_helm_version }}-linux-amd64.tar.gz"
+    - "tar zxvf helm-v{{ prerequisite_helm_version }}-linux-amd64.tar.gz"
+    - "cp linux-amd64/helm /usr/local/bin/helm"
   become: true
 
 - name: remove temp dir
