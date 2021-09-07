@@ -16,9 +16,8 @@
   become: true
 
 - name: uninstall helm
-  shell: "{{ item }}"
-  args:
-    executable: /bin/bash
+  file:
+    path: "{{ item }}"
+    state: absent
   with_items:
-    - "rm -rf /usr/local/bin/helm"
-  become: true
+    - "/usr/local/bin/helm"
