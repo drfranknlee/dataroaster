@@ -83,3 +83,17 @@
     state: absent
   with_items:
     - "{{ vault_temp_dir }}"
+
+- name: init vault
+  shell: "{{ item }}"
+  args:
+    executable: /bin/bash
+  with_items:
+    - "vault operator init"
+  environment:
+    VAULT_ADDR: https://localhost:8200
+    VAULT_SKIP_VERIFY: true
+  register: out
+  become: true
+
+- debug: var=out.stdout_lines
