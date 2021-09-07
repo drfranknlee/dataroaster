@@ -95,6 +95,7 @@
     VAULT_SKIP_VERIFY: true
   register: vault_init_out
   become: true
+  ignore_errors: true
 
 - debug:
     msg: "{{ vault_init_out }}"
