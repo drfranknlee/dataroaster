@@ -1,4 +1,4 @@
-- name: start mysql server
+- name: stop mysql server
   service:
     name: mysql
     state: stopped
@@ -6,6 +6,6 @@
 
 - name: remove mysql
   yum:
-    name: mysql
+    name: "mysql-community\*"
     state: absent
   become: true
