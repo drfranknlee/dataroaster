@@ -1,0 +1,24 @@
+- name: uninstall jdk
+  yum:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - "java-1.8.0-openjdk"
+    - "java-1.8.0-openjdk-devel"
+  become: true
+
+- name: uninstall kubectl
+  yum:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - "kubectl"
+  become: true
+
+- name: uninstall helm
+  shell: "{{ item }}"
+  args:
+    executable: /bin/bash
+  with_items:
+    - "rm -rf /usr/local/bin/helm"
+  become: true

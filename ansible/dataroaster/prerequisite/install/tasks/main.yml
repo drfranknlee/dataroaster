@@ -1,0 +1,32 @@
+- name: install jdk
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "java-1.8.0-openjdk"
+    - "java-1.8.0-openjdk-devel"
+  become: true
+
+- name: copy repo file
+  template:
+    src: "templates/{{ item }}"
+    dest: "/etc/yum.repos.d/{{ item }}"
+    mode: 0755
+  with_items:
+    - "kubernetes.repo"
+
+- name: install kubectl
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "kubectl"
+  become: true
+
+- name: install helm
+  shell: "{{ item }}"
+  args:
+    executable: /bin/bash
+  with_items:
+    - "curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash"
+  become: true
