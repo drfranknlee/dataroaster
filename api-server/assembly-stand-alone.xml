@@ -36,5 +36,12 @@
 				<include>**/*</include>
 			</includes>
 		</fileSet>
+		<fileSet>
+			<directory>./bin</directory>
+			<outputDirectory>apiserver</outputDirectory>
+			<includes>
+				<include>*.sh</include>
+			</includes>
+		</fileSet>
 	</fileSets>
 </assembly>

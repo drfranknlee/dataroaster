@@ -27,5 +27,12 @@
 				<include>logback.xml</include>
 			</includes>
 		</fileSet>
+		<fileSet>
+			<directory>./bin</directory>
+			<outputDirectory>authorizer</outputDirectory>
+			<includes>
+				<include>*.sh</include>
+			</includes>
+		</fileSet>
 	</fileSets>
 </assembly>
