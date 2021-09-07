@@ -4,8 +4,10 @@
     state: stopped
   become: true
 
-- name: remove mysql
-  yum:
-    name: "mysql-community\\*"
-    state: absent
+- name: remove mysql server
+  shell: "{{ item }}"
+  args:
+    executable: /bin/bash
+  with_items:
+    - "yum remove mysql-community\* -y"
   become: true
