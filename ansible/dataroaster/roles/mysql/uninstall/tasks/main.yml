@@ -6,6 +6,6 @@
 
 - name: remove mysql
   yum:
-    name: "mysql-community\*"
+    name: "mysql-community\\*"
     state: absent
   become: true
