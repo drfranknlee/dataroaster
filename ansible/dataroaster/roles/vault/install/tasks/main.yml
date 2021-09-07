@@ -96,8 +96,5 @@
   register: vault_init_out
   become: true
 
-- debug: 
-    msg: "{{ vault_init_out.stdout }}"
-
 - debug:
     var: "{{ vault_init_out.stdout_lines }}"
