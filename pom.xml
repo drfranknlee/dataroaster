@@ -40,6 +40,16 @@
                     <encoding>utf-8</encoding>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <descriptors>
+                        <descriptor>assembly-stand-alone.xml</descriptor>
+                    </descriptors>
+                </configuration>
+            </plugin>
         </plugins>
         <resources>
             <resource>
