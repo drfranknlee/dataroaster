@@ -1,252 +1,85 @@
-- name: Creating elasticsearch user
+- name: create dataroaster user
   user:
-    name: elasticsearch
+    name: dataroaster
     state: present
     createhome: yes
-    home: "{{ es_home }}"
+    home: "{{ dataroaster_home_dir }}"
   become: true
 
-- name: Set VM Map Count
-  shell: "{{ item }}"
-  args:
-    executable: /bin/bash
-  with_items:
-    - "sysctl -w vm.max_map_count=262144"
-  become: true
 
-- name: Setting files and procs number
-  shell: "{{ item }}"
-  args:
-    executable: /bin/bash
-  with_items:
-    - "echo elasticsearch   - nofile 65536 >> /etc/security/limits.d/elasticsearch.conf"
-    - "echo elasticsearch   - nproc  65536 >> /etc/security/limits.d/elasticsearch.conf"
-    - "echo root  soft  memlock unlimited >> /etc/security/limits.d/elasticsearch.conf"
-    - "echo root  hard  memlock unlimited >> /etc/security/limits.d/elasticsearch.conf"
-
-- name: Copying elasticsearch env to profile
-  template:
-    src: "templates/{{ item.src }}"
-    dest: "{{ item.dest }}"
-    mode: 0755
-  with_items:
-    - { src: 'es.sh', dest: '/etc/profile.d/es.sh' }
-  become: yes
-
-- name: wake up env.
-  shell: "{{ item }}"
-  args:
-    executable: /bin/bash
-  with_items:
-    - "source /etc/profile"
-
-- name: Creating elasticsearch directories
+- name: create dataroaster directories
   file:
     path: "{{ item }}"
     state: directory
-    owner: elasticsearch
-    group: elasticsearch
+    owner: dataroaster
+    group: dataroaster
     mode: 0755
   with_items:
-    - "{{ es_data_dir }}"
-    - "{{ es_log_dir }}"
-    - "{{ es_tmp_dir }}"
+    - "{{ dataroaster_home_dir }}"
+    - "{{ apiserver_home_dir }}"
+    - "{{ dataroaster_log_dir }}"
+  become: true
 
-- name: Creating elasticsearch temp directories
-  file:
-    path: "{{ item }}"
-    state: directory
-  with_items:
-    - "{{ es_install_temp_dir }}"
+- name: download apiserver distribution
+  get_url:
+    url: "https://github.com/cloudcheflabs/dataroaster/releases/download/{{ dataroaster_version }}/api-server-{{ dataroaster_version }}-dist.tgz"
+    dest: "{{ apiserver_home_dir }}"
+    mode: '0755'
+  become: true
 
-- name: Copying elasticsearch Distribution
-  copy:
-    src: "files/{{ item.src }}"
-    dest: "{{ item.dest }}"
-  with_items:
-    - { src: '{{ es_file_name }}', dest: '{{ es_install_temp_dir }}'}
 
-- name: Extracting elasticsearch files
+- name: extract apiserver distribution
   shell: "{{ item }}"
   args:
     executable: /bin/bash
-    chdir: "{{ es_install_temp_dir }}"
+    chdir: "{{ apiserver_home_dir }}"
   with_items:
-    - "tar -zxf {{ es_file_name }}"
-    - "cp -R {{ es_pack_name }}/* {{ es_home }}"
+    - "tar zxvf api-server-*-dist.tgz"
+    - "cp -R apiserver/* ."
+    - "rm -rf api-server-*-dist.tgz"
+    - "rm -rf apiserver/"
+  become: true
 
-- name: Removing elasticsearch temp dir
-  file:
-    path: "{{ item }}"
-    state: absent
-  with_items:
-    - "{{ es_install_temp_dir }}"
+- name: prompt for vault initial root token
+  pause:
+    prompt: "Enter vault initial root token "
+    echo: yes
+  register: vault_init_root_token
+- set_fact:
+    vault_init_root_token_input: "{{ vault_init_root_token.user_input }}"
+- debug:
+    var: "{{ vault_init_root_token_input }}"
+  ignore_errors: true
 
-- name: Copying elasticsearch confs
+- name: copy apiserver configuration
   template:
     src: "templates/{{ item.src }}"
     dest: "{{ item.dest }}"
-    owner: elasticsearch
-    group: elasticsearch
+    owner: dataroaster
+    group: dataroaster
     mode: 0755
   with_items:
-    - { src: 'elasticsearch.yml', dest: '{{ es_home }}/config/elasticsearch.yml' }
-    - { src: 'jvm.options', dest: '{{ es_home }}/config/jvm.options' }
+    - { src: 'application-prod.yml', dest: '{{ apiserver_home_dir }}/conf/application-prod.yml' }
+    - { src: 'logback.xml', dest: '{{ apiserver_home_dir }}/logback.xml' }
+    - { src: 'persistence-mysql.properties', dest: '{{ apiserver_home_dir }}/persistence-mysql.properties' }
+  become: true
 
-- name: "setting node.name and network.publish_host"
-  shell: "{{ item }}"
-  args:
-    executable: /bin/bash
-  with_items:
-    - "echo network.publish_host: {{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }} >> {{ es_home }}/config/elasticsearch.yml"
-    - "echo node.name: {{ inventory_hostname }} >> {{ es_home }}/config/elasticsearch.yml"
-
-- name: "setting master node"
-  shell: "{{ item }}"
-  args:
-    executable: /bin/bash
-  with_items:
-    - "echo node.master: true >> {{ es_home }}/config/elasticsearch.yml"
-  when: inventory_hostname in groups['master']
-
-- name: "setting data node"
-  shell: "{{ item }}"
-  args:
-    executable: /bin/bash
-  with_items:
-    - "echo node.data: true >> {{ es_home }}/config/elasticsearch.yml"
-  when: inventory_hostname in groups['data']
-
-- name: "setting ingest node"
-  shell: "{{ item }}"
-  args:
-    executable: /bin/bash
-  with_items:
-    - "echo node.ingest: true >> {{ es_home }}/config/elasticsearch.yml"
-  when: inventory_hostname in groups['ingest']
-
-- name: "setting client node"
-  shell: "{{ item }}"
-  args:
-    executable: /bin/bash
-  with_items:
-    - "echo node.master: false >> {{ es_home }}/config/elasticsearch.yml"
-    - "echo node.data: false >> {{ es_home }}/config/elasticsearch.yml"
-    - "echo node.ingest: false >> {{ es_home }}/config/elasticsearch.yml"
-  when: inventory_hostname in groups['client']
-
-- name: chown es home dir.
+- name: chown apiserver home dir.
   file:
     path: "{{ item }}"
     recurse: true
-    owner: elasticsearch
-    group: elasticsearch
+    owner: dataroaster
+    group: dataroaster
     mode: 0755
   with_items:
-    - "{{ es_home }}"
-
-- name: Starting elasticsearch
-  shell: sudo su - elasticsearch -c "source /etc/profile && bin/elasticsearch -d -p pid"
-  args:
-    chdir: "{{ es_home }}"
-
-
-- name: Creating kibana user
-  user:
-    name: kibana
-    state: present
-    createhome: yes
-    home: "{{ kibana_home }}"
+    - "{{ apiserver_home_dir }}"
   become: true
-  when: inventory_hostname in groups['kibana']
 
-- name: Copying kibana env to profile
-  template:
-    src: "templates/{{ item.src }}"
-    dest: "{{ item.dest }}"
-    mode: 0755
-  with_items:
-    - { src: 'kibana.sh', dest: '/etc/profile.d/kibana.sh' }
-  become: yes
-  when: inventory_hostname in groups['kibana']
-
-- name: wake up env.
+- name: start apiserver
   shell: "{{ item }}"
   args:
     executable: /bin/bash
+    chdir: "{{ apiserver_home_dir }}"
   with_items:
-    - "source /etc/profile"
-  when: inventory_hostname in groups['kibana']
-
-- name: Creating kibana directories
-  file:
-    path: "{{ item }}"
-    state: directory
-    owner: kibana
-    group: kibana
-    mode: 0755
-  with_items:
-    - "{{ kibana_data_dir }}"
-  when: inventory_hostname in groups['kibana']
-
-- name: Creating kibana temp directories
-  file:
-    path: "{{ item }}"
-    state: directory
-  with_items:
-    - "{{ kibana_install_temp_dir }}"
-  when: inventory_hostname in groups['kibana']
-
-- name: Copying kibana Distribution
-  copy:
-    src: "files/{{ item.src }}"
-    dest: "{{ item.dest }}"
-  with_items:
-    - { src: '{{ kibana_file_name }}', dest: '{{ kibana_install_temp_dir }}'}
-  when: inventory_hostname in groups['kibana']
-
-- name: Extracting kibana files
-  shell: "{{ item }}"
-  args:
-    executable: /bin/bash
-    chdir: "{{ kibana_install_temp_dir }}"
-  with_items:
-    - "tar -zxf {{ kibana_file_name }}"
-    - "cp -R {{ kibana_pack_name }}/* {{ kibana_home }}"
-  when: inventory_hostname in groups['kibana']
-
-- name: Removing kibana temp dir
-  file:
-    path: "{{ item }}"
-    state: absent
-  with_items:
-    - "{{ kibana_install_temp_dir }}"
-  when: inventory_hostname in groups['kibana']
-
-- name: Copying kibana confs
-  template:
-    src: "templates/{{ item.src }}"
-    dest: "{{ item.dest }}"
-    owner: kibana
-    group: kibana
-    mode: 0755
-  with_items:
-    - { src: 'kibana.yml', dest: '{{ kibana_home }}/config/kibana.yml' }
-  when: inventory_hostname in groups['kibana']
-
-- name: chown kibana home dir.
-  file:
-    path: "{{ item }}"
-    recurse: true
-    owner: kibana
-    group: kibana
-    mode: 0755
-  with_items:
-    - "{{ kibana_home }}"
-  when: inventory_hostname in groups['kibana']
-
-- name: Starting kibana
-  shell: sudo su - kibana -c "nohup bin/kibana > /dev/null 2>&1 & echo \$! > pid"
-  args:
-    chdir: "{{ kibana_home }}"
-  when: inventory_hostname in groups['kibana']
+    - "./start-apiserver.sh"
+  become_user: dataroaster

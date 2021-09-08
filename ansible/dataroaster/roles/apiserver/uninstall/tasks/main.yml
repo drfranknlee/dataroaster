@@ -1,54 +1,17 @@
-- name: Stopping kibana
-  shell: "kill $(cat pid)"
+- name: stop apiserver
+  shell: "{{ item }}"
   args:
-    chdir: "{{ item }}"
     executable: /bin/bash
-  become_user: kibana
+    chdir: "{{ apiserver_home_dir }}"
   with_items:
-    - "{{ kibana_home }}"
-  when: inventory_hostname in groups['kibana']
-  ignore_errors: true
+    - "./stop-apiserver.sh"
+  become_user: dataroaster
 
-- name: Stopping elasticsearch
-  shell: "kill $(cat pid)"
-  args:
-    chdir: "{{ item }}"
-    executable: /bin/bash
-  become_user: elasticsearch
-  with_items:
-    - "{{ es_home }}"
-  ignore_errors: true
-
-- name: Removing elasticsearch directories
+- name: delete apiserver directory
   file:
     path: "{{ item }}"
     state: absent
   with_items:
-    - "{{ es_home }}"
-    - "{{ es_data_dir }}"
-    - "{{ es_log_dir }}"
-    - "/etc/security/limits.d/elasticsearch.conf"
-
-- name: Removing kibana directories
-  file:
-    path: "{{ item }}"
-    state: absent
-  with_items:
-    - "{{ kibana_home }}"
-    - "{{ kibana_data_dir }}"
-  when: inventory_hostname in groups['kibana']
-
-- name: Removing Users
-  user:
-    name: "{{ item }}"
-    state: absent
+    - "{{ apiserver_home_dir }}"
   become: true
-  with_items:
-    - "elasticsearch"
-    - "kibana"
   ignore_errors: true
-
-
-
-
-

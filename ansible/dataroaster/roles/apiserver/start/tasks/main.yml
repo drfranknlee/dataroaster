@@ -1,10 +1,8 @@
-- name: Starting elasticsearch
-  shell: sudo su - elasticsearch -c "source /etc/profile && bin/elasticsearch -d -p pid"
+- name: start apiserver
+  shell: "{{ item }}"
   args:
-    chdir: "{{ es_home }}"
-
-- name: Starting kibana
-  shell: sudo su - kibana -c "nohup bin/kibana > /dev/null 2>&1 & echo \$! > pid"
-  args:
-    chdir: "{{ kibana_home }}"
-  when: inventory_hostname in groups['kibana']
+    executable: /bin/bash
+    chdir: "{{ apiserver_home_dir }}"
+  with_items:
+    - "./start-apiserver.sh"
+  become_user: dataroaster
