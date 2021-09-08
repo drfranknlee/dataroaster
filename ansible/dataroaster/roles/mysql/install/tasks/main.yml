@@ -45,6 +45,7 @@
     - "mysql -u root dataroaster < creat-auth.sql"
     - "mysql -u root dataroaster < create-tables.sql"
   become: true
+  ignore_errors: true
 
 - name: remove temp dir
   file:
