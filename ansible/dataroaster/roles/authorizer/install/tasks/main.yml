@@ -20,19 +20,25 @@
     - "{{ dataroaster_log_dir }}"
   become: true
 
+- name: download authorizer distribution
+  get_url:
+    url: "https://github.com/cloudcheflabs/dataroaster/releases/download/{{ dataroaster_version }}/authorizer-{{ dataroaster_version }}-dist.tgz"
+    dest: "{{ authorizer_home_dir }}"
+    mode: '0755'
+  become: true
 
-- name: download and extract authorizer distribution
+
+- name: extract authorizer distribution
   shell: "{{ item }}"
   args:
     executable: /bin/bash
     chdir: "{{ authorizer_home_dir }}"
   with_items:
-    - "wget https://github.com/cloudcheflabs/dataroaster/releases/download/{{ dataroaster_version }}/authorizer-{{ dataroaster_version }}-dist.tgz"
     - "tar zxvf authorizer-*-dist.tgz"
     - "cp -R authorizer/* ."
     - "rm -rf authorizer-*-dist.tgz"
     - "rm -rf authorizer/"
-  become: dataroaster
+  become: true
 
 - name: copy authorizer configuration
   template:
@@ -44,7 +50,18 @@
   with_items:
     - { src: 'application-prod.yml', dest: '{{ authorizer_home_dir }}/conf/application-prod.yml' }
     - { src: 'logback.xml', dest: '{{ authorizer_home_dir }}/logback.xml' }
+  become: true
 
+- name: chown authorizer home dir.
+  file:
+    path: "{{ item }}"
+    recurse: true
+    owner: dataroaster
+    group: dataroaster
+    mode: 0755
+  with_items:
+    - "{{ authorizer_home_dir }}"
+  become: true
 
 - name: start authorizer
   shell: "{{ item }}"
