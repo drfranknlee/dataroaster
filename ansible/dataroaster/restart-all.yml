@@ -6,12 +6,11 @@
   - ansible_ssh_user: "{{ exec_user }}"
 
   roles:
+    - role: "apiserver/stop"
+    - role: "authorizer/stop"
+    - role: "vault/stop"
     - role: "mysql/stop"
     - role: "mysql/start"
-    - role: "vault/stop"
     - role: "vault/start"
-    - role: "authorizer/stop"
     - role: "authorizer/start"
-    - role: "apiserver/stop"
     - role: "apiserver/start"
-

@@ -6,16 +6,16 @@
   - ansible_ssh_user: "{{ exec_user }}"
 
   roles:
+    - role: "cli/uninstall"
+    - role: "apiserver/uninstall"
+    - role: "authorizer/uninstall"
+    - role: "vault/uninstall"
+    - role: "mysql/uninstall"
     - role: "prerequisite/uninstall"
     - role: "prerequisite/install"
-    - role: "mysql/uninstall"
     - role: "mysql/install"
-    - role: "vault/uninstall"
     - role: "vault/install"
-    - role: "authorizer/uninstall"
     - role: "authorizer/install"
-    - role: "apiserver/uninstall"
     - role: "apiserver/install"
-    - role: "cli/uninstall"
     - role: "cli/install"
 
