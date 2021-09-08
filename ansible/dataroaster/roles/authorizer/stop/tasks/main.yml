@@ -5,4 +5,4 @@
     chdir: "{{ authorizer_home_dir }}"
   with_items:
     - "./stop-authorizer.sh"
-  become: dataroaster
+  become_user: dataroaster
