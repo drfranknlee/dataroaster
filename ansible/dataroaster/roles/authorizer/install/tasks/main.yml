@@ -25,10 +25,7 @@
   shell: "{{ item }}"
   args:
     executable: /bin/bash
-    chdir: "{{ authorizer_home_dir }}"
-    owner: dataroaster
-    group: dataroaster
-    mode: 0755
+    chdir: "{{ authorizer_home_dir }}"  
   with_items:
     - "wget https://github.com/cloudcheflabs/dataroaster/releases/download/{{ dataroaster_version }}/authorizer-{{ dataroaster_version }}-dist.tgz"
     - "tar zxvf authorizer-*-dist.tgz"
