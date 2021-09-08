@@ -10,8 +10,8 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/dataroaster
-    username: dataroaster
-    password: dataroaster123
+    username: {{ mysql_dataroaster_user }}
+    password: {{ mysql_dataroaster_password }}
     hikari:
       maximum-pool-size: 10
       max-lifetime: 30

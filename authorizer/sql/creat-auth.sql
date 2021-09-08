@@ -110,8 +110,8 @@ INSERT INTO users
 VALUES
 (
 	1,
-	'mykidong',
-	'$2a$08$jLRJiKPSyuitd1P.QMOYmOc7dcdIGI4GwGlnQzXZTdgs/.Crhmm7m',
+	'dataroaster',
+	'$2a$08$ETDKzjrwGGhGWsCtFrz4u.NH6CObF.kn5V/hpvDlTqid/70uj8EeW',
 	1
 );
 

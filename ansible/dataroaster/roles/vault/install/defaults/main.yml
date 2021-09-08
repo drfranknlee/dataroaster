@@ -4,6 +4,6 @@ vault_env:
   VAULT_ADDR: https://localhost:8200
   VAULT_SKIP_VERIFY: true
 
-mysql_vault_user: mykidong
-mysql_vault_password: icarus0337
+mysql_vault_user: dataroaster
+mysql_vault_password: dataroaster123
 

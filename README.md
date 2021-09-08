@@ -114,7 +114,7 @@ sudo yum install mysql-connector-java -y;
 
 ```
 CREATE DATABASE vault;
-CREATE USER 'mykidong'@'localhost' IDENTIFIED BY 'icarus0337';
+CREATE USER 'dataroaster'@'localhost' IDENTIFIED BY 'dataroaster123';
 GRANT ALL PRIVILEGES ON *.* TO 'mykidong'@'localhost' WITH GRANT OPTION;
 flush privileges;
 ```
@@ -507,8 +507,8 @@ storage "mysql" {
   address  = "127.0.0.1:3306"
   database = "vault"
   table    = "vault_data"
-  username = "mykidong"
-  password = "icarus0337"
+  username = "dataroaster"
+  password = "dataroaster123"
 }
 
 listener "tcp" {
@@ -618,15 +618,18 @@ vault operator unseal P6o0+OFhIlLXizXKMjltnj5U4zViJyzSRbeUWJUbTA2p
 vault operator unseal XkqpiyuLVTOnrWPHwhZkd6b92esS2W5g+mKnDRYeh14L
 ```
 
-#### Test Vault
-Test Vault, for instance.
+#### Enable KV Secret Engine
+Enable KV Secret Engine, for instance.
 ```
 export VAULT_ADDR="https://localhost:8200";
+
+# set initial root token generated.
 export VAULT_TOKEN=s.ZuCVMzRIM4eYjMZuvDXqOBJg
 
 # Enable the kv secrets engine at: secret/
 vault secrets enable -path=secret/ kv
 
+### test secret engine at the path of 'secret/'
 # put kv with path 'secret/fakebank'
 vault kv put secret/fakebank api_key=abc1234 api_secret=1a2b3c4d
 
@@ -648,7 +651,7 @@ api_secret    1a2b3c4d
 mysql -u root -p;
 ...
 CREATE DATABASE dataroaster; 
-CREATE USER 'dataroaster'@'localhost' IDENTIFIED BY 'icarus0337';
+CREATE USER 'dataroaster'@'localhost' IDENTIFIED BY 'dataroaster123';
 GRANT ALL PRIVILEGES ON *.* TO 'dataroaster'@'localhost' WITH GRANT OPTION;
 flush privileges;
 
@@ -761,7 +764,7 @@ dataroaster;
 dataroaster login http://localhost:8082;
 ...
 
-# user / password: mykidong / icarus0337
+# user / password: dataroaster / dataroaster123
 ```
 
 ### Step 2: Create Kubernetes Cluster
@@ -808,7 +811,7 @@ Example:
 dataroaster login http://localhost:8082;
 ...
 
-# user / password: mykidong / icarus0337
+# user / password: dataroaster / dataroaster123
 ```
 
 

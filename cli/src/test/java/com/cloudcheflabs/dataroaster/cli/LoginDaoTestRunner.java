@@ -25,7 +25,7 @@ public class LoginDaoTestRunner {
         String server = "http://localhost:8082";
 
         LoginDao loginDao = applicationContext.getBean(LoginDao.class);
-        RestResponse restResponse = loginDao.login("mykidong", "icarus0337", server);
+        RestResponse restResponse = loginDao.login("dataroaster", "dataroaster123", server);
 
         String json = JsonUtils.toJson(new ObjectMapper(), restResponse);
         System.out.printf("json: \n%s\n", JsonWriter.formatJson(json));
