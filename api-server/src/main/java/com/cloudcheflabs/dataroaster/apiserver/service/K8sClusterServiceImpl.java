@@ -1,17 +1,18 @@
 package com.cloudcheflabs.dataroaster.apiserver.service;
 
-import com.cloudcheflabs.dataroaster.apiserver.domain.Kubeconfig;
-import com.cloudcheflabs.dataroaster.apiserver.domain.model.K8sKubeconfigAdmin;
-import com.cloudcheflabs.dataroaster.apiserver.kubernetes.YamlUtils;
-import com.cloudcheflabs.dataroaster.apiserver.service.common.AbstractHibernateService;
-import com.cloudcheflabs.dataroaster.apiserver.util.TemplateUtils;
-import com.google.common.collect.Sets;
 import com.cloudcheflabs.dataroaster.apiserver.api.dao.K8sClusterDao;
 import com.cloudcheflabs.dataroaster.apiserver.api.dao.SecretDao;
+import com.cloudcheflabs.dataroaster.apiserver.api.dao.UsersDao;
 import com.cloudcheflabs.dataroaster.apiserver.api.dao.common.Operations;
 import com.cloudcheflabs.dataroaster.apiserver.api.service.K8sClusterService;
+import com.cloudcheflabs.dataroaster.apiserver.domain.Kubeconfig;
 import com.cloudcheflabs.dataroaster.apiserver.domain.model.K8sCluster;
+import com.cloudcheflabs.dataroaster.apiserver.domain.model.K8sKubeconfig;
+import com.cloudcheflabs.dataroaster.apiserver.domain.model.Users;
+import com.cloudcheflabs.dataroaster.apiserver.kubernetes.YamlUtils;
 import com.cloudcheflabs.dataroaster.apiserver.secret.SecretPathTemplate;
+import com.cloudcheflabs.dataroaster.apiserver.service.common.AbstractHibernateService;
+import com.cloudcheflabs.dataroaster.common.util.TemplateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,6 +36,10 @@ public class K8sClusterServiceImpl extends AbstractHibernateService<K8sCluster> 
     @Qualifier("vaultKubeconfigSecretDao")
     private SecretDao<Kubeconfig> secretDao;
 
+    @Autowired
+    @Qualifier("hibernateUsersDao")
+    private UsersDao usersDao;
+
     public K8sClusterServiceImpl() {
         super();
     }
@@ -46,56 +50,21 @@ public class K8sClusterServiceImpl extends AbstractHibernateService<K8sCluster> 
     }
 
     @Override
-    public void createCluster(String clusterName, String description, String kubeconfig) {
-        K8sCluster k8sCluster = new K8sCluster();
-        k8sCluster.setClusterName(clusterName);
-        k8sCluster.setDescription(description);
+    public void createCluster(String clusterName, String description) {
+        K8sCluster newCluster = new K8sCluster();
+        newCluster.setClusterName(clusterName);
+        newCluster.setDescription(description);
 
-        // add cluster.
-        dao.create(k8sCluster);
-
-        // get cluster.
-        K8sCluster creeatedK8sCluster = dao.findByName(clusterName);
-
-        // kubeconfig yaml.
-        Kubeconfig value = YamlUtils.readKubeconfigYaml(new ByteArrayInputStream(kubeconfig.getBytes()));
-        Map<String, String> kv = new HashMap<>();
-        kv.put("clusterId", String.valueOf(creeatedK8sCluster.getId()));
-        kv.put("user", value.getUser());
-        String path = TemplateUtils.replace(SecretPathTemplate.SECRET_KUBECONFIG_ADMIN, kv);
-        LOG.debug("secret path: {}", path);
-
-        // add secret for kubeconfig.
-        secretDao.writeSecret(path, value);
-
-        // update cluster with secret path.
-        K8sKubeconfigAdmin k8sKubeconfigAdmin = new K8sKubeconfigAdmin();
-        k8sKubeconfigAdmin.setSecretPath(path);
-        k8sKubeconfigAdmin.setK8sCluster(creeatedK8sCluster);
-        creeatedK8sCluster.setK8sKubeconfigAdminSet(Sets.newHashSet(k8sKubeconfigAdmin));
-        dao.update(creeatedK8sCluster);
+        dao.create(newCluster);
     }
 
     @Override
-    public void updateCluster(long id, String description, String kubeconfig) {
+    public void updateCluster(long id, String clusterName, String description) {
         K8sCluster k8sCluster = dao.findOne(id);
+        k8sCluster.setClusterName(clusterName);
         k8sCluster.setDescription(description);
 
-        // kubeconfig yaml.
-        Kubeconfig value = YamlUtils.readKubeconfigYaml(new ByteArrayInputStream(kubeconfig.getBytes()));
-        Map<String, String> kv = new HashMap<>();
-        kv.put("clusterId", String.valueOf(k8sCluster.getId()));
-        kv.put("user", value.getUser());
-        String path = TemplateUtils.replace(SecretPathTemplate.SECRET_KUBECONFIG_ADMIN, kv);
-        LOG.debug("secret path: {}", path);
-
-        // update secret for kubeconfig.
-        secretDao.writeSecret(path, value);
-
         // update cluster.
-        k8sCluster.getK8sKubeconfigAdminSet().forEach(k -> {
-            k.setSecretPath(path);
-        });
         dao.update(k8sCluster);
     }
 
@@ -103,7 +72,7 @@ public class K8sClusterServiceImpl extends AbstractHibernateService<K8sCluster> 
     public void deleteCluster(long id) {
         K8sCluster k8sCluster = dao.findOne(id);
 
-        k8sCluster.getK8sKubeconfigAdminSet().forEach(k -> {
+        k8sCluster.getK8sKubeconfigSet().forEach(k -> {
             String path = k.getSecretPath();
 
             // delete secret.
@@ -112,5 +81,71 @@ public class K8sClusterServiceImpl extends AbstractHibernateService<K8sCluster> 
 
         // delete cluster.
         dao.delete(k8sCluster);
+    }
+
+    @Override
+    public void createKubeconfig(long id, String kubeconfig, String userName) {
+        K8sCluster k8sCluster = dao.findOne(id);
+
+        // get user.
+        Users users = usersDao.findByUserName(userName);
+
+        // kubeconfig yaml.
+        Kubeconfig value = YamlUtils.readKubeconfigYaml(kubeconfig);
+        Map<String, String> kv = new HashMap<>();
+        kv.put("clusterId", String.valueOf(k8sCluster.getId()));
+        kv.put("user", users.getUserName());
+        String path = TemplateUtils.replace(SecretPathTemplate.SECRET_KUBECONFIG, kv);
+        LOG.debug("secret path: {}", path);
+
+        // add secret for kubeconfig.
+        secretDao.writeSecret(path, value);
+
+        // update cluster with secret path.
+        K8sKubeconfig k8sKubeconfig = new K8sKubeconfig();
+        k8sKubeconfig.setSecretPath(path);
+        k8sKubeconfig.setUsers(users);
+        k8sKubeconfig.setK8sCluster(k8sCluster);
+
+        k8sCluster.getK8sKubeconfigSet().add(k8sKubeconfig);
+
+        // update cluster.
+        dao.update(k8sCluster);
+    }
+
+    @Override
+    public void updateKubeconfig(long id, String kubeconfig, String userName) {
+        K8sCluster k8sCluster = dao.findOne(id);
+
+        // get user.
+        Users users = usersDao.findByUserName(userName);
+
+        // kubeconfig yaml.
+        Kubeconfig value = YamlUtils.readKubeconfigYaml(kubeconfig);
+        Map<String, String> kv = new HashMap<>();
+        kv.put("clusterId", String.valueOf(k8sCluster.getId()));
+        kv.put("user", users.getUserName());
+        String path = TemplateUtils.replace(SecretPathTemplate.SECRET_KUBECONFIG, kv);
+        LOG.debug("secret path: {}", path);
+
+        // update secret for kubeconfig.
+        secretDao.writeSecret(path, value);
+    }
+
+    @Override
+    public Kubeconfig getKubeconfig(long clusterId, String userName) {
+        // cluster.
+        K8sCluster k8sCluster = dao.findOne(clusterId);
+
+        // get user.
+        Users users = usersDao.findByUserName(userName);
+
+        // build secret path.
+        Map<String, String> kv = new HashMap<>();
+        kv.put("clusterId", String.valueOf(k8sCluster.getId()));
+        kv.put("user", users.getUserName());
+        String path = TemplateUtils.replace(SecretPathTemplate.SECRET_KUBECONFIG, kv);
+
+        return secretDao.readSecret(path, Kubeconfig.class);
     }
 }

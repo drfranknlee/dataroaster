@@ -1,16 +1,15 @@
 package com.cloudcheflabs.dataroaster.apiserver.kubernetes;
 
 import com.cedarsoftware.util.io.JsonWriter;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.cloudcheflabs.dataroaster.apiserver.domain.Kubeconfig;
-import com.cloudcheflabs.dataroaster.apiserver.util.JsonUtils;
-import com.cloudcheflabs.dataroaster.apiserver.util.TemplateUtils;
+import com.cloudcheflabs.dataroaster.common.util.JsonUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +17,8 @@ public class YamlUtils {
 
     private static Logger LOG = LoggerFactory.getLogger(YamlUtils.class);
 
-    public static Kubeconfig readKubeconfigYaml(InputStream inputStream) {
+    public static Kubeconfig readKubeconfigYaml(String rawKubeconfig) {
+        InputStream inputStream = new ByteArrayInputStream(rawKubeconfig.getBytes());
         Yaml yaml = new Yaml();
         Map<String, Object> map = yaml.load(inputStream);
         LOG.debug(JsonWriter.formatJson(JsonUtils.toJson(new ObjectMapper(), map)));
@@ -47,20 +47,7 @@ public class YamlUtils {
                 namespace,
                 user,
                 clientCertData,
-                clientKeyData);
-    }
-
-    public static String getKubeconfigYaml(Kubeconfig kubeconfig) {
-        String kubeconfigFileName = "config";
-        Map<String, String> kv = new HashMap<>();
-        kv.put("masterUrl", kubeconfig.getMasterUrl());
-        kv.put("clusterCertData", kubeconfig.getClusterCertData());
-        kv.put("clientCertData", kubeconfig.getClientCertData());
-        kv.put("clientKeyData", kubeconfig.getClientKeyData());
-        kv.put("clusterName", kubeconfig.getClusterName());
-        kv.put("namespace", kubeconfig.getNamespace());
-        kv.put("user", kubeconfig.getUser());
-
-        return TemplateUtils.replace("/templates/kubeconfig/" + kubeconfigFileName, true, kv);
+                clientKeyData,
+                rawKubeconfig);
     }
 }

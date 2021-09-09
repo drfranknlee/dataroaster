@@ -1,11 +1,11 @@
 package com.cloudcheflabs.dataroaster.apiserver.service;
 
-import com.cloudcheflabs.dataroaster.apiserver.domain.AuthorizerResponse;
-import com.cloudcheflabs.dataroaster.apiserver.domain.Privileges;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.cloudcheflabs.dataroaster.apiserver.api.dao.AuthorizerDao;
 import com.cloudcheflabs.dataroaster.apiserver.api.dao.PrivilegesDao;
 import com.cloudcheflabs.dataroaster.apiserver.api.service.PrivilegesService;
+import com.cloudcheflabs.dataroaster.apiserver.domain.AuthorizerResponse;
+import com.cloudcheflabs.dataroaster.apiserver.domain.Privileges;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

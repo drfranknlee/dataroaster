@@ -1,6 +1,0 @@
-kind: Namespace
-apiVersion: v1
-metadata:
-  name: csr-test-data-engineer-cluster-local
-  labels:
-    name: csr-test-data-engineer-cluster-local

@@ -1,10 +1,10 @@
 package com.cloudcheflabs.dataroaster.apiserver.filter;
 
+import com.cloudcheflabs.dataroaster.apiserver.api.service.PrivilegesService;
 import com.cloudcheflabs.dataroaster.apiserver.config.FilterConfigurer;
 import com.cloudcheflabs.dataroaster.apiserver.domain.AuthorizerResponse;
 import com.cloudcheflabs.dataroaster.apiserver.domain.Privileges;
 import com.cloudcheflabs.dataroaster.apiserver.util.HttpUtils;
-import com.cloudcheflabs.dataroaster.apiserver.api.service.PrivilegesService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

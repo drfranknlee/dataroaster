@@ -61,7 +61,7 @@ public class HibernateConfigurer {
 
     @Bean
     public DataSource dataSource() {
-        final BasicDataSource dataSource = new org.apache.tomcat.dbcp.dbcp2.BasicDataSource();
+        final BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName(Preconditions.checkNotNull(env.getProperty("jdbc.driverClassName")));
         dataSource.setUrl(Preconditions.checkNotNull(env.getProperty("jdbc.url")));
         dataSource.setUsername(Preconditions.checkNotNull(env.getProperty("jdbc.user")));

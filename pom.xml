@@ -5,16 +5,15 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.cloudcheflabs.dataroaster</groupId>
     <artifactId>dataroaster-parent</artifactId>
-    <version>3.0.0-SNAPSHOT</version>
+    <version>3.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>DataRoaster: Parent</name>
     <modules>
+        <module>common</module>
         <module>api-server</module>
 		<module>authorizer</module>
-        <module>backup</module>
-        <module>examples/spark</module>
-        <module>examples/spark-thrift-server</module>
-        <module>pod-runner</module>
+        <module>cli</module>
+        <module>components/hive/spark-thrift-server</module>
     </modules>
     <build>
         <pluginManagement>

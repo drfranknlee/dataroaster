@@ -15,7 +15,7 @@ public class HashingTest {
     {
         System.out.println("helloAuthAPI: [" + BCrypt.withDefaults().hashToString(8, "helloAuthAPI".toCharArray()) + "]");
 
-        System.out.println("icarus0337: [" + BCrypt.withDefaults().hashToString(8, "icarus0337".toCharArray()) + "]");
+        System.out.println("dataroaster123: [" + BCrypt.withDefaults().hashToString(8, "dataroaster123".toCharArray()) + "]");
     }
 
 

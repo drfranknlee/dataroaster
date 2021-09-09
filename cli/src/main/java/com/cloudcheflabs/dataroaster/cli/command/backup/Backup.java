@@ -1,0 +1,26 @@
+package com.cloudcheflabs.dataroaster.cli.command.backup;
+
+import com.cloudcheflabs.dataroaster.cli.config.DataRoasterConfig;
+import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
+import picocli.CommandLine;
+
+import java.util.concurrent.Callable;
+
+@CommandLine.Command(name = "backup",
+        subcommands = {
+                CreateBackup.class,
+                DeleteBackup.class,
+                CommandLine.HelpCommand.class
+        },
+        description = "Manage Backup.")
+public class Backup implements Callable<Integer> {
+
+    ConfigProps configProps;
+
+    @Override
+    public Integer call() throws Exception {
+        configProps = DataRoasterConfig.getConfigProps();
+
+        return 0;
+    }
+}

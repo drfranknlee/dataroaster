@@ -8,6 +8,7 @@ public class Kubeconfig {
     private String user;
     private String clientCertData;
     private String clientKeyData;
+    private String rawKubeconfig;
 
     public Kubeconfig() {}
 
@@ -17,7 +18,8 @@ public class Kubeconfig {
                       String namespace,
                       String user,
                       String clientCertData,
-                      String clientKeyData) {
+                      String clientKeyData,
+                      String rawKubeconfig) {
         this.masterUrl = masterUrl;
         this.clusterName = clusterName;
         this.clusterCertData = clusterCertData;
@@ -25,6 +27,11 @@ public class Kubeconfig {
         this.user = user;
         this.clientCertData = clientCertData;
         this.clientKeyData = clientKeyData;
+        this.rawKubeconfig = rawKubeconfig;
+    }
+
+    public String getRawKubeconfig() {
+        return rawKubeconfig;
     }
 
     public String getMasterUrl() {

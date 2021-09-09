@@ -1,7 +1,8 @@
 package com.cloudcheflabs.dataroaster.apiserver.controller;
 
-import com.cloudcheflabs.dataroaster.apiserver.api.service.ArgoService;
+import com.cloudcheflabs.dataroaster.apiserver.api.service.WorkflowService;
 import com.cloudcheflabs.dataroaster.apiserver.domain.Roles;
+import com.cloudcheflabs.dataroaster.apiserver.filter.AuthorizationFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,39 +27,45 @@ public class WorkflowController {
     private HttpServletRequest context;
 
     @Autowired
-    @Qualifier("argoServiceImpl")
-    private ArgoService argoService;
+    @Qualifier("workflowServiceImpl")
+    private WorkflowService workflowService;
 
-    @PostMapping("/apis/workflow/argo/create")
-    public String createArgo(@RequestParam Map<String, String> params) {
-        return ControllerUtils.doProcess(Roles.ROLE_PLATFORM_ADMIN, context, () -> {
-            String namespaceId = params.get("namespace_id");
-            String serviceId = params.get("service_id");
-            String bucket = params.get("bucket");
+    @PostMapping("/apis/workflow/create")
+    public String createWorkflow(@RequestParam Map<String, String> params) {
+        return ControllerUtils.doProcess(Roles.ROLE_USER, context, () -> {
+            String projectId = params.get("project_id");
+            String serviceDefId = params.get("service_def_id");
+            String clusterId = params.get("cluster_id");
+            String storageClass = params.get("storage_class");
+            String storageSize = params.get("storage_size");
+            String s3Bucket = params.get("s3_bucket");
+            String s3AccessKey = params.get("s3_access_key");
+            String s3SecretKey = params.get("s3_secret_key");
             String s3Endpoint = params.get("s3_endpoint");
-            String insecure = params.get("insecure");
-            String accessKey = params.get("access_key");
-            String secretKey = params.get("secret_key");
 
-            argoService.createArgo(Long.valueOf(namespaceId),
-                    Long.valueOf(serviceId),
-                    bucket,
-                    s3Endpoint,
-                    Boolean.valueOf(insecure),
-                    accessKey,
-                    secretKey);
+            String userName = (String) context.getAttribute(AuthorizationFilter.KEY_USER_NAME);
 
+            workflowService.create(Long.valueOf(projectId),
+                    Long.valueOf(serviceDefId),
+                    Long.valueOf(clusterId),
+                    userName,
+                    storageClass,
+                    Integer.valueOf(storageSize),
+                    s3Bucket,
+                    s3AccessKey,
+                    s3SecretKey,
+                    s3Endpoint);
             return ControllerUtils.successMessage();
         });
     }
 
-    @DeleteMapping("/apis/workflow/argo/delete")
-    public String deleteArgo(@RequestParam Map<String, String> params) {
-        return ControllerUtils.doProcess(Roles.ROLE_PLATFORM_ADMIN, context, () -> {
-            String namespaceId = params.get("namespace_id");
+    @DeleteMapping("/apis/workflow/delete")
+    public String deleteWorkflow(@RequestParam Map<String, String> params) {
+        return ControllerUtils.doProcess(Roles.ROLE_USER, context, () -> {
             String serviceId = params.get("service_id");
+            String userName = (String) context.getAttribute(AuthorizationFilter.KEY_USER_NAME);
 
-            argoService.deleteArgo(Long.valueOf(namespaceId), Long.valueOf(serviceId));
+            workflowService.delete(Long.valueOf(serviceId), userName);
             return ControllerUtils.successMessage();
         });
     }

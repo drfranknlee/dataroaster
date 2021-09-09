@@ -1,7 +1,7 @@
 package com.cloudcheflabs.dataroaster.apiserver.domain;
 
+import com.cloudcheflabs.dataroaster.common.util.JsonUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.cloudcheflabs.dataroaster.apiserver.util.JsonUtils;
 
 import java.io.Serializable;
 import java.util.List;

@@ -4,7 +4,6 @@ import com.google.common.collect.Sets;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -28,31 +27,17 @@ public class Users implements Serializable {
     @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<UserAuthorities> userAuthoritiesSet = Sets.newHashSet();
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "user_groups",
-            joinColumns = { @JoinColumn(name = "user_id") },
-            inverseJoinColumns = { @JoinColumn(name = "group_id") }
-    )
-    private Set<Groups> groupsSet = new HashSet<>();
 
-    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<K8sKubeconfigUser> k8sKubeconfigUserSet = Sets.newHashSet();
+    @OneToMany(mappedBy = "users", fetch = FetchType.EAGER)
+    private Set<Project> projectSet = Sets.newHashSet();
 
-    public Set<K8sKubeconfigUser> getK8sKubeconfigUserSet() {
-        return k8sKubeconfigUserSet;
+
+    public Set<Project> getProjectSet() {
+        return projectSet;
     }
 
-    public void setK8sKubeconfigUserSet(Set<K8sKubeconfigUser> k8sKubeconfigUserSet) {
-        this.k8sKubeconfigUserSet = k8sKubeconfigUserSet;
-    }
-
-    public Set<Groups> getGroupsSet() {
-        return groupsSet;
-    }
-
-    public void setGroupsSet(Set<Groups> groupsSet) {
-        this.groupsSet = groupsSet;
+    public void setProjectSet(Set<Project> projectSet) {
+        this.projectSet = projectSet;
     }
 
     public Set<UserAuthorities> getUserAuthoritiesSet() {
