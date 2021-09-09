@@ -72,8 +72,118 @@ This demo shows how to create the components like hive metastore, spark thrift s
 
 
 ## Install DataRoaster with ansible
+With dataroaster ansible playbook, dataroaster will be installed automatically.
 
-TODO: coming soon.
+The following components will be installed with dataroaster ansible playbook.
+* JDK 1.8
+* Kubectl
+* Helm
+* MySQL Server
+* Vault
+* DataRoaster API Server
+* DataRoaster Authorizer
+* DataRoaster CLI
+
+
+### Download and extract ansible playbook for dataroaster installation
+```
+curl -L -O https://github.com/cloudcheflabs/dataroaster/releases/download/3.0.1/dataroaster-ansible-3.0.1-dist.tgz
+tar zxvf dataroaster-ansible-3.0.1-dist.tgz
+cd dataroaster/
+```
+
+### Edit inventory
+Edit the file `inventory/dataroaster.ini`
+```
+...
+[all]
+dataroaster ansible_ssh_host=<ip-address> ip=<ip-address>
+...
+```
+`<ip-address>` is the ip address of the machine where dataroaster will be installed.
+
+### Run ansible playbook
+Now, you can run ansible playbook to install/uninstall/reinstall/start/stop/restart DataRoaster automatically.
+The following `<sudo-user>` is sudo user who will execute ansible playbook on local and remote machine.
+
+#### Install
+```
+ansible-playbook -i inventory/dataroaster.ini install-all.yml \
+--extra-vars "exec_user=<sudo-user> target_hosts=all";
+```
+
+You will meet the prompts while installing vault.
+```
+...
+              "stdout_lines": [
+                    "Unseal Key 1: QZ27JD9nJOPQLozKUvbwdHSTHKafOprwT4xw+RGUxBLI",
+                    "Unseal Key 2: GxnjXc5IHo3vRuh8boQD+u4FZM7nW+Y5xpWRXTSXfHBe",
+                    "Unseal Key 3: phA5yLU2csyAME9e8H+3NzmYq7ypilksIzLxkanmKUvl",
+                    "Unseal Key 4: BVZx/+hL6MLYcwkvONFD3CXZj8ND2yAlSPrvZ6+3lRN9",
+                    "Unseal Key 5: etU5dE+Nn+tYztFqoffUOJPQc5vy4RZuinAghI8RHVUH",
+                    "",
+                    "Initial Root Token: s.M6MNcOX92nAZjEwH5u4yVkbn",
+                    "",
+                    "Vault initialized with 5 key shares and a key threshold of 3. Please securely",
+                    "distribute the key shares printed above. When the Vault is re-sealed,",
+                    "restarted, or stopped, you must supply at least 3 of these keys to unseal it",
+                    "before it can start servicing requests.",
+                    "",
+                    "Vault does not store the generated master key. Without at least 3 key to",
+                    "reconstruct the master key, Vault will remain permanently sealed!",
+                    "",
+                    "It is possible to generate new unseal keys, provided you have a quorum of",
+                    "existing unseal keys shares. See \"vault operator rekey\" for more information."
+                ]
+...
+TASK [vault/install : prompt for unseal vault 1] *********************************************************************************************************************************************
+[WARNING]: conditional statements should not include jinja2 templating delimiters such as {{ }} or {% %}. Found: ("{{ run_option }}" == "reinstall")
+[vault/install : prompt for unseal vault 1]
+Enter 1. Unseal Key :
+```
+Because thease generated unseal keys and initial root token of vault cannot be obtained again, you have to copy them to your file. Enter the unseal keys and initial root token of vault for the prompts.
+
+You will also encounter the prompt to enter vault init. root token while installing apiserver like this:
+```
+...
+TASK [apiserver/install : prompt for vault initial root token] *******************************************************************************************************************************
+[WARNING]: conditional statements should not include jinja2 templating delimiters such as {{ }} or {% %}. Found: ("{{ run_option }}" == "reinstall")
+[apiserver/install : prompt for vault initial root token]
+Enter vault initial root token :
+```
+Enter initial root token of vault which you have obtained above.
+
+
+#### Uninstall
+```
+ansible-playbook -i inventory/dataroaster.ini uninstall-all.yml \
+--extra-vars "exec_user=<sudo-user> target_hosts=all";
+```
+
+#### Reinstall
+```
+ansible-playbook -i inventory/dataroaster.ini reinstall-all.yml \
+--extra-vars "exec_user=<sudo-user> target_hosts=all";
+```
+
+#### Start
+```
+ansible-playbook -i inventory/dataroaster.ini start-all.yml \
+--extra-vars "exec_user=<sudo-user> target_hosts=all";
+```
+
+#### Stop
+```
+ansible-playbook -i inventory/dataroaster.ini stop-all.yml \
+--extra-vars "exec_user=<sudo-user> target_hosts=all";
+```
+
+#### Restart
+```
+ansible-playbook -i inventory/dataroaster.ini restart-all.yml \
+--extra-vars "exec_user=<sudo-user> target_hosts=all";
+```
+
 
 
 ## Install DataRoaster with source
@@ -138,7 +248,7 @@ vault;
 To access Vault via TLS, Certificates are required. To create certs, you may use public CA like Let's Encrypt.
 For our example, we will create private certs as follows.
 
-Create `create-cert.sh`: 
+Create `create-cert.sh`:
 ```
 #!/bin/bash
 
@@ -783,7 +893,7 @@ dataroaster project create  --name my-project --description my-project-desc;
 ```
 
 ### Step 5: Create Ingress Controller NGINX and Cert Manager in your kubernetes cluster
-All the ingresses of DataRoaster services will be created with this ingress controller, 
+All the ingresses of DataRoaster services will be created with this ingress controller,
 and all the certificates for the ingresses will be managed by this cert manager.
 ```
 dataroaster ingresscontroller create;
@@ -804,7 +914,7 @@ Login to API server.
 dataroaster login <server>
 ```
 * `server`: API Server URL.
- 
+
 
 Example:
 ```
@@ -825,7 +935,7 @@ dataroaster cluster create <params>
 * `name`: kubernetes cluster name.
 * `description`: description of the kubernetes cluster.
 
-Example: 
+Example:
 ```
 dataroaster cluster create --name dataroaster-cluster --description dataroaster-desc...;
 ```
@@ -850,7 +960,7 @@ dataroaster kubeconfig create <params>
 ```
 * `kubeconfig`: kubeconfig file path.
 
-Example: 
+Example:
 ```
 dataroaster kubeconfig create --kubeconfig ~/.kube/config
 ```
@@ -861,7 +971,7 @@ dataroaster kubeconfig update <params>
 ```
 * `kubeconfig`: kubeconfig file path.
 
-Example: 
+Example:
 ```
 dataroaster kubeconfig update --kubeconfig ~/.kube/config
 ```
@@ -877,7 +987,7 @@ dataroaster project create <params>
 * `name`: kubernetes cluster name.
 * `description`: description of the kubernetes cluster.
 
-Example: 
+Example:
 ```
 dataroaster project create  --name new-test-project --description new-test-desc;
 ```
@@ -1111,7 +1221,7 @@ dataroaster queryengine create <params>
 * `trino-temp-data-storage`: trino temporary data storage size in GiB.
 * `trino-data-storage`: trino data storage size in GB.
 
-Example: 
+Example:
 ```
 dataroaster queryengine create \
 --s3-bucket mykidong \
