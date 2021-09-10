@@ -59,6 +59,25 @@ DataRoaster consists of the following components.
 * Cert Manager: manage certificates for ingress resources
 
 
+## DataRoaster Kubernetes Version Matrix
+| DataRoaster | Kubernetes  | 
+| ------- | --- | 
+| 3.0.1 | 1.17 | 
+
+
+## DataRoaster Component Version Matrix
+
+### DataRoaster 3.0.1
+| Component | Version  | 
+| ------- | --- | 
+| Hive Metastore | 3.0.0 | 
+| Spark Thrift Server | Spark 3.0.3 | 
+| Trino | 360 | 
+| Redash | 10.0.0-beta.b49597 | 
+| JupyterHub | 1.4.2 | 
+| Kafka | 2.8.0 | 
+
+
 
 
 ## DataRoaster Demo
