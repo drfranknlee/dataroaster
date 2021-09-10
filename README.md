@@ -1037,6 +1037,183 @@ dataroaster ingresscontroller delete;
 ```
 
 
+### Data Catalog
+Manage Data Catalog.
+
+#### Create Data Catalog
+Hive metastore and mysql server will be created.
+```
+dataroaster datacatalog create <params>
+```
+* `s3-bucket`: s3 bucket for hive metastore warehouse.
+* `s3-access-key`: s3 access key.
+* `s3-secret-key`: s3 secret key.
+* `s3-endpoint`: s3 endpoint.
+* `storage-size`: mysql storage size in GiB.
+
+Example:
+```
+dataroaster datacatalog create \
+--s3-bucket mykidong \
+--s3-access-key TOW32G9ULH63MTUI6NNW \
+--s3-secret-key jXqViVmSqIDTEKKKzdgSssHVykBrX4RrlnSeVgMi \
+--s3-endpoint https://ceph-rgw-test.cloudchef-labs.com \
+--storage-size 1;
+```
+
+#### Delete Data Catalog
+```
+dataroaster datacatalog delete;
+```
+
+### Query Engine
+Manage Query Engine.
+
+#### Create Query Engine
+Spark thrift server(hive on spark) and trino will be created.
+
+To run spark thrift server on kubernetes, `ReadWriteMany` supported storage class, for instance, nfs, is required to save intermediate data on PVs.
+To install nfs storage class, run the following helm chart.
+```
+cd <dataroaster-src>/component/nfs/nfs-server-provisioner-1.1.1;
+
+helm install \
+nfs-server . \
+--set replicaCount=1 \
+--set namespace=nfs \
+--set persistence.enabled=true \
+--set persistence.size=1000Gi \
+--set persistence.storageClass=<storage-class>;
+```
+`<storage-class>` can be `ReadWriteOnce` supported storage class already installed on kubernetes cluster.
+
+Run the following command to create query engine service including spark thrift server and trino.
+```
+dataroaster queryengine create <params>
+```
+* `s3-bucket`: s3 bucket where spark thrift server jar will be uploaded.
+* `s3-access-key`: s3 access key.
+* `s3-secret-key`: s3 secret key.
+* `s3-endpoint`: s3 endpoint.
+* `spark-thrift-server-executors`: executor count of spark thrift server.
+* `spark-thrift-server-executor-memory`: spark thrift server executor memory in GB.
+* `spark-thrift-server-executor-cores`: spark thrift server executor core count.
+* `spark-thrift-server-driver-memory`: spark thrift server driver memory in GB.
+* `trino-workers`: trino worker count.
+* `trino-server-max-memory`: trino server max. memory in GB.
+* `trino-cores`: trino server core count.
+* `trino-temp-data-storage`: trino temporary data storage size in GiB.
+* `trino-data-storage`: trino data storage size in GB.
+
+Example:
+```
+dataroaster queryengine create \
+--s3-bucket mykidong \
+--s3-access-key TOW32G9ULH63MTUI6NNW \
+--s3-secret-key jXqViVmSqIDTEKKKzdgSssHVykBrX4RrlnSeVgMi \
+--s3-endpoint https://ceph-rgw-test.cloudchef-labs.com \
+--spark-thrift-server-executors 1 \
+--spark-thrift-server-executor-memory 1 \
+--spark-thrift-server-executor-cores 1 \
+--spark-thrift-server-driver-memory 1 \
+--trino-workers 3 \
+--trino-server-max-memory 16 \
+--trino-cores 1 \
+--trino-temp-data-storage 1 \
+--trino-data-storage 1;
+```
+
+
+#### Delete Query Engine
+```
+dataroaster queryengine delete;
+```
+
+### Streaming
+Manage Streaming.
+
+#### Create Streaming
+Kafka will be created.
+```
+dataroaster streaming create <params>
+```
+* `kafka-replica-count`: kafka node count.
+* `kafka-storage-size`: kafka storage size in GiB.
+* `zk-replica-count`: zookeeper node count.
+
+Example:
+```
+dataroaster streaming create \
+--kafka-replica-count 3 \
+--kafka-storage-size 4 \
+--zk-replica-count 3;
+```
+
+#### Delete Streaming
+```
+dataroaster streaming delete;
+```
+
+### Analytics
+Manage Analytics.
+
+#### Create Analytics
+Redash and jupyterhub will be created.
+```
+dataroaster analytics create <params>
+```
+* `jupyterhub-github-client-id`: jupyterhub github oauth client id.
+* `jupyterhub-github-client-secret`: jupyterhub github oauth client secret.
+* `jupyterhub-ingress-host`: jupyterhub ingress host name.
+* `jupyterhub-storage-size`: storage size in GiB of single jupyter instance.
+* `redash-storage-size`: redash database storage size in GiB.
+
+Example:
+```
+dataroaster analytics create \
+--jupyterhub-github-client-id 0b322767446baedb3203 \
+--jupyterhub-github-client-secret 828688ff8be545b6434df2dbb2860a1160ae1517 \
+--jupyterhub-ingress-host jupyterhub-test.cloudchef-labs.com \
+--jupyterhub-storage-size 1 \
+--redash-storage-size 1;
+```
+
+#### Delete Analytics
+```
+dataroaster analytics delete;
+```
+
+### Workflow
+Manage Workflow.
+
+#### Create Workflow
+Argo Workflow will be created.
+```
+dataroaster workflow create <params>
+```
+* `storage-size`: database storage size in GiB.
+* `s3-bucket`: s3 bucket where application logs of workflow will be saved.
+* `s3-access-key`: s3 access key.
+* `s3-secret-key`: s3 secret key.
+* `s3-endpoint`: s3 endpoint.
+
+Example:
+```
+dataroaster workflow create \
+--storage-size 1 \
+--s3-bucket mykidong \
+--s3-access-key TOW32G9ULH63MTUI6NNW \
+--s3-secret-key jXqViVmSqIDTEKKKzdgSssHVykBrX4RrlnSeVgMi \
+--s3-endpoint ceph-rgw-test.cloudchef-labs.com;
+```
+
+#### Delete Workflow
+```
+dataroaster workflow delete;
+```
+
+
+
 ### Pod Log Monitoring
 Manage Pod Log Monitoring.
 
@@ -1189,163 +1366,7 @@ dataroaster backup create \
 dataroaster backup delete;
 ```
 
-### Data Catalog
-Manage Data Catalog.
 
-#### Create Data Catalog
-Hive metastore and mysql server will be created.
-```
-dataroaster datacatalog create <params>
-```
-* `s3-bucket`: s3 bucket for hive metastore warehouse.
-* `s3-access-key`: s3 access key.
-* `s3-secret-key`: s3 secret key.
-* `s3-endpoint`: s3 endpoint.
-* `storage-size`: mysql storage size in GiB.
-
-Example:
-```
-dataroaster datacatalog create \
---s3-bucket mykidong \
---s3-access-key TOW32G9ULH63MTUI6NNW \
---s3-secret-key jXqViVmSqIDTEKKKzdgSssHVykBrX4RrlnSeVgMi \
---s3-endpoint https://ceph-rgw-test.cloudchef-labs.com \
---storage-size 1;
-```
-
-#### Delete Data Catalog
-```
-dataroaster datacatalog delete;
-```
-
-### Query Engine
-Manage Query Engine.
-
-#### Create Query Engine
-Spark thrift server(hive on spark) and trino will be created.
-```
-dataroaster queryengine create <params>
-```
-* `s3-bucket`: s3 bucket where spark thrift server jar will be uploaded.
-* `s3-access-key`: s3 access key.
-* `s3-secret-key`: s3 secret key.
-* `s3-endpoint`: s3 endpoint.
-* `spark-thrift-server-executors`: executor count of spark thrift server.
-* `spark-thrift-server-executor-memory`: spark thrift server executor memory in GB.
-* `spark-thrift-server-executor-cores`: spark thrift server executor core count.
-* `spark-thrift-server-driver-memory`: spark thrift server driver memory in GB.
-* `trino-workers`: trino worker count.
-* `trino-server-max-memory`: trino server max. memory in GB.
-* `trino-cores`: trino server core count.
-* `trino-temp-data-storage`: trino temporary data storage size in GiB.
-* `trino-data-storage`: trino data storage size in GB.
-
-Example:
-```
-dataroaster queryengine create \
---s3-bucket mykidong \
---s3-access-key TOW32G9ULH63MTUI6NNW \
---s3-secret-key jXqViVmSqIDTEKKKzdgSssHVykBrX4RrlnSeVgMi \
---s3-endpoint https://ceph-rgw-test.cloudchef-labs.com \
---spark-thrift-server-executors 1 \
---spark-thrift-server-executor-memory 1 \
---spark-thrift-server-executor-cores 1 \
---spark-thrift-server-driver-memory 1 \
---trino-workers 3 \
---trino-server-max-memory 16 \
---trino-cores 1 \
---trino-temp-data-storage 1 \
---trino-data-storage 1;
-```
-
-
-#### Delete Query Engine
-```
-dataroaster queryengine delete;
-```
-
-### Streaming
-Manage Streaming.
-
-#### Create Streaming
-Kafka will be created.
-```
-dataroaster streaming create <params>
-```
-* `kafka-replica-count`: kafka node count.
-* `kafka-storage-size`: kafka storage size in GiB.
-* `zk-replica-count`: zookeeper node count.
-
-Example:
-```
-dataroaster streaming create \
---kafka-replica-count 3 \
---kafka-storage-size 4 \
---zk-replica-count 3;
-```
-
-#### Delete Streaming
-```
-dataroaster streaming delete;
-```
-
-### Analytics
-Manage Analytics.
-
-#### Create Analytics
-Redash and jupyterhub will be created.
-```
-dataroaster analytics create <params>
-```
-* `jupyterhub-github-client-id`: jupyterhub github oauth client id.
-* `jupyterhub-github-client-secret`: jupyterhub github oauth client secret.
-* `jupyterhub-ingress-host`: jupyterhub ingress host name.
-* `jupyterhub-storage-size`: storage size in GiB of single jupyter instance.
-* `redash-storage-size`: redash database storage size in GiB.
-
-Example:
-```
-dataroaster analytics create \
---jupyterhub-github-client-id 0b322767446baedb3203 \
---jupyterhub-github-client-secret 828688ff8be545b6434df2dbb2860a1160ae1517 \
---jupyterhub-ingress-host jupyterhub-test.cloudchef-labs.com \
---jupyterhub-storage-size 1 \
---redash-storage-size 1;
-```
-
-#### Delete Analytics
-```
-dataroaster analytics delete;
-```
-
-### Workflow
-Manage Workflow.
-
-#### Create Workflow
-Argo Workflow will be created.
-```
-dataroaster workflow create <params>
-```
-* `storage-size`: database storage size in GiB.
-* `s3-bucket`: s3 bucket where application logs of workflow will be saved.
-* `s3-access-key`: s3 access key.
-* `s3-secret-key`: s3 secret key.
-* `s3-endpoint`: s3 endpoint.
-
-Example:
-```
-dataroaster workflow create \
---storage-size 1 \
---s3-bucket mykidong \
---s3-access-key TOW32G9ULH63MTUI6NNW \
---s3-secret-key jXqViVmSqIDTEKKKzdgSssHVykBrX4RrlnSeVgMi \
---s3-endpoint ceph-rgw-test.cloudchef-labs.com;
-```
-
-#### Delete Workflow
-```
-dataroaster workflow delete;
-```
 
 
 ## License
