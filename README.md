@@ -68,14 +68,24 @@ DataRoaster consists of the following components.
 ## DataRoaster Component Version Matrix
 
 ### DataRoaster 3.0.1
-| Component | Version  | 
-| ------- | --- | 
-| Hive Metastore | 3.0.0 | 
-| Spark Thrift Server | Spark 3.0.3 | 
-| Trino | 360 | 
-| Redash | 10.0.0-beta.b49597 | 
-| JupyterHub | 1.4.2 | 
-| Kafka | 2.8.0 | 
+| Component | Application Version  | Helm Chart Repo / Version |
+| ------- | --- | ---------------- |
+| Hive Metastore | 3.0.0 |  |
+| Spark Thrift Server | Spark 3.0.3 |   |
+| Trino | 360 |   |
+| Redash | 10.0.0-beta.b49597 |   |
+| JupyterHub | 1.4.2 | https://jupyterhub.github.io/helm-chart/ 1.1.3 |
+| Kafka | 2.8.0 | https://charts.bitnami.com/bitnami 13.0.4 |
+| Argo Workflow | 3.0.10 |   |
+| Jenkins | 2.289.1 |   |
+| Argo CD | 2.0.3 |   |
+| Metrics Server | 0.4.1 |   |
+| Prometheus Stack | 0.43.2 | https://prometheus-community.github.io/helm-charts 12.2.4 |
+| Jaeger | 1.22.0 | https://jaegertracing.github.io/helm-charts 0.46.0 |
+| Velero | 1.6.0 | |
+| Harbor | 2.1.5 | https://helm.goharbor.io 1.5.5 |
+| Ingress NGINX | 0.46.0 | https://kubernetes.github.io/ingress-nginx 3.32.0 |
+| Cert Manager | 1.0.1 | |
 
 
 
