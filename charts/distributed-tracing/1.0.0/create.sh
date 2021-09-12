@@ -10,6 +10,8 @@ NAMESPACE=dataroaster-jaeger
 APP_NAME=jaeger
 
 # add repos.
+helm repo add jaegertracing https://jaegertracing.github.io/helm-charts;
+
 helm repo add elastic https://helm.elastic.co
 helm show values elastic/elasticsearch
 
