@@ -887,9 +887,28 @@ dataroaster;
 
 
 ## Storage Requirement
-Most of the components provided by DataRoaster will be deployed as statefulset on kubernetes, so storage classes should be installed on your kubernetes cluster to provision persistent volumes automatically.
-If you use managed kubernetes services provided by public cloud providers, you don't have to install storage classes for most of cases, but if your kubernetes cluster is installed in on-prem environment, you have to install storage class on your kubernetes cluster for yourself. For instance, if you have installed ceph as external storage, ceph storage class can be installed on your kubernetes cluster, see this blog how to do it: https://itnext.io/provision-volumes-from-external-ceph-storage-on-kubernetes-and-nomad-using-ceph-csi-7ad9b15e9809.
 
+### Storage Class
+Most of the components provided by DataRoaster will be deployed as statefulset on kubernetes, so storage classes should be installed on your kubernetes cluster to provision persistent volumes automatically.
+If you use managed kubernetes services provided by public cloud providers, you don't have to install storage classes for most of cases, but if your kubernetes cluster is installed in on-prem environment, you have to install storage class on your kubernetes cluster for yourself. 
+For instance, if you have installed ceph as external storage, ceph storage class can be installed on your kubernetes cluster, see this blog how to do it: https://itnext.io/provision-volumes-from-external-ceph-storage-on-kubernetes-and-nomad-using-ceph-csi-7ad9b15e9809.
+
+There is a component like spark thrift server which needs to use `ReadWriteMany` supported storage class, for instance, `nfs` to save intermediate data on PVs.
+To install `nfs` storage class, run the following helm chart.
+```
+cd <dataroaster-src>/component/nfs/nfs-server-provisioner-1.1.1;
+
+helm install \
+nfs-server . \
+--set replicaCount=1 \
+--set namespace=nfs \
+--set persistence.enabled=true \
+--set persistence.size=1000Gi \
+--set persistence.storageClass=<storage-class>;
+```
+`<storage-class>` can be `ReadWriteOnce` supported storage class already installed on your kubernetes cluster.
+
+### S3 Object Storage
 S3 compatible object storage will be also required to save data for several components provided by DataRoaster. There are many S3 compatible object storages out there, for example you can use the following:
 * MinIO: Popular S3 compatible object storage, see https://min.io/
 * Ceph S3 compatible object storage: ceph provides S3 API, that is, ceph can be used as S3 compatible object storage. See https://docs.ceph.com/en/latest/radosgw/
@@ -1253,25 +1272,8 @@ Manage Query Engine.
 
 #### Create Query Engine
 Spark thrift server(hive on spark) and trino will be created.
-
 Query engine service depends on Data Catalog servcice. Before creating query engine service, you have to create data catalog service above on your kubernetes cluster.
 
-To run spark thrift server on kubernetes, `ReadWriteMany` supported storage class, for instance, nfs, is required to save intermediate data on PVs.
-To install nfs storage class, run the following helm chart.
-```
-cd <dataroaster-src>/component/nfs/nfs-server-provisioner-1.1.1;
-
-helm install \
-nfs-server . \
---set replicaCount=1 \
---set namespace=nfs \
---set persistence.enabled=true \
---set persistence.size=1000Gi \
---set persistence.storageClass=<storage-class>;
-```
-`<storage-class>` can be `ReadWriteOnce` supported storage class already installed on kubernetes cluster.
-
-Run the following command to create query engine service including spark thrift server and trino.
 ```
 dataroaster queryengine create <params>
 ```
