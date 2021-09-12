@@ -886,6 +886,17 @@ dataroaster;
 ```
 
 
+## Storage Requirement
+Most of the components provided by DataRoaster will be deployed as statefulset on kubernetes, so storage classes should be installed on your kubernetes cluster to provision persistent volumes automatically.
+If you use managed kubernetes services provided by public cloud providers, you don't have to install storage classes for most of cases, but if your kubernetes cluster is installed in on-prem environment, you have to install storage class on your kubernetes cluster for yourself. For instance, if you have installed ceph as external storage, ceph storage class can be installed on your kubernetes cluster, see this blog how to do it: https://itnext.io/provision-volumes-from-external-ceph-storage-on-kubernetes-and-nomad-using-ceph-csi-7ad9b15e9809.
+
+S3 compatible object storage will be also required to save data for several components provided by DataRoaster. There are many S3 compatible object storages out there, for example you can use the following:
+* MinIO: Popular S3 compatible object storage, see https://min.io/
+* Ceph S3 compatible object storage: ceph provides S3 API, that is, ceph can be used as S3 compatible object storage. See https://docs.ceph.com/en/latest/radosgw/
+* AWS S3: aws s3 object storage.
+
+
+
 ## Getting started
 
 ### Step 1: Login to API Server
@@ -1096,15 +1107,6 @@ kubectl get svc -n dataroaster-trino;
 
 
 ## DataRoaster CLI Usage
-
-Most of the components provided by DataRoaster will be deployed as statefulset on kubernetes, so storage classes should be installed on your kubernetes cluster to provision persistent volumes automatically.
-If you use managed kubernetes services provided by public cloud providers, you don't have to install storage classes for most of cases, but if your kubernetes cluster is installed in on-prem environment, you have to install storage class on your kubernetes cluster for yourself. For instance, if you have installed ceph as external storage, ceph storage class can be installed on your kubernetes cluster, see this blog how to do it: https://itnext.io/provision-volumes-from-external-ceph-storage-on-kubernetes-and-nomad-using-ceph-csi-7ad9b15e9809.
-
-S3 compatible object storage will be also required to save data for several components provided by DataRoaster. There are many S3 compatible object storages out there, for example you can use the following:
-* MinIO: Popular S3 compatible object storage, see https://min.io/
-* Ceph S3 compatible object storage: ceph provides S3 API, that is, ceph can be used as S3 compatible object storage. See https://docs.ceph.com/en/latest/radosgw/
-* AWS S3: aws s3 object storage.
-
 
 ### Login
 Login to API server.
