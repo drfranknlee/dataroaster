@@ -17,6 +17,10 @@ public class JsonToParquetTestRunner {
     @Test
     public void jsonToParquet() throws Exception
     {
+        String s3Bucket = System.getProperty("s3Bucket");
+        String s3AccessKey = System.getProperty("s3AccessKey");
+        String s3SecretKey = System.getProperty("s3SecretKey");
+        String s3Endpoint = System.getProperty("s3Endpoint");
         String metastoreUrl = System.getProperty("metastoreUrl");
 
         SparkConf sparkConf = new SparkConf().setAppName("create sample table");
@@ -30,10 +34,10 @@ public class JsonToParquetTestRunner {
 
 
         Configuration hadoopConfiguration = spark.sparkContext().hadoopConfiguration();
-        hadoopConfiguration.set("fs.defaultFS", "s3a://mykidong");
-        hadoopConfiguration.set("fs.s3a.endpoint", "https://ceph-rgw-test.cloudchef-labs.com");
-        hadoopConfiguration.set("fs.s3a.access.key", "TOW32G9ULH63MTUI6NNW");
-        hadoopConfiguration.set("fs.s3a.secret.key", "jXqViVmSqIDTEKKKzdgSssHVykBrX4RrlnSeVgMi");
+        hadoopConfiguration.set("fs.defaultFS", "s3a://" + s3Bucket);
+        hadoopConfiguration.set("fs.s3a.endpoint", s3Endpoint);
+        hadoopConfiguration.set("fs.s3a.access.key", s3AccessKey);
+        hadoopConfiguration.set("fs.s3a.secret.key", s3SecretKey);
         hadoopConfiguration.set("fs.s3a.path.style.access", "true");
         hadoopConfiguration.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem");
         hadoopConfiguration.set("hive.metastore.uris", "thrift://" + metastoreUrl);
@@ -51,7 +55,7 @@ public class JsonToParquetTestRunner {
 
         // create persistent parquet table with external path.
         df.write().format("parquet")
-                .option("path", "s3a://mykidong/test-parquet")
+                .option("path", "s3a://" + s3Bucket + "/test-parquet")
                 .mode(SaveMode.Overwrite)
                 .saveAsTable("test_parquet");
 
