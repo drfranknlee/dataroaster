@@ -921,6 +921,172 @@ dataroaster ingresscontroller create;
 ### Step 6: Create Services like Data Catalog, Query Engine, etc in your Project
 See DataRoaster CLI usage how to create services.
 
+## Usage Example: DataRoater Demo
+As shown in dataroaster demo video above, the architecture of the demo looks like this.
+
+![Demo Architecture](https://miro.medium.com/max/1400/1*5htePIy2DKpuzFuI7wWU9g.png)
+
+For this demo, ceph storage as external storage has been used by which ceph storage class has been installed on kubernetes. Ceph also provides S3 API and can be used as s3 compatible object storage.
+
+The scenario of the demo is:
+* create parquet table in s3 compatible object storage which is provided by ceph storage with running spark example job using hive metastore.
+* query data in parquet table saved in ceph using spark thrift server and trino which use hive metastore.
+* query data with the connectors to spark thrift server and trino coordinator from redash and jupyter.
+
+### Create Data Catalog
+Hive metastore will be created.
+
+```
+# create.
+dataroaster datacatalog create \
+--s3-bucket mykidong \
+--s3-access-key TOW32G9ULH63MTUI6NNW \
+--s3-secret-key jXqViVmSqIDTEKKKzdgSssHVykBrX4RrlnSeVgMi \
+--s3-endpoint https://ceph-rgw-test.cloudchef-labs.com \
+--storage-size 1;
+
+
+# delete.
+dataroaster datacatalog delete;
+```
+
+### Create Query Engine
+Spark thrift server(hive on spark) and trino will be created. Both of them depends on hive metastore which needs to be installed on your kubernetes cluster before.
+
+```
+# create.
+dataroaster queryengine create \
+--s3-bucket mykidong \
+--s3-access-key TOW32G9ULH63MTUI6NNW \
+--s3-secret-key jXqViVmSqIDTEKKKzdgSssHVykBrX4RrlnSeVgMi \
+--s3-endpoint https://ceph-rgw-test.cloudchef-labs.com \
+--spark-thrift-server-executors 1 \
+--spark-thrift-server-executor-memory 1 \
+--spark-thrift-server-executor-cores 1 \
+--spark-thrift-server-driver-memory 1 \
+--trino-workers 3 \
+--trino-server-max-memory 16 \
+--trino-cores 1 \
+--trino-temp-data-storage 1 \
+--trino-data-storage 1;
+
+# delete.
+dataroaster queryengine delete;
+```
+
+### Create Parquet Table using Spark Example Job
+This is simple spark job to create parquet table in ceph s3 object storage using hive metastore.
+
+```
+cd <dataroaster-src>/components/hive/spark-thrift-server;
+mvn -e -Dtest=JsonToParquetTestRunner -DmetastoreUrl=$(kubectl get svc metastore-service -n dataroaster-hivemetastore -o jsonpath={.status.loadBalancer.ingress[0].ip}):9083 test;
+```
+
+### Query Data using CLI
+
+#### Connect to Spark Thrift Server using Beeline
+Query data in parquet table created by the spark job above with the connection to spark thrift server using beeline.
+
+```
+cd ${SPARK_HOME};
+export SPARK_THRIFT_SERVER_NAMESPACE=dataroaster-spark-thrift-server;
+bin/beeline -u jdbc:hive2://$(kubectl get svc spark-thrift-server-service -n ${SPARK_THRIFT_SERVER_NAMESPACE} -o jsonpath={.status.loadBalancer.ingress[0].ip}):10016;
+
+...
+# query data.
+show tables;
+select * from test_parquet;
+select count(*) from test_parquet;
+...
+
+```
+
+#### Connect to Trino Coordinator using Trino CLI
+Query data in parquet table created by the spark job above with the connection to trino coordinator using trino cli.
+
+```
+kubectl exec -it trino-cli -n dataroaster-trino -- /opt/trino-cli --server trino-coordinator:8080 --catalog hive --schema default;
+
+...
+# query data.
+show tables;
+select * from test_parquet;
+select count(*) from test_parquet;
+...
+```
+
+### Create Analytics
+Redash and jupyterhub will be created.
+
+```
+# create.
+dataroaster analytics create \
+--jupyterhub-github-client-id 0b322767446baedb3203 \
+--jupyterhub-github-client-secret 828688ff8be545b6434df2dbb2860a1160ae1517 \
+--jupyterhub-ingress-host jupyterhub-test.cloudchef-labs.com \
+--jupyterhub-storage-size 1 \
+--redash-storage-size 1;
+
+# delete.
+dataroaster analytics delete;
+```
+
+### Query Data from Redash and Jupyter
+
+#### Query Data from Redash
+Query data in parquet tables using hive connector to spark thrift server and trino connector to trino coordinator from redash.
+
+```
+# get external ip of redash loadbalancer.
+kubectl get svc -n dataroaster-redash;
+
+# redash ui
+http://<external-ip>:5000/
+
+# get external ip of trino service.
+kubectl get svc -n dataroaster-trino;
+
+# get external ip of spark thrift server service.
+kubectl get svc -n dataroaster-spark-thrift-server;
+```
+
+#### Query Data from Jupyter
+Query data in parquet table with trino connector to trino coordinator from jupyter.
+
+```
+# jupyterhub ui.
+https://jupyterhub-test.cloudchef-labs.com/
+
+# trino example in jupyter.
+
+## get external ip of trino service.
+kubectl get svc -n dataroaster-trino;
+
+...
+from pyhive import trino
+host_name = "146.56.138.128"
+port = 8080
+protocol = "http"
+user = "anyuser"
+password = None
+schema = "default"
+catalog = "hive"
+def trinoconnection(host_name, port, protocol, user, password, schema, catalog):
+    conn = trino.connect(host=host_name, port=port, username=user, password=password, schema=schema, catalog=catalog)
+    cur = conn.cursor()
+    cur.execute('select * from test_parquet')
+    result = cur.fetchall()	
+    return result
+	
+# Call above function
+output = trinoconnection(host_name, port, protocol, user, password, schema, catalog)
+print(output)
+...	
+```
+`host_name` needs to be replaced with external ip of trino service. To get the external ip of it:
+```
+kubectl get svc -n dataroaster-trino;
+```
 
 
 ## DataRoaster CLI Usage
@@ -1079,6 +1245,8 @@ Manage Query Engine.
 
 #### Create Query Engine
 Spark thrift server(hive on spark) and trino will be created.
+
+Query engine service depends on Data Catalog servcice. Before creating query engine service, you have to create data catalog service above on your kubernetes cluster.
 
 To run spark thrift server on kubernetes, `ReadWriteMany` supported storage class, for instance, nfs, is required to save intermediate data on PVs.
 To install nfs storage class, run the following helm chart.
