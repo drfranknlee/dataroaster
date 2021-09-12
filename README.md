@@ -979,7 +979,13 @@ This is simple spark job to create parquet table in ceph s3 object storage using
 
 ```
 cd <dataroaster-src>/components/hive/spark-thrift-server;
-mvn -e -Dtest=JsonToParquetTestRunner -DmetastoreUrl=$(kubectl get svc metastore-service -n dataroaster-hivemetastore -o jsonpath={.status.loadBalancer.ingress[0].ip}):9083 test;
+mvn -e -Dtest=JsonToParquetTestRunner \
+-DmetastoreUrl=$(kubectl get svc metastore-service -n dataroaster-hivemetastore -o jsonpath={.status.loadBalancer.ingress[0].ip}):9083 \
+-Ds3Bucket=mykidong \
+-Ds3AccessKey=TOW32G9ULH63MTUI6NNW \
+-Ds3SecretKey=jXqViVmSqIDTEKKKzdgSssHVykBrX4RrlnSeVgMi \
+-Ds3Endpoint=https://ceph-rgw-test.cloudchef-labs.com \
+test;
 ```
 
 ### Query Data using CLI
