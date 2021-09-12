@@ -919,7 +919,7 @@ dataroaster ingresscontroller create;
 ```
 
 ### Step 6: Create Services like Data Catalog, Query Engine, etc in your Project
-See DataRoaster CLI usage how to create services.
+See [DataRoaster CLI usage](https://github.com/cloudcheflabs/dataroaster#dataroaster-cli-usage) how to create services.
 
 ## Usage Example: DataRoater Demo
 As shown in dataroaster demo video above, the architecture of the demo looks like this.
