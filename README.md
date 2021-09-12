@@ -888,6 +888,8 @@ dataroaster;
 
 ## Storage Requirement
 
+Currently, storage service to provision external storages like ceph / minio and install storage classes on kubernetes is not provided by DataRoaster yet, which will be supported by future release of DataRoaster. Before getting started, you should take a look at the following instruction.
+
 ### Storage Class
 Most of the components provided by DataRoaster will be deployed as statefulset on kubernetes, so storage classes should be installed on your kubernetes cluster to provision persistent volumes automatically.
 If you use managed kubernetes services provided by public cloud providers, you don't have to install storage classes for most of cases, but if your kubernetes cluster is installed in on-prem environment, you have to install storage class on your kubernetes cluster for yourself. 
