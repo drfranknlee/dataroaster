@@ -68,24 +68,26 @@ DataRoaster consists of the following components.
 ## DataRoaster Component Version Matrix
 
 ### DataRoaster 3.0.1
-| Component | Application Version  | Helm Chart Repo / Version |
-| ------- | --- | ---------------- |
-| Hive Metastore | 3.0.0 |  |
-| Spark Thrift Server | Spark 3.0.3 |   |
-| Trino | 360 |   |
-| Redash | 10.0.0-beta.b49597 |   |
-| JupyterHub | 1.4.2 | https://jupyterhub.github.io/helm-chart/ 1.1.3 |
-| Kafka | 2.8.0 | https://charts.bitnami.com/bitnami 13.0.4 |
-| Argo Workflow | 3.0.10 |   |
-| Jenkins | 2.289.1 |   |
-| Argo CD | 2.0.3 |   |
-| Metrics Server | 0.4.1 |   |
-| Prometheus Stack | 0.43.2 | https://prometheus-community.github.io/helm-charts 12.2.4 |
-| Jaeger | 1.22.0 | https://jaegertracing.github.io/helm-charts 0.46.0 |
-| Velero | 1.6.0 | |
-| Harbor | 2.1.5 | https://helm.goharbor.io 1.5.5 |
-| Ingress NGINX | 0.46.0 | https://kubernetes.github.io/ingress-nginx 3.32.0 |
-| Cert Manager | 1.0.1 | |
+| Service | Component | Application Version  | Helm Chart Repo / Version |
+| ------- | ------- | --- | ---------------- |
+| Data Catalog | Hive Metastore | 3.0.0 |  |
+| Query Engine | Spark Thrift Server | Spark 3.0.3 |   |
+| Query Engine | Trino | 360 |   |
+| Analytics | Redash | 10.0.0-beta.b49597 |   |
+| Analytics | JupyterHub | 1.4.2 | https://jupyterhub.github.io/helm-chart/ <br /> 1.1.3 |
+| Streaming | Kafka | 2.8.0 | https://charts.bitnami.com/bitnami <br /> 13.0.4 |
+| Workflow | Argo Workflow | 3.0.10 |   |
+| CI / CD | Jenkins | 2.289.1 |   |
+| CI / CD | Argo CD | 2.0.3 |   |
+| Metrics Monitoring | Metrics Server | 0.4.1 |   |
+| Metrics Monitoring | Prometheus Stack | 0.43.2 | https://prometheus-community.github.io/helm-charts <br /> 12.2.4 |
+| Pod Log Monitoring | Filebeat | 7.12.1 | |
+| Pod Log Monitoring | Logstash | 7.12.1 | |
+| Distributed Tracing | Jaeger | 1.22.0 | https://jaegertracing.github.io/helm-charts <br /> 0.46.0 |
+| Backup | Velero | 1.6.0 | |
+| Private Registry | Harbor | 2.1.5 | https://helm.goharbor.io <br /> 1.5.5 |
+| Ingress Controller | Ingress NGINX | 0.46.0 | https://kubernetes.github.io/ingress-nginx <br /> 3.32.0 |
+| Ingress Controller | Cert Manager | 1.0.1 | |
 
 
 
