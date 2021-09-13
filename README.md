@@ -391,6 +391,11 @@ select count(*) from test_parquet;
 ### Create Analytics
 Redash and jupyterhub will be created.
 
+Before creating service, ingress host whose ip address is the external ip of ingress nginx service must be registered to your public dns server. To get external ip of ingress nginx service:
+```
+kubectl get svc -n ingress-nginx;
+```
+
 ```
 # create.
 dataroaster analytics create \
@@ -682,6 +687,12 @@ Manage Analytics.
 
 #### Create Analytics
 Redash and jupyterhub will be created.
+
+Before creating service, ingress host whose ip address is the external ip of ingress nginx service must be registered to your public dns server. To get external ip of ingress nginx service:
+```
+kubectl get svc -n ingress-nginx;
+```
+
 ```
 dataroaster analytics create <params>
 ```
@@ -778,6 +789,12 @@ Manage Distributed Tracing.
 
 #### Create Distributed Tracing
 Jaeger will be created.
+
+Before creating service, ingress host whose ip address is the external ip of ingress nginx service must be registered to your public dns server. To get external ip of ingress nginx service:
+```
+kubectl get svc -n ingress-nginx;
+```
+
 ```
 dataroaster distributedtracing create <params>
 ```
@@ -801,6 +818,12 @@ Manage private registry for docker images and helm charts.
 
 #### Create Private Registry
 Harbor will be created.
+
+Before creating service, ingress host whose ip address is the external ip of ingress nginx service must be registered to your public dns server. To get external ip of ingress nginx service:
+```
+kubectl get svc -n ingress-nginx;
+```
+
 ```
 dataroaster privateregistry create <params>
 ```
