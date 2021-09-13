@@ -233,7 +233,7 @@ For instance, if you have installed ceph as external storage, ceph storage class
 There is a component like spark thrift server which needs to use `ReadWriteMany` supported storage class, for instance, `nfs` to save intermediate data on PVs.
 To install `nfs` storage class, run the following helm chart.
 ```
-cd <dataroaster-src>/component/nfs/nfs-server-provisioner-1.1.1;
+cd <dataroaster-src>/components/nfs/nfs-server-provisioner-1.1.1;
 
 helm install \
 nfs-server . \
