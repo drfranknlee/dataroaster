@@ -1,2 +1,5 @@
+dataroaster_exec_user: dataroaster
+dataroaster_home_dir: /opt/dataroaster
+
 prerequisite_helm_temp_dir: /tmp/helm
 prerequisite_helm_version: 3.6.2

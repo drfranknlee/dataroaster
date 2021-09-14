@@ -5,7 +5,7 @@
     chdir: "{{ apiserver_home_dir }}"
   with_items:
     - "./stop-apiserver.sh"
-  become_user: dataroaster
+  become_user: "{{ dataroaster_exec_user }}"
 
 - name: delete apiserver directory
   file:

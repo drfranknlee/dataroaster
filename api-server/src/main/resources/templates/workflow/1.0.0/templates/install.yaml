@@ -633,8 +633,8 @@ metadata:
   name: s3-secret
   namespace: {{ .Values.namespace }}
 stringData:
-  accesskey: {{ .Values.s3.accessKey }}
-  secretkey: {{ .Values.s3.secretKey }}
+  accesskey: {{ .Values.s3.accessKey | b64enc }}
+  secretkey: {{ .Values.s3.secretKey | b64enc  }}
 type: Opaque
 ---
 apiVersion: v1

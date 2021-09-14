@@ -1,6 +1,6 @@
 - name: create dataroaster user
   user:
-    name: dataroaster
+    name: "{{ dataroaster_exec_user }}"
     state: present
     createhome: yes
     home: "{{ dataroaster_home_dir }}"
@@ -11,8 +11,8 @@
   file:
     path: "{{ item }}"
     state: directory
-    owner: dataroaster
-    group: dataroaster
+    owner: "{{ dataroaster_exec_user }}"
+    group: "{{ dataroaster_exec_user }}"
     mode: 0755
   with_items:
     - "{{ dataroaster_home_dir }}"
@@ -55,8 +55,8 @@
   template:
     src: "templates/{{ item.src }}"
     dest: "{{ item.dest }}"
-    owner: dataroaster
-    group: dataroaster
+    owner: "{{ dataroaster_exec_user }}"
+    group: "{{ dataroaster_exec_user }}"
     mode: 0755
   with_items:
     - { src: 'application-prod.yml', dest: '{{ apiserver_home_dir }}/conf/application-prod.yml' }
@@ -68,8 +68,8 @@
   file:
     path: "{{ item }}"
     recurse: true
-    owner: dataroaster
-    group: dataroaster
+    owner: "{{ dataroaster_exec_user }}"
+    group: "{{ dataroaster_exec_user }}"
     mode: 0755
   with_items:
     - "{{ apiserver_home_dir }}"
@@ -82,4 +82,4 @@
     chdir: "{{ apiserver_home_dir }}"
   with_items:
     - "./start-apiserver.sh"
-  become_user: dataroaster
+  become_user: "{{ dataroaster_exec_user }}"
