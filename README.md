@@ -372,7 +372,12 @@ kubectl apply -f hive-metastore-service.yaml;
 
 Run spark job.
 ```
-cd <dataroaster-src>/components/hive/spark-thrift-server;
+# build dataroaster source.
+cd <dataroaster-src>;
+mvn -e -DskipTests=true clean install;
+
+# run spark job.
+cd components/hive/spark-thrift-server;
 mvn -e -Dtest=JsonToParquetTestRunner \
 -DmetastoreUrl=$(kubectl get svc metastore-service -n dataroaster-hivemetastore -o jsonpath={.status.loadBalancer.ingress[0].ip}):9083 \
 -Ds3Bucket=mykidong \
