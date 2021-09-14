@@ -346,6 +346,28 @@ dataroaster queryengine delete;
 ### Create Parquet Table using Spark Example Job
 This is simple spark job to create parquet table in ceph s3 object storage using hive metastore.
 
+Create hive metastore service to be accessed from local spark job.
+```
+# create hive metastore service with the type of load balancer to be accessed by example spark job on local.
+cat <<EOF > hive-metastore-service.yaml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: metastore-service
+  namespace: dataroaster-hivemetastore
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 9083
+  selector:
+    app: metastore
+EOF
+
+kubectl apply -f hive-metastore-service.yaml;
+```
+
+Run spark job.
 ```
 cd <dataroaster-src>/components/hive/spark-thrift-server;
 mvn -e -Dtest=JsonToParquetTestRunner \
