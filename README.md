@@ -187,6 +187,9 @@ Enter vault initial root token :
 Enter initial root token of vault which you have obtained above.
 
 
+After installation success, api server and authorizer can be found in `/opt/dataroaster`, and log files of api server can be found in `/data/dataroaster/logs/apiserver`.
+
+
 #### Uninstall
 ```
 ansible-playbook -i inventory/dataroaster.ini uninstall-all.yml \
