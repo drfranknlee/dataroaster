@@ -13,4 +13,4 @@ vault:
   host: localhost
   port: 8200
   trustStore: /etc/vault.d/keystore.jks
-  token: s.iA3ETaFvf8ye6737AOcPo7ZZ
+  token: s.5asZbypBBw9mAa2YDuUg1y7a
