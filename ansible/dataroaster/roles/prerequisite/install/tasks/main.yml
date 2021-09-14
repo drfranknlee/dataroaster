@@ -21,7 +21,7 @@
     state: present
   with_items:
     - "maven"
-  become_user: true
+  become: true
   
 - name: copy pom.xml file
   template:
