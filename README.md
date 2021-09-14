@@ -768,6 +768,8 @@ dataroaster workflow create \
 --s3-endpoint ceph-rgw-test.cloudchef-labs.com;
 ```
 
+Note that `s3-endpoint` has no such `https://` prefix.
+
 #### Delete Workflow
 ```
 dataroaster workflow delete;
