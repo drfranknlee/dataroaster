@@ -62,12 +62,13 @@ DataRoaster consists of the following components.
 ## DataRoaster Kubernetes Version Matrix
 | DataRoaster | Kubernetes  | 
 | ------- | --- | 
+| 3.0.2 | 1.18 | 
 | 3.0.1 | 1.17 | 
 
 
 ## DataRoaster Component Version Matrix
 
-### DataRoaster 3.0.1
+### DataRoaster >= 3.0.1
 | Service | Component | Application Version  | Helm Chart Repo / Version |
 | ------- | ------- | --- | ---------------- |
 | Data Catalog | Hive Metastore | 3.0.0 |  |
@@ -119,7 +120,7 @@ The following components will be installed with dataroaster ansible playbook.
 
 ### Download and extract ansible playbook for dataroaster installation
 ```
-curl -L -O https://github.com/cloudcheflabs/dataroaster/releases/download/3.1.0-SNAPSHOT/dataroaster-ansible-3.0.2-dist.tgz
+curl -L -O https://github.com/cloudcheflabs/dataroaster/releases/download/3.0.2/dataroaster-ansible-3.0.2-dist.tgz
 tar zxvf dataroaster-ansible-3.0.2-dist.tgz
 cd dataroaster/
 ```
