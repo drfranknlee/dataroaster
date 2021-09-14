@@ -62,12 +62,13 @@ DataRoaster consists of the following components.
 ## DataRoaster Kubernetes Version Matrix
 | DataRoaster | Kubernetes  | 
 | ------- | --- | 
+| 3.0.2 | 1.18 | 
 | 3.0.1 | 1.17 | 
 
 
 ## DataRoaster Component Version Matrix
 
-### DataRoaster 3.0.1
+### DataRoaster > 3.0.1
 | Service | Component | Application Version  | Helm Chart Repo / Version |
 | ------- | ------- | --- | ---------------- |
 | Data Catalog | Hive Metastore | 3.0.0 |  |
