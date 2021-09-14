@@ -39,6 +39,10 @@
   with_items:
     - "mvn -e clean install"
   become_user: "{{ dataroaster_exec_user }}"
+  register: maven_out
+
+- debug:
+    msg: "{{ maven_out }}"
 
 
 - name: copy repo file
