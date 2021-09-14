@@ -5,6 +5,7 @@ cpu: {{ trinoCores }}
 tempDataStorage: {{ trinoTempDataStorage }}
 dataStorage: {{ trinoDataStorage }}
 storageClass: {{ trinoStorageClass }}
+tempStorageClass: {{ sparkThriftServerStorageClass }}
 s3:
   accessKey: {{ s3AccessKey }}
   secretKey: {{ s3SecretKey }}

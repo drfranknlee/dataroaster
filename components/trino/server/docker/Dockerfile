@@ -29,5 +29,6 @@ RUN set -ex \
     && echo 'trino hard nofile 131072' >> /etc/security/limits.d/trino.conf
 RUN cat /etc/security/limits.d/trino.conf
 
-USER ${TRINO_USER}
+## error with trino user: ERROR: [Errno 13] Permission denied: '/opt/trino-server/data/var'
+#USER ${TRINO_USER}
 WORKDIR ${APP_HOME}

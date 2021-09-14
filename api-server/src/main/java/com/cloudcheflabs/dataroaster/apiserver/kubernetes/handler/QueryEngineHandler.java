@@ -133,11 +133,11 @@ public class QueryEngineHandler {
             kv.put("trinoTempDataStorage", (Integer) map.get("trinoTempDataStorage"));
             kv.put("trinoDataStorage", (Integer) map.get("trinoDataStorage"));
             kv.put("trinoStorageClass", (String) map.get("trinoStorageClass"));
+            kv.put("sparkThriftServerStorageClass", (String) map.get("sparkThriftServerStorageClass"));
             kv.put("s3AccessKey", (String) map.get("s3AccessKey"));
             kv.put("s3SecretKey", (String) map.get("s3SecretKey"));
             kv.put("s3Endpoint", (String) map.get("s3Endpoint"));
             kv.put("hivemetastoreNamespace", K8sNamespace.DEFAULT_NAMESPACE_HIVE_METASTORE);
-
 
             TemplateUtils.toFile(tempDirectory + "/trino/" + file,
                     false,
