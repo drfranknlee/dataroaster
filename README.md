@@ -62,7 +62,7 @@ DataRoaster consists of the following components.
 ## DataRoaster Kubernetes Version Matrix
 | DataRoaster | Kubernetes  | 
 | ------- | --- | 
-| 3.0.2 | 1.18 | 
+| 3.0.3 | 1.18 | 
 | 3.0.1 | 1.17 | 
 
 
