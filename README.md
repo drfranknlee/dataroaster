@@ -120,8 +120,8 @@ The following components will be installed with dataroaster ansible playbook.
 
 ### Download and extract ansible playbook for dataroaster installation
 ```
-curl -L -O https://github.com/cloudcheflabs/dataroaster/releases/download/3.0.2/dataroaster-ansible-3.0.2-dist.tgz
-tar zxvf dataroaster-ansible-3.0.2-dist.tgz
+curl -L -O https://github.com/cloudcheflabs/dataroaster/releases/download/3.0.3/dataroaster-ansible-3.0.3-dist.tgz
+tar zxvf dataroaster-ansible-3.0.3-dist.tgz
 cd dataroaster/
 ```
 
