@@ -107,6 +107,7 @@ With dataroaster ansible playbook, dataroaster will be installed automatically.
 
 The following components will be installed with dataroaster ansible playbook.
 * JDK 1.8
+* Maven
 * Kubectl
 * Helm
 * MySQL Server
