@@ -269,7 +269,7 @@ spec:
       resources:
         requests:
           storage: {{ .Values.tempDataStorage }}Gi
-      storageClassName: {{ tempStorageClass }}
+      storageClassName: {{ .Values.tempStorageClass }}
   - metadata:
       name: trino-data-dir
     spec:
