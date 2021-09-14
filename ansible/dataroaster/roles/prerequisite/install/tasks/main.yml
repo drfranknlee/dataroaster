@@ -7,6 +7,40 @@
     - "java-1.8.0-openjdk-devel"
   become: true
 
+- name: create dataroaster user
+  user:
+    name: "{{ dataroaster_exec_user }}"
+    state: present
+    createhome: yes
+    home: "{{ dataroaster_home_dir }}"
+  become: true
+
+- name: install maven
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "maven"
+  become_user: true
+  
+- name: copy pom.xml file
+  template:
+    src: "templates/{{ item }}"
+    dest: "{{ dataroaster_home_dir }}/{{ item }}"
+    mode: 0755
+  with_items:
+    - "pom.xml"
+
+- name: run maven to download spark thrift server deps jars
+  shell: "{{ item }}"
+  args:
+    executable: /bin/bash
+    chdir: "{{ dataroaster_home_dir }}"
+  with_items:
+    - "mvn -e clean install"
+  become_user: "{{ dataroaster_exec_user }}"
+
+
 - name: copy repo file
   template:
     src: "templates/{{ item }}"

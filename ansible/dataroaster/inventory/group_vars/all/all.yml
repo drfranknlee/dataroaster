@@ -8,6 +8,9 @@ dataroaster_version: 3.1.0-SNAPSHOT
 # dataroaster log directory.
 #dataroaster_log_dir: /data/dataroaster/logs
 
+# execution user to run dataroaster applications.
+#dataroaster_exec_user: dataroaster
+
 # dataroaster apiserver home directory.
 #apiserver_home_dir: "{{ dataroaster_home_dir }}/apiserver"
 

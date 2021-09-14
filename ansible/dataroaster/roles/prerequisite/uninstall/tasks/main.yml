@@ -7,6 +7,14 @@
     - "java-1.8.0-openjdk-devel"
   become: true
 
+- name: uninstall maven
+  yum:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - "maven"
+  become: true
+
 - name: uninstall kubectl
   yum:
     name: "{{ item }}"
