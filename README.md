@@ -118,6 +118,12 @@ The following components will be installed with dataroaster ansible playbook.
 * DataRoaster CLI
 
 
+See the video below about installing DataRoaster with ansible.
+
+[![Install DataRoaster with Ansible](http://www.cloudchef-labs.com/images/install-dataroaster.png)](https://youtu.be/9mqVkrLOu3Y "Install DataRoaster with Ansible")
+
+
+
 ### Download and extract ansible playbook for dataroaster installation
 ```
 curl -L -O https://github.com/cloudcheflabs/dataroaster/releases/download/3.0.3/dataroaster-ansible-3.0.3-dist.tgz
