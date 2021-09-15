@@ -614,6 +614,8 @@ Manage Ingress Controller NGINX and Cert Manager.
 
 #### Create Ingress Controller
 Ingress controller nginx and cert manager will be created.
+* The namespace of ingress controller nginx is `ingress-nginx`.
+* The namespace of cert manager is `cert-manager`.
 ```
 dataroaster ingresscontroller create;
 ```
@@ -629,6 +631,7 @@ Manage Data Catalog.
 
 #### Create Data Catalog
 Hive metastore and mysql server will be created.
+* The namespace of hive metastore is `dataroaster-hivemetastore`.
 ```
 dataroaster datacatalog create <params>
 ```
@@ -637,6 +640,7 @@ dataroaster datacatalog create <params>
 * `s3-secret-key`: s3 secret key.
 * `s3-endpoint`: s3 endpoint.
 * `storage-size`: mysql storage size in GiB.
+
 
 Example:
 ```
@@ -648,6 +652,8 @@ dataroaster datacatalog create \
 --storage-size 1;
 ```
 
+
+
 #### Delete Data Catalog
 ```
 dataroaster datacatalog delete;
@@ -658,6 +664,9 @@ Manage Query Engine.
 
 #### Create Query Engine
 Spark thrift server(hive on spark) and trino will be created.
+* The namespace of spark thrift server is `dataroaster-spark-thrift-server`.
+* The namespace of trino is `dataroaster-trino`.
+
 Query engine service depends on Data Catalog servcice. Before creating query engine service, you have to create data catalog service above on your kubernetes cluster.
 
 ```
@@ -706,6 +715,7 @@ Manage Streaming.
 
 #### Create Streaming
 Kafka will be created.
+* The namespace of kafka is `dataroaster-kafka`.
 ```
 dataroaster streaming create <params>
 ```
@@ -731,6 +741,8 @@ Manage Analytics.
 
 #### Create Analytics
 Redash and jupyterhub will be created.
+* The namespace of redash is `dataroaster-redash`.
+* The namespace of jupyterhub is `dataroaster-jupyterhub`.
 
 Before creating service, ingress host whose ip address is the external ip of ingress nginx service must be registered to your public dns server. To get external ip of ingress nginx service:
 ```
@@ -766,6 +778,7 @@ Manage Workflow.
 
 #### Create Workflow
 Argo Workflow will be created.
+* The namespace of argo workflow is `dataroaster-argo-workflow`.
 ```
 dataroaster workflow create <params>
 ```
@@ -799,6 +812,8 @@ Manage Pod Log Monitoring.
 
 #### Create Pod Log Monitoring
 Logstash and filebeat will be created.
+* The namespace of filebeat is `dataroaster-filebeat`.
+* The namespace of logstash is `dataroaster-logstash`.
 ```
 dataroaster podlogmonitoring create <params>
 ```
@@ -821,6 +836,7 @@ Manage Metrics Monitoring.
 
 #### Create Metrics Monitoring
 Prometheus, grafana, metrics server will be created.
+* The namespace of prom stack is `dataroaster-prom-stack`.
 ```
 dataroaster metricsmonitoring create;
 ```
@@ -835,6 +851,7 @@ Manage Distributed Tracing.
 
 #### Create Distributed Tracing
 Jaeger will be created.
+* The namespace of jaeger is `dataroaster-jaeger`.
 
 Before creating service, ingress host whose ip address is the external ip of ingress nginx service must be registered to your public dns server. To get external ip of ingress nginx service:
 ```
@@ -862,8 +879,10 @@ dataroaster distributedtracing delete;
 ### Private Registry
 Manage private registry for docker images and helm charts.
 
+
 #### Create Private Registry
 Harbor will be created.
+* The namespace of harbor is `dataroaster-harbor`.
 
 Before creating service, ingress host whose ip address is the external ip of ingress nginx service must be registered to your public dns server. To get external ip of ingress nginx service:
 ```
@@ -913,6 +932,8 @@ Manage CI / CD.
 
 #### Create CI / CD
 Argo cd and jenkins will be created.
+* The namespace of argo cd is `dataroaster-argocd`.
+* The namespace of jenkins is `dataroaster-jenkins`.
 ```
 dataroaster cicd create <params>
 ```
@@ -936,6 +957,7 @@ Manage Backup for Persistent Volumes and resources.
 
 #### Create Backup
 Velero will be created.
+* The namespace of velero is `dataroaster-velero`.
 ```
 dataroaster backup create <params>
 ```
