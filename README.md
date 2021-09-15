@@ -120,8 +120,14 @@ The following components will be installed with dataroaster ansible playbook.
 
 See the video below about installing DataRoaster with ansible.
 
-[![Install DataRoaster with Ansible](http://www.cloudchef-labs.com/images/install-dataroaster.png)](https://youtu.be/9mqVkrLOu3Y "Install DataRoaster with Ansible")
-
+<div align="left">
+  <a href="https://youtu.be/9mqVkrLOu3Y">
+	<img 
+	src="http://www.cloudchef-labs.com/images/install-dataroaster.png" 
+	alt="Install DataRoaster with Ansible" 
+	style="width:35%;">
+  </a>
+</div>
 
 
 ### Download and extract ansible playbook for dataroaster installation
