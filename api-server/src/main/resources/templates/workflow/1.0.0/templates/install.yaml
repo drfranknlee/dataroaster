@@ -321,6 +321,7 @@ rules:
   resources:
   - pods
   - pods/exec
+  - pods/log
   verbs:
   - create
   - get
