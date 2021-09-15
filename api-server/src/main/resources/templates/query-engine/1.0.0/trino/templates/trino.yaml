@@ -160,7 +160,7 @@ spec:
         app: trino-coordinator
     spec:
       containers:
-      - name: metastore
+      - name: trino-coordinator
         image: cloudcheflabs/trino:360
         ports:
         - containerPort: 8080
@@ -217,7 +217,7 @@ spec:
         app: trino-worker
     spec:
       containers:
-      - name: metastore
+      - name: trino-worker
         image: cloudcheflabs/trino:360
         ports:
         - containerPort: 8080
