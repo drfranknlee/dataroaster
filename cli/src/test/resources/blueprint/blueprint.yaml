@@ -41,8 +41,8 @@ services:
 
   - name: analytics
     params:
-      jupyterhub-github-client-id: 4451c4ef07dd842c907d
-      jupyterhub-github-client-secret: 25114ac451313d1201c9fd1032de5c5cb69c6102
+      jupyterhub-github-client-id: any-github-client-id
+      jupyterhub-github-client-secret: any-github-client-secret
       jupyterhub-ingress-host: jupyterhub-test.cloudchef-labs.com
       jupyterhub-storage-size: 1
       redash-storage-size: 1
