@@ -2,6 +2,7 @@ package com.cloudcheflabs.dataroaster.cli.command.kubeconfig;
 
 import com.cloudcheflabs.dataroaster.cli.api.dao.ClusterDao;
 import com.cloudcheflabs.dataroaster.cli.api.dao.KubeconfigDao;
+import com.cloudcheflabs.dataroaster.cli.command.CommandUtils;
 import com.cloudcheflabs.dataroaster.cli.config.SpringContextSingleton;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
@@ -66,14 +67,6 @@ public class CreateKubeconfig implements Callable<Integer> {
         String kubeconfigPath = kubeconfigFile.getAbsolutePath();
         String kubeconfig = FileUtils.fileToString(kubeconfigPath, false);
 
-        KubeconfigDao kubeconfigDao = applicationContext.getBean(KubeconfigDao.class);
-        restResponse = kubeconfigDao.createKubeconfig(configProps, Long.valueOf(clusterId), kubeconfig);
-        if(restResponse.getStatusCode() == 200) {
-            System.out.println("kubeconfig created successfully!");
-            return 0;
-        } else {
-            System.err.println(restResponse.getErrorMessage());
-            return -1;
-        }
+        return CommandUtils.createKubeconfig(configProps, clusterId, kubeconfig);
     }
 }
