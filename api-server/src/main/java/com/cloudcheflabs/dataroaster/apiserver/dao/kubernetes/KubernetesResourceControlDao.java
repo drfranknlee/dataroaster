@@ -35,7 +35,7 @@ public class KubernetesResourceControlDao implements ResourceControlDao {
     public String getExternalIpOfIngressControllerNginx(Kubeconfig kubeconfig, String namespace) {
         try {
             String externalIP = null;
-            KubernetesClient adminClient = KubernetesClientUtils.newClient(kubeconfig);
+            KubernetesClient adminClient = KubernetesClientUtils.newClientWithKubeconfigYaml(kubeconfig);
             for (Service service : adminClient.services().inNamespace(namespace).list().getItems()) {
                 if (service.getMetadata().getName().equals("ingress-nginx-controller")) {
                     externalIP = service.getStatus().getLoadBalancer().getIngress().get(0).getIp();
