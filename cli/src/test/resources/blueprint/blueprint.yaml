@@ -134,15 +134,15 @@ properties:
   - name: s3
     kv:
       s3-bucket: mykidong
-      s3-access-key: 59c2b742d33b2cd784d07fc6e97839f40a8eb9ce
-      s3-secret-key: N01jEIoKTd9FtA7KwCHJEZKmAEhUxcOZXNANMDVMGdU=
-      s3-endpoint: https://cnobgk2u8blu.compat.objectstorage.ap-seoul-1.oraclecloud.com
+      s3-access-key: any-access-key
+      s3-secret-key: any-secret-key
+      s3-endpoint: https://s3-endpoint
   - name: velero-s3
     kv:
       s3-bucket: velero-backups
-      s3-access-key: 59c2b742d33b2cd784d07fc6e97839f40a8eb9ce
-      s3-secret-key: N01jEIoKTd9FtA7KwCHJEZKmAEhUxcOZXNANMDVMGdU=
-      s3-endpoint: https://cnobgk2u8blu.compat.objectstorage.ap-seoul-1.oraclecloud.com
+      s3-access-key: any-access-key
+      s3-secret-key: any-secret-key
+      s3-endpoint: https://s3-endpoint
   - name: storage-classes
     kv:
       storage-class-rwo: oci
