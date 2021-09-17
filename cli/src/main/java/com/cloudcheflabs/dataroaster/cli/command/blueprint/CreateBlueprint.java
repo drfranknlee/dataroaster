@@ -111,11 +111,28 @@ public class CreateBlueprint implements Callable<Integer> {
         }
 
         // register kubeconfig.
+        System.out.println("upload kubeconfig...");
         File kubeconfigFile = new File(cluster.getKubeconfig());
         String kubeconfigPath = kubeconfigFile.getAbsolutePath();
         String kubeconfig = FileUtils.fileToString(kubeconfigPath, false);
         CommandUtils.createKubeconfig(configProps, clusterId, kubeconfig);
 
+        // create services.
+        for(BlueprintGraph.Service service : serviceDependencyList) {
+            String serviceName = service.getName();
+            String depends = service.getDepends();
+            boolean dependsOnIngressController = (depends != null) ? depends.equals("ingresscontroller") : false;
+            // ingress controller.
+            if(serviceName.equals("ingresscontroller")) {
+                CommandUtils.createIngressController(configProps, projectId, clusterId);
+            } else if(serviceName.equals("datacatalog")) {
+                // show external ip of ingress controller nginx to register ingress host with the external ip of it to public dns server.
+                if(dependsOnIngressController) {
+
+                }
+
+            }
+        }
 
         return 0;
     }

@@ -43,4 +43,16 @@ public class ResourceControlController {
             return JsonUtils.toJson(mapper, storageClasses);
         });
     }
+
+    @GetMapping("/apis/resource_control/ingress_controller/get_external_ip")
+    public String getExternalIpOfIngressControllerNginx(@RequestParam Map<String, String> params) {
+        return ControllerUtils.doProcess(Roles.ROLE_USER, context, () -> {
+            String clusterId = params.get("cluster_id");
+            String userName = (String) context.getAttribute(AuthorizationFilter.KEY_USER_NAME);
+
+            String externalIp = resourceControlService.getExternalIpOfIngressControllerNginx(Long.valueOf(clusterId), userName);
+
+            return JsonUtils.toJson(mapper, externalIp);
+        });
+    }
 }

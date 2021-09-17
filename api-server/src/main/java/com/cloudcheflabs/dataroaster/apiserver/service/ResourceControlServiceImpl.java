@@ -8,6 +8,7 @@ import com.cloudcheflabs.dataroaster.apiserver.api.service.ResourceControlServic
 import com.cloudcheflabs.dataroaster.apiserver.domain.Kubeconfig;
 import com.cloudcheflabs.dataroaster.apiserver.domain.StorageClass;
 import com.cloudcheflabs.dataroaster.apiserver.domain.model.K8sCluster;
+import com.cloudcheflabs.dataroaster.apiserver.domain.model.K8sNamespace;
 import com.cloudcheflabs.dataroaster.apiserver.domain.model.Users;
 import com.cloudcheflabs.dataroaster.apiserver.secret.SecretPathTemplate;
 import com.cloudcheflabs.dataroaster.common.util.TemplateUtils;
@@ -60,5 +61,23 @@ public class ResourceControlServiceImpl implements ResourceControlService {
         Kubeconfig kubeconfig = secretDao.readSecret(path, Kubeconfig.class);
 
         return resourceControlDao.listStorageClasses(kubeconfig);
+    }
+
+    @Override
+    public String getExternalIpOfIngressControllerNginx(long clusterId, String userName) {
+        // cluster.
+        K8sCluster k8sCluster = k8sClusterDao.findOne(clusterId);
+
+        // get user.
+        Users users = usersDao.findByUserName(userName);
+
+        // build secret path.
+        Map<String, String> kv = new HashMap<>();
+        kv.put("clusterId", String.valueOf(k8sCluster.getId()));
+        kv.put("user", users.getUserName());
+        String path = TemplateUtils.replace(SecretPathTemplate.SECRET_KUBECONFIG, kv);
+        Kubeconfig kubeconfig = secretDao.readSecret(path, Kubeconfig.class);
+
+        return resourceControlDao.getExternalIpOfIngressControllerNginx(kubeconfig, K8sNamespace.DEFAULT_NAMESPACE_INGRESS_CONTROLLER_NGINX);
     }
 }
