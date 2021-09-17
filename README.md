@@ -439,12 +439,13 @@ Before creating service, ingress host whose ip address is the external ip of ing
 ```
 kubectl get svc -n ingress-nginx;
 ```
+Github oauth secret also needs to be created to authenticate with github oauth service from jupyterhub.
 
 ```
 # create.
 dataroaster analytics create \
---jupyterhub-github-client-id 0b322767446baedb3203 \
---jupyterhub-github-client-secret 828688ff8be545b6434df2dbb2860a1160ae1517 \
+--jupyterhub-github-client-id any-github-client-id \
+--jupyterhub-github-client-secret any-github-client-secret \
 --jupyterhub-ingress-host jupyterhub-test.cloudchef-labs.com \
 --jupyterhub-storage-size 1 \
 --redash-storage-size 1;
@@ -748,6 +749,7 @@ Before creating service, ingress host whose ip address is the external ip of ing
 ```
 kubectl get svc -n ingress-nginx;
 ```
+Github oauth secret also needs to be created to authenticate with github oauth service from jupyterhub.
 
 ```
 dataroaster analytics create <params>
@@ -761,8 +763,8 @@ dataroaster analytics create <params>
 Example:
 ```
 dataroaster analytics create \
---jupyterhub-github-client-id 0b322767446baedb3203 \
---jupyterhub-github-client-secret 828688ff8be545b6434df2dbb2860a1160ae1517 \
+--jupyterhub-github-client-id any-github-client-id \
+--jupyterhub-github-client-secret any-github-client-secret \
 --jupyterhub-ingress-host jupyterhub-test.cloudchef-labs.com \
 --jupyterhub-storage-size 1 \
 --redash-storage-size 1;
