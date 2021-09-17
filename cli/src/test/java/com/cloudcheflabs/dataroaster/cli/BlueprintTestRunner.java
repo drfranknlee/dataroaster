@@ -236,7 +236,7 @@ public class BlueprintTestRunner {
 
     @Test
     public void readKubeconfig() throws Exception {
-        String filePath = "~/.kube/config";
+        String filePath = "/home/opc/.kube/config";
         File kubeconfigFile = new File(filePath);
         String kubeconfigPath = kubeconfigFile.getAbsolutePath();
         String kubeconfig = FileUtils.fileToString(kubeconfigPath, false);

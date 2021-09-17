@@ -4,7 +4,7 @@ project:
 cluster:
   name: my-blueprint-cluster
   description: "My blueprint cluster description..."
-  kubeconfig: "~/.kube/config"
+  kubeconfig: "/home/opc/.kube/config"
 services:
   - name: ingresscontroller
 
