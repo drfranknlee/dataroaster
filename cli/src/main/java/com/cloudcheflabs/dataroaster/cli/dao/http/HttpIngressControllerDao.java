@@ -66,4 +66,29 @@ public class HttpIngressControllerDao extends AbstractHttpClient implements Ingr
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public RestResponse getExternalIpOfIngressControllerNginx(ConfigProps configProps, long clusterId) {
+        String serverUrl = configProps.getServer();
+        String accessToken = configProps.getAccessToken();
+
+        String urlPath = serverUrl + "/api/apis/resource_control/ingress_controller/get_external_ip";
+
+        // parameters in body.
+        String content = "cluster_id=" + clusterId;
+
+        RequestBody body = RequestBody.create(mediaType, content);
+        try {
+            Request request = new Request.Builder()
+                    .url(urlPath)
+                    .addHeader("Authorization", "Bearer " + accessToken)
+                    .addHeader("Content-Length", String.valueOf(body.contentLength()))
+                    .get()
+                    .build();
+
+            return ResponseHandler.doCall(client, request);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

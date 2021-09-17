@@ -1,6 +1,7 @@
 package com.cloudcheflabs.dataroaster.cli.command.blueprint;
 
 import com.cloudcheflabs.dataroaster.cli.api.dao.ClusterDao;
+import com.cloudcheflabs.dataroaster.cli.api.dao.IngressControllerDao;
 import com.cloudcheflabs.dataroaster.cli.api.dao.ProjectDao;
 import com.cloudcheflabs.dataroaster.cli.command.CommandUtils;
 import com.cloudcheflabs.dataroaster.cli.config.SpringContextSingleton;
@@ -126,11 +127,13 @@ public class CreateBlueprint implements Callable<Integer> {
             if(serviceName.equals("ingresscontroller")) {
                 CommandUtils.createIngressController(configProps, projectId, clusterId);
             } else if(serviceName.equals("datacatalog")) {
-                // show external ip of ingress controller nginx to register ingress host with the external ip of it to public dns server.
+                // show external ip of ingress controller nginx to register ingress host with the external ip of it
+                // to public dns server.
                 if(dependsOnIngressController) {
-
+                    CommandUtils.makeSureIngressHostRegistered(configProps, clusterId, cnsl);
                 }
 
+                // TODO:
             }
         }
 
