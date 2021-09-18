@@ -47,8 +47,8 @@ public class HttpQueryEngineDao extends AbstractHttpClient implements QueryEngin
         content += "&service_def_id=" + serviceDefId;
         content += "&cluster_id=" + clusterId;
         content += "&s3_bucket=" + s3Bucket;
-        content += "&s3_access_key=" + Base64.getEncoder().encodeToString(s3AccessKey.getBytes());
-        content += "&s3_secret_key=" + Base64.getEncoder().encodeToString(s3SecretKey.getBytes());
+        content += "&s3_access_key=" + s3AccessKey;
+        content += "&s3_secret_key=" + s3SecretKey;
         content += "&s3_endpoint=" + s3Endpoint;
         content += "&spark_thrift_server_storage_class=" + sparkThriftServerStorageClass;
         content += "&spark_thrift_server_executors=" + sparkThriftServerExecutors;
