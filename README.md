@@ -132,7 +132,7 @@ See the video below about installing DataRoaster with ansible.
 
 ### Download and extract ansible playbook for dataroaster installation
 ```
-curl -L -O https://github.com/cloudcheflabs/dataroaster/releases/download/3.0.4/dataroaster-ansible-3.0.5-dist.tgz
+curl -L -O https://github.com/cloudcheflabs/dataroaster/releases/download/3.0.5/dataroaster-ansible-3.0.5-dist.tgz
 tar zxvf dataroaster-ansible-3.0.5-dist.tgz
 cd dataroaster/
 ```
