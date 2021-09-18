@@ -511,6 +511,92 @@ print(output)
 kubectl get svc -n dataroaster-trino;
 ```
 
+## Blueprint Deployment
+Blueprint Deployment is used to deploy all the services defined in blueprint yaml on kubernetes all at once instead of creating services using individual cli commands.
+
+The full format of blueprint example can be found in [here](https://github.com/cloudcheflabs/dataroaster/blob/master/cli/src/test/resources/blueprint/blueprint.yaml).
+
+For example, with the following blueprint, services like ingress controller, data catalog(hive metastore), query engine(spark thrift server, trino), and analytics(redash, jupyterhub) will be created on kubernetes all at once.
+```
+project:
+  name: my-blueprint-project
+  description: "My blueprint project description..."
+cluster:
+  name: my-blueprint-cluster
+  description: "My blueprint cluster description..."
+  kubeconfig: "/home/opc/.kube/config"
+services:
+  - name: ingresscontroller
+
+  - name: datacatalog
+    params:
+      properties:
+        - s3
+      storage-size: 1
+    extra-params:
+      storage-class:
+        property-ref: storage-classes
+        key: storage-class-rwo
+
+  - name: queryengine
+    params:
+      properties:
+        - s3
+      spark-thrift-server-executors: 1
+      spark-thrift-server-executor-memory: 1
+      spark-thrift-server-executor-cores: 1
+      spark-thrift-server-driver-memory: 1
+      trino-workers: 3
+      trino-server-max-memory: 16
+      trino-cores: 1
+      trino-temp-data-storage: 1
+      trino-data-storage: 1
+    extra-params:
+      spark-thrift-server-storage-class:
+        property-ref: storage-classes
+        key: storage-class-rwx
+      trino-storage-class:
+        property-ref: storage-classes
+        key: storage-class-rwo
+    depends: datacatalog
+
+  - name: analytics
+    params:
+      jupyterhub-github-client-id: any-client-id
+      jupyterhub-github-client-secret: any-client-secret
+      jupyterhub-ingress-host: jupyterhub-test.cloudchef-labs.com
+      jupyterhub-storage-size: 1
+      redash-storage-size: 1
+    extra-params:
+      storage-class:
+        property-ref: storage-classes
+        key: storage-class-rwo
+    depends: ingresscontroller
+
+
+properties:
+  - name: s3
+    kv:
+      s3-bucket: mykidong
+      s3-access-key: any-access-key
+      s3-secret-key: any-secret-key
+      s3-endpoint: https://s3-endpoint
+  - name: storage-classes
+    kv:
+      storage-class-rwo: oci
+      storage-class-rwx: nfs
+```
+
+To create services with blueprint:
+```
+dataroaster blueprint create --blueprint /home/opc/blueprint.yaml;
+```
+
+To delete services with blueprint:
+```
+dataroaster blueprint delete --blueprint /home/opc/blueprint.yaml;
+```
+
 
 ## DataRoaster CLI Usage
 
