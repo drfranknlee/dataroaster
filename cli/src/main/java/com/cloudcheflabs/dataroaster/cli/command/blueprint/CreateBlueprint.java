@@ -183,7 +183,7 @@ public class CreateBlueprint implements Callable<Integer> {
 
                 // extra params.
                 ConcurrentHashMap<String, Object> extraParams = service.getExtraParams();
-                String storageClass = (String) params.get("storage-class");
+                String storageClass = (String) extraParams.get("storage-class");
 
                 // show external ip of ingress controller nginx to register ingress host with the external ip of it
                 // to public dns server.
@@ -217,7 +217,7 @@ public class CreateBlueprint implements Callable<Integer> {
 
                 // extra params.
                 ConcurrentHashMap<String, Object> extraParams = service.getExtraParams();
-                String storageClass = (String) params.get("storage-class");
+                String storageClass = (String) extraParams.get("storage-class");
 
                 // show external ip of ingress controller nginx to register ingress host with the external ip of it
                 // to public dns server.
@@ -252,7 +252,7 @@ public class CreateBlueprint implements Callable<Integer> {
 
                 // extra params.
                 ConcurrentHashMap<String, Object> extraParams = service.getExtraParams();
-                String storageClass = (String) params.get("storage-class");
+                String storageClass = (String) extraParams.get("storage-class");
 
                 // show external ip of ingress controller nginx to register ingress host with the external ip of it
                 // to public dns server.
@@ -287,7 +287,7 @@ public class CreateBlueprint implements Callable<Integer> {
 
                 // extra params.
                 ConcurrentHashMap<String, Object> extraParams = service.getExtraParams();
-                String storageClass = (String) params.get("storage-class");
+                String storageClass = (String) extraParams.get("storage-class");
 
                 // show external ip of ingress controller nginx to register ingress host with the external ip of it
                 // to public dns server.
@@ -317,7 +317,7 @@ public class CreateBlueprint implements Callable<Integer> {
 
                 // extra params.
                 ConcurrentHashMap<String, Object> extraParams = service.getExtraParams();
-                String storageClass = (String) params.get("storage-class");
+                String storageClass = (String) extraParams.get("storage-class");
 
                 // show external ip of ingress controller nginx to register ingress host with the external ip of it
                 // to public dns server.
@@ -381,7 +381,7 @@ public class CreateBlueprint implements Callable<Integer> {
 
                 // extra params.
                 ConcurrentHashMap<String, Object> extraParams = service.getExtraParams();
-                String storageClass = (String) params.get("storage-class");
+                String storageClass = (String) extraParams.get("storage-class");
 
                 // show external ip of ingress controller nginx to register ingress host with the external ip of it
                 // to public dns server.
@@ -438,8 +438,8 @@ public class CreateBlueprint implements Callable<Integer> {
 
                 // extra params.
                 ConcurrentHashMap<String, Object> extraParams = service.getExtraParams();
-                String sparkThriftServerStorageClass = (String) params.get("spark-thrift-server-storage-class");
-                String trinoStorageClass = (String) params.get("trino-storage-class");
+                String sparkThriftServerStorageClass = (String) extraParams.get("spark-thrift-server-storage-class");
+                String trinoStorageClass = (String) extraParams.get("trino-storage-class");
 
                 // show external ip of ingress controller nginx to register ingress host with the external ip of it
                 // to public dns server.
@@ -484,7 +484,7 @@ public class CreateBlueprint implements Callable<Integer> {
 
                 // extra params.
                 ConcurrentHashMap<String, Object> extraParams = service.getExtraParams();
-                String storageClass = (String) params.get("storage-class");
+                String storageClass = (String) extraParams.get("storage-class");
 
                 // show external ip of ingress controller nginx to register ingress host with the external ip of it
                 // to public dns server.
@@ -518,7 +518,7 @@ public class CreateBlueprint implements Callable<Integer> {
 
                 // extra params.
                 ConcurrentHashMap<String, Object> extraParams = service.getExtraParams();
-                String storageClass = (String) params.get("storage-class");
+                String storageClass = (String) extraParams.get("storage-class");
 
                 // show external ip of ingress controller nginx to register ingress host with the external ip of it
                 // to public dns server.

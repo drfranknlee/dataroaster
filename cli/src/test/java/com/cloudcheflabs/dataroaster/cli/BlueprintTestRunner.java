@@ -1,7 +1,10 @@
 package com.cloudcheflabs.dataroaster.cli;
 
+import com.cedarsoftware.util.io.JsonWriter;
 import com.cloudcheflabs.dataroaster.cli.domain.BlueprintGraph;
 import com.cloudcheflabs.dataroaster.common.util.FileUtils;
+import com.cloudcheflabs.dataroaster.common.util.JsonUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.yaml.snakeyaml.Yaml;
 
@@ -206,7 +209,7 @@ public class BlueprintTestRunner {
 
         blueprintGraph.setServiceDependencyList(serviceDependencyList);
 
-        //System.out.printf("serviceDependencyList - size: %d\n%s", blueprintGraph.getServiceDependencyList().size(), JsonWriter.formatJson(JsonUtils.toJson(new ObjectMapper(), blueprintGraph.getServiceDependencyList())));
+        System.out.printf("serviceDependencyList - size: %d\n%s", blueprintGraph.getServiceDependencyList().size(), JsonWriter.formatJson(JsonUtils.toJson(new ObjectMapper(), blueprintGraph.getServiceDependencyList())));
     }
 
     private void setDependentServiceRecursively(Set<String> registeredServiceSet,
