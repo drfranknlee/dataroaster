@@ -146,6 +146,7 @@ public class CommandUtils {
         System.out.println("\n");
         System.out.println("Before moving on, make sure that your Ingress Hosts have been registered \nwith the external IP Address of Ingress Controller NGINX Service to your public DNS server.");
 
+        cnsl.flush();
         String yN = cnsl.readLine("Continue(y/N) : ");
         if(yN != null) {
             if(yN.toLowerCase().equals("n") || yN.toLowerCase().equals("no")) {

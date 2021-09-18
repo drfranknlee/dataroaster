@@ -58,6 +58,7 @@ public class DeleteBlueprint implements Callable<Integer> {
         System.out.println("\n");
         System.out.printf("All the services defined in blueprint will be deleted in project [%s] and cluster [%s]...\n", projectName, clusterName);
         System.out.println("\n");
+        cnsl.flush();
         String yN = cnsl.readLine("Continue(y/N) : ");
         if(yN != null) {
             if(yN.toLowerCase().equals("n") || yN.toLowerCase().equals("no")) {
