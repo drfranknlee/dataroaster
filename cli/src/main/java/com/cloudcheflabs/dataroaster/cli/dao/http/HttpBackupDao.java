@@ -8,6 +8,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 
 import java.io.IOException;
+import java.util.Base64;
 
 public class HttpBackupDao extends AbstractHttpClient implements BackupDao {
 
@@ -27,8 +28,8 @@ public class HttpBackupDao extends AbstractHttpClient implements BackupDao {
         content += "&service_def_id=" + serviceDefId;
         content += "&cluster_id=" + clusterId;
         content += "&s3_bucket=" + s3Bucket;
-        content += "&s3_access_key=" + s3AccessKey;
-        content += "&s3_secret_key=" + s3SecretKey;
+        content += "&s3_access_key=" + Base64.getEncoder().encodeToString(s3AccessKey.getBytes());
+        content += "&s3_secret_key=" + Base64.getEncoder().encodeToString(s3SecretKey.getBytes());
         content += "&s3_endpoint=" + s3Endpoint;
 
         RequestBody body = RequestBody.create(mediaType, content);
