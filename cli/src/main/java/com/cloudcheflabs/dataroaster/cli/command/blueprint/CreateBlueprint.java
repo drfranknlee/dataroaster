@@ -178,8 +178,8 @@ public class CreateBlueprint implements Callable<Integer> {
                 String jupyterhubGithubClientId = (String) params.get("jupyterhub-github-client-id");
                 String jupyterhubGithubClientSecret = (String) params.get("jupyterhub-github-client-secret");
                 String jupyterhubIngressHost = (String) params.get("jupyterhub-ingress-host");
-                String jupyterhubStorageSize = (String) params.get("jupyterhub-storage-size");
-                String redashStorageSize = (String) params.get("redash-storage-size");
+                String jupyterhubStorageSize = String.valueOf(params.get("jupyterhub-storage-size"));
+                String redashStorageSize = String.valueOf(params.get("redash-storage-size"));
 
                 // extra params.
                 ConcurrentHashMap<String, Object> extraParams = service.getExtraParams();
@@ -248,7 +248,7 @@ public class CreateBlueprint implements Callable<Integer> {
                 String s3AccessKey = (String) params.get("s3-access-key");
                 String s3SecretKey = (String) params.get("s3-secret-key");
                 String s3Endpoint = (String) params.get("s3-endpoint");
-                String storageSize = (String) params.get("storage-size");
+                String storageSize = String.valueOf(params.get("storage-size"));
 
                 // extra params.
                 ConcurrentHashMap<String, Object> extraParams = service.getExtraParams();
@@ -313,7 +313,7 @@ public class CreateBlueprint implements Callable<Integer> {
             } else if(serviceName.equals(CLIConstants.SERVICE_METRICS_MONITORING)) {
                 // params.
                 ConcurrentHashMap<String, Object> params = service.getParams();
-                String storageSize = (String) params.get("storage-size");
+                String storageSize = String.valueOf(params.get("storage-size"));
 
                 // extra params.
                 ConcurrentHashMap<String, Object> extraParams = service.getExtraParams();
@@ -368,12 +368,12 @@ public class CreateBlueprint implements Callable<Integer> {
                 ConcurrentHashMap<String, Object> params = service.getParams();
                 String coreHost = (String) params.get("core-host");
                 String notaryHost = (String) params.get("notary-host");
-                String registryStorageSize = (String) params.get("registry-storage-size");
-                String chartmuseumStorageSize = (String) params.get("chartmuseum-storage-size");
-                String jobserviceStorageSize = (String) params.get("jobservice-storage-size");
-                String databaseStorageSize = (String) params.get("database-storage-size");
-                String redisStorageSize = (String) params.get("redis-storage-size");
-                String trivyStorageSize = (String) params.get("trivy-storage-size");
+                String registryStorageSize = String.valueOf(params.get("registry-storage-size"));
+                String chartmuseumStorageSize = String.valueOf(params.get("chartmuseum-storage-size"));
+                String jobserviceStorageSize = String.valueOf(params.get("jobservice-storage-size"));
+                String databaseStorageSize = String.valueOf(params.get("database-storage-size"));
+                String redisStorageSize = String.valueOf(params.get("redis-storage-size"));
+                String trivyStorageSize = String.valueOf(params.get("trivy-storage-size"));
                 String s3Bucket = (String) params.get("s3-bucket");
                 String s3AccessKey = (String) params.get("s3-access-key");
                 String s3SecretKey = (String) params.get("s3-secret-key");
@@ -425,15 +425,15 @@ public class CreateBlueprint implements Callable<Integer> {
                 String s3AccessKey = (String) params.get("s3-access-key");
                 String s3SecretKey = (String) params.get("s3-secret-key");
                 String s3Endpoint = (String) params.get("s3-endpoint");
-                String sparkThriftServerExecutors = (String) params.get("spark-thrift-server-executors");
-                String sparkThriftServerExecutorMemory = (String) params.get("spark-thrift-server-executor-memory");
-                String sparkThriftServerExecutorCores = (String) params.get("spark-thrift-server-executor-cores");
-                String sparkThriftServerDriverMemory = (String) params.get("spark-thrift-server-driver-memory");
-                String trinoWorkers = (String) params.get("trino-workers");
-                String trinoServerMaxMemory = (String) params.get("trino-server-max-memory");
-                String trinoCores = (String) params.get("trino-cores");
-                String trinoTempDataStorage = (String) params.get("trino-temp-data-storage");
-                String trinoDataStorage = (String) params.get("trino-data-storage");
+                String sparkThriftServerExecutors = String.valueOf(params.get("spark-thrift-server-executors"));
+                String sparkThriftServerExecutorMemory = String.valueOf(params.get("spark-thrift-server-executor-memory"));
+                String sparkThriftServerExecutorCores = String.valueOf(params.get("spark-thrift-server-executor-cores"));
+                String sparkThriftServerDriverMemory = String.valueOf(params.get("spark-thrift-server-driver-memory"));
+                String trinoWorkers = String.valueOf(params.get("trino-workers"));
+                String trinoServerMaxMemory = String.valueOf(params.get("trino-server-max-memory"));
+                String trinoCores = String.valueOf(params.get("trino-cores"));
+                String trinoTempDataStorage = String.valueOf(params.get("trino-temp-data-storage"));
+                String trinoDataStorage = String.valueOf(params.get("trino-data-storage"));
 
 
                 // extra params.
@@ -478,9 +478,9 @@ public class CreateBlueprint implements Callable<Integer> {
 
                 // params.
                 ConcurrentHashMap<String, Object> params = service.getParams();
-                String kafkaReplicaCount = (String) params.get("kafka-replica-count");
-                String kafkaStorageSize = (String) params.get("kafka-storage-size");
-                String zkReplicaCount = (String) params.get("zk-replica-count");
+                String kafkaReplicaCount = String.valueOf(params.get("kafka-replica-count"));
+                String kafkaStorageSize = String.valueOf(params.get("kafka-storage-size"));
+                String zkReplicaCount = String.valueOf(params.get("zk-replica-count"));
 
                 // extra params.
                 ConcurrentHashMap<String, Object> extraParams = service.getExtraParams();
@@ -514,7 +514,7 @@ public class CreateBlueprint implements Callable<Integer> {
                 String s3AccessKey = (String) params.get("s3-access-key");
                 String s3SecretKey = (String) params.get("s3-secret-key");
                 String s3Endpoint = (String) params.get("s3-endpoint");
-                String storageSize = (String) params.get("storage-size");
+                String storageSize = String.valueOf(params.get("storage-size"));
 
                 // extra params.
                 ConcurrentHashMap<String, Object> extraParams = service.getExtraParams();
