@@ -62,10 +62,10 @@ public class DeleteIngressController implements Callable<Integer> {
 
         System.out.printf("\n");
 
-        String serviceId = cnsl.readLine("Select Service to be deleted : ");
+        String serviceId = cnsl.readLine("Select Service ID to be deleted : ");
         while(serviceId.equals("")) {
             System.err.println("service id is required!");
-            serviceId = cnsl.readLine("Select Service to be deleted : ");
+            serviceId = cnsl.readLine("Select Service ID to be deleted : ");
             if(!serviceId.equals("")) {
                 break;
             }

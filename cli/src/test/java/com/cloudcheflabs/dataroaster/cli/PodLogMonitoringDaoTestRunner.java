@@ -119,7 +119,7 @@ public class PodLogMonitoringDaoTestRunner {
             }
         }
 
-        String serviceId = cnsl.readLine("Select Service to be deleted : ");
+        String serviceId = cnsl.readLine("Select Service ID to be deleted : ");
 
         // delete pod log monitoring.
         PodLogMonitoringDao podLogMonitoringDao = applicationContext.getBean(PodLogMonitoringDao.class);
