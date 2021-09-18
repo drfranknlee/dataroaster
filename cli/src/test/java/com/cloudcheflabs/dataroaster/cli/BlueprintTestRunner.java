@@ -19,8 +19,9 @@ public class BlueprintTestRunner {
     @Test
     public void readBlueprint() throws Exception {
 
-        String blueprintYaml = "blueprint/blueprint.yaml";
-        String blueprint = FileUtils.fileToString(blueprintYaml, true);
+        String blueprintYaml = System.getProperty("blueprintYaml", "blueprint/blueprint.yaml");
+        boolean fromClasspath = Boolean.valueOf(System.getProperty("fromClasspath", "true"));
+        String blueprint = FileUtils.fileToString(blueprintYaml, fromClasspath);
 
         InputStream inputStream = new ByteArrayInputStream(blueprint.getBytes());
         Yaml yaml = new Yaml();
