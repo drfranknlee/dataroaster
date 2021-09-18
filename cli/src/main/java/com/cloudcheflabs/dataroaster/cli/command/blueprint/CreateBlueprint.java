@@ -15,6 +15,7 @@ import org.springframework.context.ApplicationContext;
 import picocli.CommandLine;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -142,20 +143,21 @@ public class CreateBlueprint implements Callable<Integer> {
                     throw new RuntimeException("error with creating ingress controller.");
                 }
             } else if(serviceName.equals(CLIConstants.SERVICE_BACKUP)) {
-                // show external ip of ingress controller nginx to register ingress host with the external ip of it
-                // to public dns server.
-                if(dependsOnIngressController) {
-                    ret = CommandUtils.makeSureIngressHostRegistered(configProps, clusterId, cnsl);
-                    if(ret != 0) {
-                        throw new RuntimeException("error with registering ingress host.");
-                    }
-                }
                 // params.
                 ConcurrentHashMap<String, Object> params = service.getParams();
                 String s3Bucket = (String) params.get("s3-bucket");
                 String s3AccessKey = (String) params.get("s3-access-key");
                 String s3SecretKey = (String) params.get("s3-secret-key");
                 String s3Endpoint = (String) params.get("s3-endpoint");
+
+                // show external ip of ingress controller nginx to register ingress host with the external ip of it
+                // to public dns server.
+                if(dependsOnIngressController) {
+                    ret = CommandUtils.makeSureIngressHostRegistered(configProps, clusterId, null, cnsl);
+                    if(ret != 0) {
+                        throw new RuntimeException("error with registering ingress host.");
+                    }
+                }
 
                 System.out.println("creating backup...");
                 ret = CommandUtils.createBackup(
@@ -170,14 +172,6 @@ public class CreateBlueprint implements Callable<Integer> {
                     throw new RuntimeException("error with creating backup.");
                 }
             } else if(serviceName.equals(CLIConstants.SERVICE_ANALYTICS)) {
-                // show external ip of ingress controller nginx to register ingress host with the external ip of it
-                // to public dns server.
-                if(dependsOnIngressController) {
-                    ret = CommandUtils.makeSureIngressHostRegistered(configProps, clusterId, cnsl);
-                    if(ret != 0) {
-                        throw new RuntimeException("error with registering ingress host.");
-                    }
-                }
 
                 // params.
                 ConcurrentHashMap<String, Object> params = service.getParams();
@@ -190,6 +184,15 @@ public class CreateBlueprint implements Callable<Integer> {
                 // extra params.
                 ConcurrentHashMap<String, Object> extraParams = service.getExtraParams();
                 String storageClass = (String) params.get("storage-class");
+
+                // show external ip of ingress controller nginx to register ingress host with the external ip of it
+                // to public dns server.
+                if(dependsOnIngressController) {
+                    ret = CommandUtils.makeSureIngressHostRegistered(configProps, clusterId, Arrays.asList(jupyterhubIngressHost), cnsl);
+                    if(ret != 0) {
+                        throw new RuntimeException("error with registering ingress host.");
+                    }
+                }
 
                 System.out.println("creating analytics...");
                 ret = CommandUtils.createAnalytics(
@@ -206,14 +209,6 @@ public class CreateBlueprint implements Callable<Integer> {
                     throw new RuntimeException("error with creating analytics.");
                 }
             } else if(serviceName.equals(CLIConstants.SERVICE_CICD)) {
-                // show external ip of ingress controller nginx to register ingress host with the external ip of it
-                // to public dns server.
-                if(dependsOnIngressController) {
-                    ret = CommandUtils.makeSureIngressHostRegistered(configProps, clusterId, cnsl);
-                    if(ret != 0) {
-                        throw new RuntimeException("error with registering ingress host.");
-                    }
-                }
 
                 // params.
                 ConcurrentHashMap<String, Object> params = service.getParams();
@@ -223,6 +218,15 @@ public class CreateBlueprint implements Callable<Integer> {
                 // extra params.
                 ConcurrentHashMap<String, Object> extraParams = service.getExtraParams();
                 String storageClass = (String) params.get("storage-class");
+
+                // show external ip of ingress controller nginx to register ingress host with the external ip of it
+                // to public dns server.
+                if(dependsOnIngressController) {
+                    ret = CommandUtils.makeSureIngressHostRegistered(configProps, clusterId, Arrays.asList(argocdIngressHost, jenkinsIngressHost), cnsl);
+                    if(ret != 0) {
+                        throw new RuntimeException("error with registering ingress host.");
+                    }
+                }
 
                 System.out.println("creating cicd...");
                 ret = CommandUtils.createCiCd(
@@ -237,14 +241,6 @@ public class CreateBlueprint implements Callable<Integer> {
                 }
 
             } else if(serviceName.equals(CLIConstants.SERVICE_DATA_CATALOG)) {
-                // show external ip of ingress controller nginx to register ingress host with the external ip of it
-                // to public dns server.
-                if(dependsOnIngressController) {
-                    ret = CommandUtils.makeSureIngressHostRegistered(configProps, clusterId, cnsl);
-                    if(ret != 0) {
-                        throw new RuntimeException("error with registering ingress host.");
-                    }
-                }
 
                 // params.
                 ConcurrentHashMap<String, Object> params = service.getParams();
@@ -257,6 +253,15 @@ public class CreateBlueprint implements Callable<Integer> {
                 // extra params.
                 ConcurrentHashMap<String, Object> extraParams = service.getExtraParams();
                 String storageClass = (String) params.get("storage-class");
+
+                // show external ip of ingress controller nginx to register ingress host with the external ip of it
+                // to public dns server.
+                if(dependsOnIngressController) {
+                    ret = CommandUtils.makeSureIngressHostRegistered(configProps, clusterId, null, cnsl);
+                    if(ret != 0) {
+                        throw new RuntimeException("error with registering ingress host.");
+                    }
+                }
 
                 System.out.println("creating data catalog...");
                 ret = CommandUtils.createDataCatalog(
@@ -274,14 +279,6 @@ public class CreateBlueprint implements Callable<Integer> {
                     throw new RuntimeException("error with creating data catalog.");
                 }
             } else if(serviceName.equals(CLIConstants.SERVICE_DISTRIBUTED_TRACING)) {
-                // show external ip of ingress controller nginx to register ingress host with the external ip of it
-                // to public dns server.
-                if(dependsOnIngressController) {
-                    ret = CommandUtils.makeSureIngressHostRegistered(configProps, clusterId, cnsl);
-                    if(ret != 0) {
-                        throw new RuntimeException("error with registering ingress host.");
-                    }
-                }
 
                 // params.
                 ConcurrentHashMap<String, Object> params = service.getParams();
@@ -291,6 +288,15 @@ public class CreateBlueprint implements Callable<Integer> {
                 // extra params.
                 ConcurrentHashMap<String, Object> extraParams = service.getExtraParams();
                 String storageClass = (String) params.get("storage-class");
+
+                // show external ip of ingress controller nginx to register ingress host with the external ip of it
+                // to public dns server.
+                if(dependsOnIngressController) {
+                    ret = CommandUtils.makeSureIngressHostRegistered(configProps, clusterId, Arrays.asList(ingressHost), cnsl);
+                    if(ret != 0) {
+                        throw new RuntimeException("error with registering ingress host.");
+                    }
+                }
 
                 System.out.println("creating distributed tracing...");
                 ret = CommandUtils.createDistributedTracing(
@@ -305,15 +311,6 @@ public class CreateBlueprint implements Callable<Integer> {
                 }
 
             } else if(serviceName.equals(CLIConstants.SERVICE_METRICS_MONITORING)) {
-                // show external ip of ingress controller nginx to register ingress host with the external ip of it
-                // to public dns server.
-                if(dependsOnIngressController) {
-                    ret = CommandUtils.makeSureIngressHostRegistered(configProps, clusterId, cnsl);
-                    if(ret != 0) {
-                        throw new RuntimeException("error with registering ingress host.");
-                    }
-                }
-
                 // params.
                 ConcurrentHashMap<String, Object> params = service.getParams();
                 String storageSize = (String) params.get("storage-size");
@@ -321,6 +318,15 @@ public class CreateBlueprint implements Callable<Integer> {
                 // extra params.
                 ConcurrentHashMap<String, Object> extraParams = service.getExtraParams();
                 String storageClass = (String) params.get("storage-class");
+
+                // show external ip of ingress controller nginx to register ingress host with the external ip of it
+                // to public dns server.
+                if(dependsOnIngressController) {
+                    ret = CommandUtils.makeSureIngressHostRegistered(configProps, clusterId, null, cnsl);
+                    if(ret != 0) {
+                        throw new RuntimeException("error with registering ingress host.");
+                    }
+                }
 
                 System.out.println("creating metrics monitoring...");
                 ret = CommandUtils.createMetricsMonitoring(
@@ -333,18 +339,19 @@ public class CreateBlueprint implements Callable<Integer> {
                     throw new RuntimeException("error with creating metrics monitoring.");
                 }
             } else if(serviceName.equals(CLIConstants.SERVICE_POD_LOG_MONITORING)) {
-                // show external ip of ingress controller nginx to register ingress host with the external ip of it
-                // to public dns server.
-                if(dependsOnIngressController) {
-                    ret = CommandUtils.makeSureIngressHostRegistered(configProps, clusterId, cnsl);
-                    if(ret != 0) {
-                        throw new RuntimeException("error with registering ingress host.");
-                    }
-                }
 
                 // params.
                 ConcurrentHashMap<String, Object> params = service.getParams();
                 String elasticsearchHosts = (String) params.get("elasticsearch-hosts");
+
+                // show external ip of ingress controller nginx to register ingress host with the external ip of it
+                // to public dns server.
+                if(dependsOnIngressController) {
+                    ret = CommandUtils.makeSureIngressHostRegistered(configProps, clusterId, null, cnsl);
+                    if(ret != 0) {
+                        throw new RuntimeException("error with registering ingress host.");
+                    }
+                }
 
                 System.out.println("creating pod log monitoring...");
                 ret = CommandUtils.createPodLogMonitoring(
@@ -357,15 +364,6 @@ public class CreateBlueprint implements Callable<Integer> {
                 }
 
             } else if(serviceName.equals(CLIConstants.SERVICE_PRIVATE_REGISTRY)) {
-                // show external ip of ingress controller nginx to register ingress host with the external ip of it
-                // to public dns server.
-                if(dependsOnIngressController) {
-                    ret = CommandUtils.makeSureIngressHostRegistered(configProps, clusterId, cnsl);
-                    if(ret != 0) {
-                        throw new RuntimeException("error with registering ingress host.");
-                    }
-                }
-
                 // params.
                 ConcurrentHashMap<String, Object> params = service.getParams();
                 String coreHost = (String) params.get("core-host");
@@ -384,6 +382,19 @@ public class CreateBlueprint implements Callable<Integer> {
                 // extra params.
                 ConcurrentHashMap<String, Object> extraParams = service.getExtraParams();
                 String storageClass = (String) params.get("storage-class");
+
+                // show external ip of ingress controller nginx to register ingress host with the external ip of it
+                // to public dns server.
+                if(dependsOnIngressController) {
+                    ret = CommandUtils.makeSureIngressHostRegistered(
+                            configProps,
+                            clusterId,
+                            Arrays.asList(coreHost, notaryHost),
+                            cnsl);
+                    if(ret != 0) {
+                        throw new RuntimeException("error with registering ingress host.");
+                    }
+                }
 
                 System.out.println("creating private registry...");
                 ret = CommandUtils.createPrivateRegistry(
@@ -407,14 +418,6 @@ public class CreateBlueprint implements Callable<Integer> {
                     throw new RuntimeException("error with creating private registry.");
                 }
             } else if(serviceName.equals(CLIConstants.SERVICE_QUERY_ENGINE)) {
-                // show external ip of ingress controller nginx to register ingress host with the external ip of it
-                // to public dns server.
-                if(dependsOnIngressController) {
-                    ret = CommandUtils.makeSureIngressHostRegistered(configProps, clusterId, cnsl);
-                    if(ret != 0) {
-                        throw new RuntimeException("error with registering ingress host.");
-                    }
-                }
 
                 // params.
                 ConcurrentHashMap<String, Object> params = service.getParams();
@@ -437,6 +440,15 @@ public class CreateBlueprint implements Callable<Integer> {
                 ConcurrentHashMap<String, Object> extraParams = service.getExtraParams();
                 String sparkThriftServerStorageClass = (String) params.get("spark-thrift-server-storage-class");
                 String trinoStorageClass = (String) params.get("trino-storage-class");
+
+                // show external ip of ingress controller nginx to register ingress host with the external ip of it
+                // to public dns server.
+                if(dependsOnIngressController) {
+                    ret = CommandUtils.makeSureIngressHostRegistered(configProps, clusterId, null, cnsl);
+                    if(ret != 0) {
+                        throw new RuntimeException("error with registering ingress host.");
+                    }
+                }
 
                 System.out.println("creating query engine...");
                 ret = CommandUtils.createQueryEngine(
@@ -463,14 +475,6 @@ public class CreateBlueprint implements Callable<Integer> {
                 }
 
             } else if(serviceName.equals(CLIConstants.SERVICE_STREAMING)) {
-                // show external ip of ingress controller nginx to register ingress host with the external ip of it
-                // to public dns server.
-                if(dependsOnIngressController) {
-                    ret = CommandUtils.makeSureIngressHostRegistered(configProps, clusterId, cnsl);
-                    if(ret != 0) {
-                        throw new RuntimeException("error with registering ingress host.");
-                    }
-                }
 
                 // params.
                 ConcurrentHashMap<String, Object> params = service.getParams();
@@ -481,6 +485,15 @@ public class CreateBlueprint implements Callable<Integer> {
                 // extra params.
                 ConcurrentHashMap<String, Object> extraParams = service.getExtraParams();
                 String storageClass = (String) params.get("storage-class");
+
+                // show external ip of ingress controller nginx to register ingress host with the external ip of it
+                // to public dns server.
+                if(dependsOnIngressController) {
+                    ret = CommandUtils.makeSureIngressHostRegistered(configProps, clusterId, null, cnsl);
+                    if(ret != 0) {
+                        throw new RuntimeException("error with registering ingress host.");
+                    }
+                }
 
                 System.out.println("creating streaming...");
                 ret = CommandUtils.createStreaming(
@@ -495,15 +508,6 @@ public class CreateBlueprint implements Callable<Integer> {
                     throw new RuntimeException("error with creating streaming.");
                 }
             } else if(serviceName.equals(CLIConstants.SERVICE_WORKFLOW)) {
-                // show external ip of ingress controller nginx to register ingress host with the external ip of it
-                // to public dns server.
-                if(dependsOnIngressController) {
-                    ret = CommandUtils.makeSureIngressHostRegistered(configProps, clusterId, cnsl);
-                    if(ret != 0) {
-                        throw new RuntimeException("error with registering ingress host.");
-                    }
-                }
-
                 // params.
                 ConcurrentHashMap<String, Object> params = service.getParams();
                 String s3Bucket = (String) params.get("s3-bucket");
@@ -515,6 +519,15 @@ public class CreateBlueprint implements Callable<Integer> {
                 // extra params.
                 ConcurrentHashMap<String, Object> extraParams = service.getExtraParams();
                 String storageClass = (String) params.get("storage-class");
+
+                // show external ip of ingress controller nginx to register ingress host with the external ip of it
+                // to public dns server.
+                if(dependsOnIngressController) {
+                    ret = CommandUtils.makeSureIngressHostRegistered(configProps, clusterId, null, cnsl);
+                    if(ret != 0) {
+                        throw new RuntimeException("error with registering ingress host.");
+                    }
+                }
 
                 System.out.println("creating workflow...");
                 ret = CommandUtils.createWorkflow(

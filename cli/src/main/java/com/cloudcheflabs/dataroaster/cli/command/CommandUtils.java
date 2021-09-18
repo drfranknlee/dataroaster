@@ -107,6 +107,7 @@ public class CommandUtils {
 
     public static int makeSureIngressHostRegistered(ConfigProps configProps,
                                                     String clusterId,
+                                                    List<String> ingressHosts,
                                                     java.io.Console cnsl) {
         ApplicationContext applicationContext = SpringContextSingleton.getInstance();
         IngressControllerDao ingressControllerDao = applicationContext.getBean(IngressControllerDao.class);
@@ -136,7 +137,13 @@ public class CommandUtils {
 
         System.out.printf("External IP Address of Ingress Controller NGINX Service: %s\n", externalIp);
         System.out.println("\n");
-        System.out.println("Before moving on, make sure that your Ingress Hosts have been registered with this IP Address to your public DNS server.");
+        if(ingressHosts != null) {
+            for (String ingressHost : ingressHosts) {
+                System.out.printf("Your ingress host: %s\n", ingressHost);
+            }
+        }
+        System.out.println("\n");
+        System.out.println("Before moving on, make sure that your Ingress Hosts have been registered \nwith the external IP Address of Ingress Controller NGINX Service to your public DNS server.");
 
         String yN = cnsl.readLine("Continue(y/N) : ");
         if(yN != null) {
