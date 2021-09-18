@@ -983,6 +983,34 @@ dataroaster backup delete;
 ```
 
 
+### Blueprint
+Manage Blueprint deployment.
+
+#### Create Blueprint
+Deploy all the services defined in blueprint on Kubernetes all at once.
+
+```
+dataroaster blueprint create <params>;
+```
+* `blueprint`: Blueprint yaml file path.
+
+Example:
+```
+dataroaster blueprint create --blueprint /home/opc/blueprint.yaml;
+```
+
+#### Delete Blueprint
+```
+dataroaster blueprint delete <params>;
+```
+* `blueprint`: Blueprint yaml file path.
+
+Example:
+```
+dataroaster blueprint delete --blueprint /home/opc/blueprint.yaml;
+```
+
+
 ## Community
 
 * DataRoaster Community Mailing Lists: https://groups.google.com/g/dataroaster
