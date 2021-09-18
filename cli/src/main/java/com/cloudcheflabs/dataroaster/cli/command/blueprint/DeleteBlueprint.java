@@ -95,153 +95,164 @@ public class DeleteBlueprint implements Callable<Integer> {
             boolean dependsOnIngressController = (depends != null) ? depends.equals(CLIConstants.SERVICE_INGRESS_CONTROLLER) : false;
             // ingress controller.
             if(serviceName.equals(CLIConstants.SERVICE_INGRESS_CONTROLLER)) {
-                String serviceId = CommandUtils.getServiceId(
-                        servicesList,
-                        projectName,
-                        clusterName,
-                        ServiceDef.ServiceTypeEnum.INGRESS_CONTROLLER.name());
+                try {
+                    String serviceId = CommandUtils.getServiceId(
+                            servicesList,
+                            projectName,
+                            clusterName,
+                            ServiceDef.ServiceTypeEnum.INGRESS_CONTROLLER.name());
 
-                System.out.println("deleting ingress controller...");
-                ret = CommandUtils.deleteIngressController(
-                        configProps,
-                        serviceId);
-                if(ret != 0) {
-                    throw new RuntimeException("error with deleting ingress controller.");
+                    System.out.println("deleting ingress controller...");
+                    ret = CommandUtils.deleteIngressController(
+                            configProps,
+                            serviceId);
+                } catch (Exception e) {
+                   System.err.printf("error: %s\n", e.getMessage());
                 }
-
             } else if(serviceName.equals(CLIConstants.SERVICE_BACKUP)) {
-                String serviceId = CommandUtils.getServiceId(
-                        servicesList,
-                        projectName,
-                        clusterName,
-                        ServiceDef.ServiceTypeEnum.BACKUP.name());
+                try {
+                    String serviceId = CommandUtils.getServiceId(
+                            servicesList,
+                            projectName,
+                            clusterName,
+                            ServiceDef.ServiceTypeEnum.BACKUP.name());
 
-                System.out.println("deleting backup...");
-                ret = CommandUtils.deleteBackup(
-                        configProps,
-                        serviceId);
-                if(ret != 0) {
-                    throw new RuntimeException("error with deleting backup.");
+                    System.out.println("deleting backup...");
+                    ret = CommandUtils.deleteBackup(
+                            configProps,
+                            serviceId);
+                } catch (Exception e) {
+                    System.err.printf("error: %s\n", e.getMessage());
                 }
             } else if(serviceName.equals(CLIConstants.SERVICE_ANALYTICS)) {
-                String serviceId = CommandUtils.getServiceId(
-                        servicesList,
-                        projectName,
-                        clusterName,
-                        ServiceDef.ServiceTypeEnum.ANALYTICS.name());
+                try {
+                    String serviceId = CommandUtils.getServiceId(
+                            servicesList,
+                            projectName,
+                            clusterName,
+                            ServiceDef.ServiceTypeEnum.ANALYTICS.name());
 
-                System.out.println("deleting analytics...");
-                ret = CommandUtils.deleteAnalytics(configProps, serviceId);
-                if(ret != 0) {
-                    throw new RuntimeException("error with deleting analytics.");
+                    System.out.println("deleting analytics...");
+                    ret = CommandUtils.deleteAnalytics(configProps, serviceId);
+                } catch (Exception e) {
+                    System.err.printf("error: %s\n", e.getMessage());
                 }
             } else if(serviceName.equals(CLIConstants.SERVICE_CICD)) {
-                String serviceId = CommandUtils.getServiceId(
-                        servicesList,
-                        projectName,
-                        clusterName,
-                        ServiceDef.ServiceTypeEnum.CI_CD.name());
+                try {
+                    String serviceId = CommandUtils.getServiceId(
+                            servicesList,
+                            projectName,
+                            clusterName,
+                            ServiceDef.ServiceTypeEnum.CI_CD.name());
 
-                System.out.println("deleting cicd...");
-                ret = CommandUtils.deleteCiCd(configProps, serviceId);
-                if(ret != 0) {
-                    throw new RuntimeException("error with deleting cicd.");
+                    System.out.println("deleting cicd...");
+                    ret = CommandUtils.deleteCiCd(configProps, serviceId);
+                } catch (Exception e) {
+                    System.err.printf("error: %s\n", e.getMessage());
                 }
             } else if(serviceName.equals(CLIConstants.SERVICE_DATA_CATALOG)) {
-                String serviceId = CommandUtils.getServiceId(
-                        servicesList,
-                        projectName,
-                        clusterName,
-                        ServiceDef.ServiceTypeEnum.DATA_CATALOG.name());
+                try {
+                    String serviceId = CommandUtils.getServiceId(
+                            servicesList,
+                            projectName,
+                            clusterName,
+                            ServiceDef.ServiceTypeEnum.DATA_CATALOG.name());
 
-                System.out.println("deleting data catalog...");
-                ret = CommandUtils.deleteDataCatalog(configProps, serviceId);
-                if(ret != 0) {
-                    throw new RuntimeException("error with deleting data catalog.");
+                    System.out.println("deleting data catalog...");
+                    ret = CommandUtils.deleteDataCatalog(configProps, serviceId);
+                } catch (Exception e) {
+                    System.err.printf("error: %s\n", e.getMessage());
                 }
             } else if(serviceName.equals(CLIConstants.SERVICE_DISTRIBUTED_TRACING)) {
-                String serviceId = CommandUtils.getServiceId(
-                        servicesList,
-                        projectName,
-                        clusterName,
-                        ServiceDef.ServiceTypeEnum.DISTRIBUTED_TRACING.name());
+                try {
+                    String serviceId = CommandUtils.getServiceId(
+                            servicesList,
+                            projectName,
+                            clusterName,
+                            ServiceDef.ServiceTypeEnum.DISTRIBUTED_TRACING.name());
 
-                System.out.println("deleting distributed tracing...");
-                ret = CommandUtils.deleteDistributedTracing(configProps, serviceId);
-                if(ret != 0) {
-                    throw new RuntimeException("error with deleting distributed tracing.");
+                    System.out.println("deleting distributed tracing...");
+                    ret = CommandUtils.deleteDistributedTracing(configProps, serviceId);
+                } catch (Exception e) {
+                    System.err.printf("error: %s\n", e.getMessage());
                 }
             } else if(serviceName.equals(CLIConstants.SERVICE_METRICS_MONITORING)) {
-                String serviceId = CommandUtils.getServiceId(
-                        servicesList,
-                        projectName,
-                        clusterName,
-                        ServiceDef.ServiceTypeEnum.METRICS_MONITORING.name());
+                try {
+                    String serviceId = CommandUtils.getServiceId(
+                            servicesList,
+                            projectName,
+                            clusterName,
+                            ServiceDef.ServiceTypeEnum.METRICS_MONITORING.name());
 
-                System.out.println("deleting metrics monitoring...");
-                ret = CommandUtils.deleteMetricsMonitoring(configProps, serviceId);
-                if(ret != 0) {
-                    throw new RuntimeException("error with deleting metrics monitoring.");
+                    System.out.println("deleting metrics monitoring...");
+                    ret = CommandUtils.deleteMetricsMonitoring(configProps, serviceId);
+                } catch (Exception e) {
+                    System.err.printf("error: %s\n", e.getMessage());
                 }
             } else if(serviceName.equals(CLIConstants.SERVICE_POD_LOG_MONITORING)) {
-                String serviceId = CommandUtils.getServiceId(
-                        servicesList,
-                        projectName,
-                        clusterName,
-                        ServiceDef.ServiceTypeEnum.POD_LOG_MONITORING.name());
+                try {
+                    String serviceId = CommandUtils.getServiceId(
+                            servicesList,
+                            projectName,
+                            clusterName,
+                            ServiceDef.ServiceTypeEnum.POD_LOG_MONITORING.name());
 
-                System.out.println("deleting pod log monitoring...");
-                ret = CommandUtils.deletePodLogMonitoring(configProps, serviceId);
-                if(ret != 0) {
-                    throw new RuntimeException("error with deleting pod log monitoring.");
+                    System.out.println("deleting pod log monitoring...");
+                    ret = CommandUtils.deletePodLogMonitoring(configProps, serviceId);
+                } catch (Exception e) {
+                    System.err.printf("error: %s\n", e.getMessage());
                 }
             } else if(serviceName.equals(CLIConstants.SERVICE_PRIVATE_REGISTRY)) {
-                String serviceId = CommandUtils.getServiceId(
-                        servicesList,
-                        projectName,
-                        clusterName,
-                        ServiceDef.ServiceTypeEnum.PRIVATE_REGISTRY.name());
+                try {
+                    String serviceId = CommandUtils.getServiceId(
+                            servicesList,
+                            projectName,
+                            clusterName,
+                            ServiceDef.ServiceTypeEnum.PRIVATE_REGISTRY.name());
 
-                System.out.println("deleting private registry...");
-                ret = CommandUtils.deletePrivateRegistry(configProps, serviceId);
-                if(ret != 0) {
-                    throw new RuntimeException("error with deleting private registry.");
+                    System.out.println("deleting private registry...");
+                    ret = CommandUtils.deletePrivateRegistry(configProps, serviceId);
+                } catch (Exception e) {
+                    System.err.printf("error: %s\n", e.getMessage());
                 }
             } else if(serviceName.equals(CLIConstants.SERVICE_QUERY_ENGINE)) {
-                String serviceId = CommandUtils.getServiceId(
-                        servicesList,
-                        projectName,
-                        clusterName,
-                        ServiceDef.ServiceTypeEnum.QUERY_ENGINE.name());
+                try {
+                    String serviceId = CommandUtils.getServiceId(
+                            servicesList,
+                            projectName,
+                            clusterName,
+                            ServiceDef.ServiceTypeEnum.QUERY_ENGINE.name());
 
-                System.out.println("deleting query engine...");
-                ret = CommandUtils.deleteQueryEngine(configProps, serviceId);
-                if(ret != 0) {
-                    throw new RuntimeException("error with deleting query engine.");
+                    System.out.println("deleting query engine...");
+                    ret = CommandUtils.deleteQueryEngine(configProps, serviceId);
+                } catch (Exception e) {
+                    System.err.printf("error: %s\n", e.getMessage());
                 }
             } else if(serviceName.equals(CLIConstants.SERVICE_STREAMING)) {
-                String serviceId = CommandUtils.getServiceId(
-                        servicesList,
-                        projectName,
-                        clusterName,
-                        ServiceDef.ServiceTypeEnum.STREAMING.name());
+                try {
+                    String serviceId = CommandUtils.getServiceId(
+                            servicesList,
+                            projectName,
+                            clusterName,
+                            ServiceDef.ServiceTypeEnum.STREAMING.name());
 
-                System.out.println("deleting streaming...");
-                ret = CommandUtils.deleteStreaming(configProps, serviceId);
-                if(ret != 0) {
-                    throw new RuntimeException("error with deleting streaming.");
+                    System.out.println("deleting streaming...");
+                    ret = CommandUtils.deleteStreaming(configProps, serviceId);
+                } catch (Exception e) {
+                    System.err.printf("error: %s\n", e.getMessage());
                 }
             } else if(serviceName.equals(CLIConstants.SERVICE_WORKFLOW)) {
-                String serviceId = CommandUtils.getServiceId(
-                        servicesList,
-                        projectName,
-                        clusterName,
-                        ServiceDef.ServiceTypeEnum.WORKFLOW.name());
+                try {
+                    String serviceId = CommandUtils.getServiceId(
+                            servicesList,
+                            projectName,
+                            clusterName,
+                            ServiceDef.ServiceTypeEnum.WORKFLOW.name());
 
-                System.out.println("deleting workflow...");
-                ret = CommandUtils.deleteWorkflow(configProps, serviceId);
-                if(ret != 0) {
-                    throw new RuntimeException("error with deleting workflow.");
+                    System.out.println("deleting workflow...");
+                    ret = CommandUtils.deleteWorkflow(configProps, serviceId);
+                } catch (Exception e) {
+                    System.err.printf("error: %s\n", e.getMessage());
                 }
             }
         }
