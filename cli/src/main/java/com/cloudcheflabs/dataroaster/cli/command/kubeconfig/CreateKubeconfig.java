@@ -59,7 +59,7 @@ public class CreateKubeconfig implements Callable<Integer> {
 
         String clusterId = cnsl.readLine("Select Cluster : ");
         while(clusterId.equals("")) {
-            System.err.println("cluster id is required!");
+            System.err.println("cluster id is required!\n");
             clusterId = cnsl.readLine("Select Cluster : ");
             if(!clusterId.equals("")) {
                 break;
