@@ -1,11 +1,11 @@
 package com.cloudcheflabs.dataroaster.cli.command.blueprint;
 
 import com.cloudcheflabs.dataroaster.cli.api.dao.ClusterDao;
-import com.cloudcheflabs.dataroaster.cli.api.dao.IngressControllerDao;
 import com.cloudcheflabs.dataroaster.cli.api.dao.ProjectDao;
 import com.cloudcheflabs.dataroaster.cli.command.CommandUtils;
 import com.cloudcheflabs.dataroaster.cli.config.SpringContextSingleton;
 import com.cloudcheflabs.dataroaster.cli.domain.BlueprintGraph;
+import com.cloudcheflabs.dataroaster.cli.domain.CLIConstants;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
 import com.cloudcheflabs.dataroaster.common.util.FileUtils;
@@ -18,6 +18,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 
 @CommandLine.Command(name = "create",
         subcommands = { CommandLine.HelpCommand.class },
@@ -58,8 +59,11 @@ public class CreateBlueprint implements Callable<Integer> {
         List<BlueprintGraph.Service> serviceDependencyList = blueprintGraph.getServiceDependencyList();
 
         // create project.
-        System.out.println("create project...");
-        CommandUtils.createProject(configProps, project.getName(), project.getDescription());
+        System.out.println("creating project...");
+        int ret = CommandUtils.createProject(configProps, project.getName(), project.getDescription());
+        if(ret != 0) {
+            throw new RuntimeException("error with creating project.");
+        }
 
         // show project list.
         ApplicationContext applicationContext = SpringContextSingleton.getInstance();
@@ -86,8 +90,11 @@ public class CreateBlueprint implements Callable<Integer> {
         }
 
         // create cluster.
-        System.out.println("create cluster...");
-        CommandUtils.createCluster(configProps, cluster.getName(), cluster.getDescription());
+        System.out.println("creating cluster...");
+        ret = CommandUtils.createCluster(configProps, cluster.getName(), cluster.getDescription());
+        if(ret != 0) {
+            throw new RuntimeException("error with creating cluster.");
+        }
 
         ClusterDao clusterDao = applicationContext.getBean(ClusterDao.class);
         restResponse = clusterDao.listClusters(configProps);
@@ -116,26 +123,417 @@ public class CreateBlueprint implements Callable<Integer> {
         File kubeconfigFile = new File(cluster.getKubeconfig());
         String kubeconfigPath = kubeconfigFile.getAbsolutePath();
         String kubeconfig = FileUtils.fileToString(kubeconfigPath, false);
-        CommandUtils.createKubeconfig(configProps, clusterId, kubeconfig);
+        ret = CommandUtils.createKubeconfig(configProps, clusterId, kubeconfig);
+        if(ret != 0) {
+            throw new RuntimeException("error with uploading kubeconfig.");
+        }
+
 
         // create services.
         for(BlueprintGraph.Service service : serviceDependencyList) {
             String serviceName = service.getName();
             String depends = service.getDepends();
-            boolean dependsOnIngressController = (depends != null) ? depends.equals("ingresscontroller") : false;
+            boolean dependsOnIngressController = (depends != null) ? depends.equals(CLIConstants.SERVICE_INGRESS_CONTROLLER) : false;
             // ingress controller.
-            if(serviceName.equals("ingresscontroller")) {
-                CommandUtils.createIngressController(configProps, projectId, clusterId);
-            } else if(serviceName.equals("datacatalog")) {
+            if(serviceName.equals(CLIConstants.SERVICE_INGRESS_CONTROLLER)) {
+                System.out.println("creating ingress controller...");
+                ret = CommandUtils.createIngressController(configProps, projectId, clusterId);
+                if(ret != 0) {
+                    throw new RuntimeException("error with creating ingress controller.");
+                }
+            } else if(serviceName.equals(CLIConstants.SERVICE_BACKUP)) {
                 // show external ip of ingress controller nginx to register ingress host with the external ip of it
                 // to public dns server.
                 if(dependsOnIngressController) {
-                    CommandUtils.makeSureIngressHostRegistered(configProps, clusterId, cnsl);
+                    ret = CommandUtils.makeSureIngressHostRegistered(configProps, clusterId, cnsl);
+                    if(ret != 0) {
+                        throw new RuntimeException("error with registering ingress host.");
+                    }
+                }
+                // params.
+                ConcurrentHashMap<String, Object> params = service.getParams();
+                String s3Bucket = (String) params.get("s3-bucket");
+                String s3AccessKey = (String) params.get("s3-access-key");
+                String s3SecretKey = (String) params.get("s3-secret-key");
+                String s3Endpoint = (String) params.get("s3-endpoint");
+
+                System.out.println("creating backup...");
+                ret = CommandUtils.createBackup(
+                        configProps,
+                        projectId,
+                        clusterId,
+                        s3Bucket,
+                        s3AccessKey,
+                        s3SecretKey,
+                        s3Endpoint);
+                if(ret != 0) {
+                    throw new RuntimeException("error with creating backup.");
+                }
+            } else if(serviceName.equals(CLIConstants.SERVICE_ANALYTICS)) {
+                // show external ip of ingress controller nginx to register ingress host with the external ip of it
+                // to public dns server.
+                if(dependsOnIngressController) {
+                    ret = CommandUtils.makeSureIngressHostRegistered(configProps, clusterId, cnsl);
+                    if(ret != 0) {
+                        throw new RuntimeException("error with registering ingress host.");
+                    }
                 }
 
-                // TODO:
+                // params.
+                ConcurrentHashMap<String, Object> params = service.getParams();
+                String jupyterhubGithubClientId = (String) params.get("jupyterhub-github-client-id");
+                String jupyterhubGithubClientSecret = (String) params.get("jupyterhub-github-client-secret");
+                String jupyterhubIngressHost = (String) params.get("jupyterhub-ingress-host");
+                String jupyterhubStorageSize = (String) params.get("jupyterhub-storage-size");
+                String redashStorageSize = (String) params.get("redash-storage-size");
+
+                // extra params.
+                ConcurrentHashMap<String, Object> extraParams = service.getExtraParams();
+                String storageClass = (String) params.get("storage-class");
+
+                System.out.println("creating analytics...");
+                ret = CommandUtils.createAnalytics(
+                        configProps,
+                        projectId,
+                        clusterId,
+                        jupyterhubGithubClientId,
+                        jupyterhubGithubClientSecret,
+                        jupyterhubIngressHost,
+                        storageClass,
+                        Integer.valueOf(jupyterhubStorageSize),
+                        Integer.valueOf(redashStorageSize));
+                if(ret != 0) {
+                    throw new RuntimeException("error with creating analytics.");
+                }
+            } else if(serviceName.equals(CLIConstants.SERVICE_CICD)) {
+                // show external ip of ingress controller nginx to register ingress host with the external ip of it
+                // to public dns server.
+                if(dependsOnIngressController) {
+                    ret = CommandUtils.makeSureIngressHostRegistered(configProps, clusterId, cnsl);
+                    if(ret != 0) {
+                        throw new RuntimeException("error with registering ingress host.");
+                    }
+                }
+
+                // params.
+                ConcurrentHashMap<String, Object> params = service.getParams();
+                String argocdIngressHost = (String) params.get("argocd-ingress-host");
+                String jenkinsIngressHost = (String) params.get("jenkins-ingress-host");
+
+                // extra params.
+                ConcurrentHashMap<String, Object> extraParams = service.getExtraParams();
+                String storageClass = (String) params.get("storage-class");
+
+                System.out.println("creating cicd...");
+                ret = CommandUtils.createCiCd(
+                        configProps,
+                        projectId,
+                        clusterId,
+                        argocdIngressHost,
+                        jenkinsIngressHost,
+                        storageClass);
+                if(ret != 0) {
+                    throw new RuntimeException("error with creating cicd.");
+                }
+
+            } else if(serviceName.equals(CLIConstants.SERVICE_DATA_CATALOG)) {
+                // show external ip of ingress controller nginx to register ingress host with the external ip of it
+                // to public dns server.
+                if(dependsOnIngressController) {
+                    ret = CommandUtils.makeSureIngressHostRegistered(configProps, clusterId, cnsl);
+                    if(ret != 0) {
+                        throw new RuntimeException("error with registering ingress host.");
+                    }
+                }
+
+                // params.
+                ConcurrentHashMap<String, Object> params = service.getParams();
+                String s3Bucket = (String) params.get("s3-bucket");
+                String s3AccessKey = (String) params.get("s3-access-key");
+                String s3SecretKey = (String) params.get("s3-secret-key");
+                String s3Endpoint = (String) params.get("s3-endpoint");
+                String storageSize = (String) params.get("storage-size");
+
+                // extra params.
+                ConcurrentHashMap<String, Object> extraParams = service.getExtraParams();
+                String storageClass = (String) params.get("storage-class");
+
+                System.out.println("creating data catalog...");
+                ret = CommandUtils.createDataCatalog(
+                        configProps,
+                        projectId,
+                        clusterId,
+                        s3Bucket,
+                        s3AccessKey,
+                        s3SecretKey,
+                        s3Endpoint,
+                        storageClass,
+                        Integer.valueOf(storageSize));
+
+                if(ret != 0) {
+                    throw new RuntimeException("error with creating data catalog.");
+                }
+            } else if(serviceName.equals(CLIConstants.SERVICE_DISTRIBUTED_TRACING)) {
+                // show external ip of ingress controller nginx to register ingress host with the external ip of it
+                // to public dns server.
+                if(dependsOnIngressController) {
+                    ret = CommandUtils.makeSureIngressHostRegistered(configProps, clusterId, cnsl);
+                    if(ret != 0) {
+                        throw new RuntimeException("error with registering ingress host.");
+                    }
+                }
+
+                // params.
+                ConcurrentHashMap<String, Object> params = service.getParams();
+                String ingressHost = (String) params.get("ingress-host");
+                String elasticsearchHostPort = (String) params.get("elasticsearch-host-port");
+
+                // extra params.
+                ConcurrentHashMap<String, Object> extraParams = service.getExtraParams();
+                String storageClass = (String) params.get("storage-class");
+
+                System.out.println("creating distributed tracing...");
+                ret = CommandUtils.createDistributedTracing(
+                        configProps,
+                        projectId,
+                        clusterId,
+                        storageClass,
+                        ingressHost,
+                        elasticsearchHostPort);
+                if(ret != 0) {
+                    throw new RuntimeException("error with creating distributed tracing.");
+                }
+
+            } else if(serviceName.equals(CLIConstants.SERVICE_METRICS_MONITORING)) {
+                // show external ip of ingress controller nginx to register ingress host with the external ip of it
+                // to public dns server.
+                if(dependsOnIngressController) {
+                    ret = CommandUtils.makeSureIngressHostRegistered(configProps, clusterId, cnsl);
+                    if(ret != 0) {
+                        throw new RuntimeException("error with registering ingress host.");
+                    }
+                }
+
+                // params.
+                ConcurrentHashMap<String, Object> params = service.getParams();
+                String storageSize = (String) params.get("storage-size");
+
+                // extra params.
+                ConcurrentHashMap<String, Object> extraParams = service.getExtraParams();
+                String storageClass = (String) params.get("storage-class");
+
+                System.out.println("creating metrics monitoring...");
+                ret = CommandUtils.createMetricsMonitoring(
+                        configProps,
+                        projectId,
+                        clusterId,
+                        storageClass,
+                        storageSize);
+                if(ret != 0) {
+                    throw new RuntimeException("error with creating metrics monitoring.");
+                }
+            } else if(serviceName.equals(CLIConstants.SERVICE_POD_LOG_MONITORING)) {
+                // show external ip of ingress controller nginx to register ingress host with the external ip of it
+                // to public dns server.
+                if(dependsOnIngressController) {
+                    ret = CommandUtils.makeSureIngressHostRegistered(configProps, clusterId, cnsl);
+                    if(ret != 0) {
+                        throw new RuntimeException("error with registering ingress host.");
+                    }
+                }
+
+                // params.
+                ConcurrentHashMap<String, Object> params = service.getParams();
+                String elasticsearchHosts = (String) params.get("elasticsearch-hosts");
+
+                System.out.println("creating pod log monitoring...");
+                ret = CommandUtils.createPodLogMonitoring(
+                        configProps,
+                        projectId,
+                        clusterId,
+                        elasticsearchHosts);
+                if(ret != 0) {
+                    throw new RuntimeException("error with creating pod log monitoring.");
+                }
+
+            } else if(serviceName.equals(CLIConstants.SERVICE_PRIVATE_REGISTRY)) {
+                // show external ip of ingress controller nginx to register ingress host with the external ip of it
+                // to public dns server.
+                if(dependsOnIngressController) {
+                    ret = CommandUtils.makeSureIngressHostRegistered(configProps, clusterId, cnsl);
+                    if(ret != 0) {
+                        throw new RuntimeException("error with registering ingress host.");
+                    }
+                }
+
+                // params.
+                ConcurrentHashMap<String, Object> params = service.getParams();
+                String coreHost = (String) params.get("core-host");
+                String notaryHost = (String) params.get("notary-host");
+                String registryStorageSize = (String) params.get("registry-storage-size");
+                String chartmuseumStorageSize = (String) params.get("chartmuseum-storage-size");
+                String jobserviceStorageSize = (String) params.get("jobservice-storage-size");
+                String databaseStorageSize = (String) params.get("database-storage-size");
+                String redisStorageSize = (String) params.get("redis-storage-size");
+                String trivyStorageSize = (String) params.get("trivy-storage-size");
+                String s3Bucket = (String) params.get("s3-bucket");
+                String s3AccessKey = (String) params.get("s3-access-key");
+                String s3SecretKey = (String) params.get("s3-secret-key");
+                String s3Endpoint = (String) params.get("s3-endpoint");
+
+                // extra params.
+                ConcurrentHashMap<String, Object> extraParams = service.getExtraParams();
+                String storageClass = (String) params.get("storage-class");
+
+                System.out.println("creating private registry...");
+                ret = CommandUtils.createPrivateRegistry(
+                        configProps,
+                        projectId,
+                        clusterId,
+                        coreHost,
+                        notaryHost,
+                        storageClass,
+                        Integer.valueOf(registryStorageSize),
+                        Integer.valueOf(chartmuseumStorageSize),
+                        Integer.valueOf(jobserviceStorageSize),
+                        Integer.valueOf(databaseStorageSize),
+                        Integer.valueOf(redisStorageSize),
+                        Integer.valueOf(trivyStorageSize),
+                        s3Bucket,
+                        s3AccessKey,
+                        s3SecretKey,
+                        s3Endpoint);
+                if(ret != 0) {
+                    throw new RuntimeException("error with creating private registry.");
+                }
+            } else if(serviceName.equals(CLIConstants.SERVICE_QUERY_ENGINE)) {
+                // show external ip of ingress controller nginx to register ingress host with the external ip of it
+                // to public dns server.
+                if(dependsOnIngressController) {
+                    ret = CommandUtils.makeSureIngressHostRegistered(configProps, clusterId, cnsl);
+                    if(ret != 0) {
+                        throw new RuntimeException("error with registering ingress host.");
+                    }
+                }
+
+                // params.
+                ConcurrentHashMap<String, Object> params = service.getParams();
+                String s3Bucket = (String) params.get("s3-bucket");
+                String s3AccessKey = (String) params.get("s3-access-key");
+                String s3SecretKey = (String) params.get("s3-secret-key");
+                String s3Endpoint = (String) params.get("s3-endpoint");
+                String sparkThriftServerExecutors = (String) params.get("spark-thrift-server-executors");
+                String sparkThriftServerExecutorMemory = (String) params.get("spark-thrift-server-executor-memory");
+                String sparkThriftServerExecutorCores = (String) params.get("spark-thrift-server-executor-cores");
+                String sparkThriftServerDriverMemory = (String) params.get("spark-thrift-server-driver-memory");
+                String trinoWorkers = (String) params.get("trino-workers");
+                String trinoServerMaxMemory = (String) params.get("trino-server-max-memory");
+                String trinoCores = (String) params.get("trino-cores");
+                String trinoTempDataStorage = (String) params.get("trino-temp-data-storage");
+                String trinoDataStorage = (String) params.get("trino-data-storage");
+
+
+                // extra params.
+                ConcurrentHashMap<String, Object> extraParams = service.getExtraParams();
+                String sparkThriftServerStorageClass = (String) params.get("spark-thrift-server-storage-class");
+                String trinoStorageClass = (String) params.get("trino-storage-class");
+
+                System.out.println("creating query engine...");
+                ret = CommandUtils.createQueryEngine(
+                        configProps,
+                        projectId,
+                        clusterId,
+                        s3Bucket,
+                        s3AccessKey,
+                        s3SecretKey,
+                        s3Endpoint,
+                        sparkThriftServerStorageClass,
+                        Integer.valueOf(sparkThriftServerExecutors),
+                        Integer.valueOf(sparkThriftServerExecutorMemory),
+                        Integer.valueOf(sparkThriftServerExecutorCores),
+                        Integer.valueOf(sparkThriftServerDriverMemory),
+                        Integer.valueOf(trinoWorkers),
+                        Integer.valueOf(trinoServerMaxMemory),
+                        Integer.valueOf(trinoCores),
+                        Integer.valueOf(trinoTempDataStorage),
+                        Integer.valueOf(trinoDataStorage),
+                        trinoStorageClass);
+                if(ret != 0) {
+                    throw new RuntimeException("error with creating query engine.");
+                }
+
+            } else if(serviceName.equals(CLIConstants.SERVICE_STREAMING)) {
+                // show external ip of ingress controller nginx to register ingress host with the external ip of it
+                // to public dns server.
+                if(dependsOnIngressController) {
+                    ret = CommandUtils.makeSureIngressHostRegistered(configProps, clusterId, cnsl);
+                    if(ret != 0) {
+                        throw new RuntimeException("error with registering ingress host.");
+                    }
+                }
+
+                // params.
+                ConcurrentHashMap<String, Object> params = service.getParams();
+                String kafkaReplicaCount = (String) params.get("kafka-replica-count");
+                String kafkaStorageSize = (String) params.get("kafka-storage-size");
+                String zkReplicaCount = (String) params.get("zk-replica-count");
+
+                // extra params.
+                ConcurrentHashMap<String, Object> extraParams = service.getExtraParams();
+                String storageClass = (String) params.get("storage-class");
+
+                System.out.println("creating streaming...");
+                ret = CommandUtils.createStreaming(
+                        configProps,
+                        projectId,
+                        clusterId,
+                        Integer.valueOf(kafkaReplicaCount),
+                        Integer.valueOf(kafkaStorageSize),
+                        storageClass,
+                        Integer.valueOf(zkReplicaCount));
+                if(ret != 0) {
+                    throw new RuntimeException("error with creating streaming.");
+                }
+            } else if(serviceName.equals(CLIConstants.SERVICE_WORKFLOW)) {
+                // show external ip of ingress controller nginx to register ingress host with the external ip of it
+                // to public dns server.
+                if(dependsOnIngressController) {
+                    ret = CommandUtils.makeSureIngressHostRegistered(configProps, clusterId, cnsl);
+                    if(ret != 0) {
+                        throw new RuntimeException("error with registering ingress host.");
+                    }
+                }
+
+                // params.
+                ConcurrentHashMap<String, Object> params = service.getParams();
+                String s3Bucket = (String) params.get("s3-bucket");
+                String s3AccessKey = (String) params.get("s3-access-key");
+                String s3SecretKey = (String) params.get("s3-secret-key");
+                String s3Endpoint = (String) params.get("s3-endpoint");
+                String storageSize = (String) params.get("storage-size");
+
+                // extra params.
+                ConcurrentHashMap<String, Object> extraParams = service.getExtraParams();
+                String storageClass = (String) params.get("storage-class");
+
+                System.out.println("creating workflow...");
+                ret = CommandUtils.createWorkflow(
+                        configProps,
+                        projectId,
+                        clusterId,
+                        storageClass,
+                        Integer.valueOf(storageSize),
+                        s3Bucket,
+                        s3AccessKey,
+                        s3SecretKey,
+                        s3Endpoint);
+                if(ret != 0) {
+                    throw new RuntimeException("error with creating workflow.");
+                }
             }
         }
+
+        System.out.println("all the services in blueprint created successfully.");
 
         return 0;
     }

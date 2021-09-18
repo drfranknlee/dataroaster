@@ -1,7 +1,7 @@
 package com.cloudcheflabs.dataroaster.cli.command.cicd;
 
-import com.cloudcheflabs.dataroaster.cli.api.dao.CiCdDao;
 import com.cloudcheflabs.dataroaster.cli.api.dao.ServicesDao;
+import com.cloudcheflabs.dataroaster.cli.command.CommandUtils;
 import com.cloudcheflabs.dataroaster.cli.config.SpringContextSingleton;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
@@ -70,15 +70,6 @@ public class DeleteCiCd implements Callable<Integer> {
         System.out.printf("\n");
 
         // delete.
-        CiCdDao ciCdDao = applicationContext.getBean(CiCdDao.class);
-        restResponse = ciCdDao.deleteCiCd(configProps, Long.valueOf(serviceId));
-
-        if(restResponse.getStatusCode() == 200) {
-            System.out.println("ci/cd service deleted successfully!");
-            return 0;
-        } else {
-            System.err.println(restResponse.getErrorMessage());
-            return -1;
-        }
+        return CommandUtils.deleteCiCd(configProps, serviceId);
     }
 }

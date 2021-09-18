@@ -1,12 +1,13 @@
 package com.cloudcheflabs.dataroaster.cli.command.queryengine;
 
 import com.cloudcheflabs.dataroaster.cli.config.DataRoasterConfig;
+import com.cloudcheflabs.dataroaster.cli.domain.CLIConstants;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import picocli.CommandLine;
 
 import java.util.concurrent.Callable;
 
-@CommandLine.Command(name = "queryengine",
+@CommandLine.Command(name = CLIConstants.SERVICE_QUERY_ENGINE,
         subcommands = {
                 CreateQueryEngine.class,
                 DeleteQueryEngine.class,

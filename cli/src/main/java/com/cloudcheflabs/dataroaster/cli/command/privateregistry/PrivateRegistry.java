@@ -1,12 +1,13 @@
 package com.cloudcheflabs.dataroaster.cli.command.privateregistry;
 
 import com.cloudcheflabs.dataroaster.cli.config.DataRoasterConfig;
+import com.cloudcheflabs.dataroaster.cli.domain.CLIConstants;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import picocli.CommandLine;
 
 import java.util.concurrent.Callable;
 
-@CommandLine.Command(name = "privateregistry",
+@CommandLine.Command(name = CLIConstants.SERVICE_PRIVATE_REGISTRY,
         subcommands = {
                 CreatePrivateRegistry.class,
                 DeletePrivateRegistry.class,

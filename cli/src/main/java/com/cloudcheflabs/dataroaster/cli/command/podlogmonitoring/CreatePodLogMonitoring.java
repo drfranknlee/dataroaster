@@ -1,13 +1,11 @@
 package com.cloudcheflabs.dataroaster.cli.command.podlogmonitoring;
 
 import com.cloudcheflabs.dataroaster.cli.api.dao.ClusterDao;
-import com.cloudcheflabs.dataroaster.cli.api.dao.PodLogMonitoringDao;
 import com.cloudcheflabs.dataroaster.cli.api.dao.ProjectDao;
-import com.cloudcheflabs.dataroaster.cli.api.dao.ServicesDao;
+import com.cloudcheflabs.dataroaster.cli.command.CommandUtils;
 import com.cloudcheflabs.dataroaster.cli.config.SpringContextSingleton;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
-import com.cloudcheflabs.dataroaster.cli.domain.ServiceDef;
 import com.cloudcheflabs.dataroaster.common.util.JsonUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.ApplicationContext;
@@ -94,34 +92,11 @@ public class CreatePodLogMonitoring implements Callable<Integer> {
 
         System.out.printf("\n");
 
-        // get service def id.
-        String serviceDefId = null;
-        ServicesDao serviceDefDao = applicationContext.getBean(ServicesDao.class);
-        restResponse = serviceDefDao.listServiceDef(configProps);
-        List<Map<String, Object>> serviceDefLists =
-                JsonUtils.toMapList(new ObjectMapper(), restResponse.getSuccessMessage());
-        for(Map<String, Object> map : serviceDefLists) {
-            String type = (String) map.get("type");
-            if(type.equals(ServiceDef.ServiceTypeEnum.POD_LOG_MONITORING.name())) {
-                serviceDefId = String.valueOf(map.get("id"));
-                break;
-            }
-        }
-
         // create.
-        PodLogMonitoringDao podLogMonitoringDao = applicationContext.getBean(PodLogMonitoringDao.class);
-        restResponse = podLogMonitoringDao.createPodLogMonitoring(configProps,
-                Long.valueOf(projectId),
-                Long.valueOf(serviceDefId),
-                Long.valueOf(clusterId),
+        return CommandUtils.createPodLogMonitoring(
+                configProps,
+                projectId,
+                clusterId,
                 elasticsearchHosts);
-
-        if(restResponse.getStatusCode() == 200) {
-            System.out.println("pod log monitoring service created successfully!");
-            return 0;
-        } else {
-            System.err.println(restResponse.getErrorMessage());
-            return -1;
-        }
     }
 }

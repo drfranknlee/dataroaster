@@ -1,11 +1,7 @@
 package com.cloudcheflabs.dataroaster.cli.command.project;
 
-import com.cloudcheflabs.dataroaster.cli.api.dao.ProjectDao;
 import com.cloudcheflabs.dataroaster.cli.command.CommandUtils;
-import com.cloudcheflabs.dataroaster.cli.config.SpringContextSingleton;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
-import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
-import org.springframework.context.ApplicationContext;
 import picocli.CommandLine;
 
 import java.util.concurrent.Callable;

@@ -1,12 +1,13 @@
 package com.cloudcheflabs.dataroaster.cli.command.datacatalog;
 
 import com.cloudcheflabs.dataroaster.cli.config.DataRoasterConfig;
+import com.cloudcheflabs.dataroaster.cli.domain.CLIConstants;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import picocli.CommandLine;
 
 import java.util.concurrent.Callable;
 
-@CommandLine.Command(name = "datacatalog",
+@CommandLine.Command(name = CLIConstants.SERVICE_DATA_CATALOG,
         subcommands = {
                 CreateDataCatalog.class,
                 DeleteDataCatalog.class,

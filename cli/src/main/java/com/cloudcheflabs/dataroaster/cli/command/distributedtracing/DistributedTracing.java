@@ -1,12 +1,13 @@
 package com.cloudcheflabs.dataroaster.cli.command.distributedtracing;
 
 import com.cloudcheflabs.dataroaster.cli.config.DataRoasterConfig;
+import com.cloudcheflabs.dataroaster.cli.domain.CLIConstants;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import picocli.CommandLine;
 
 import java.util.concurrent.Callable;
 
-@CommandLine.Command(name = "distributedtracing",
+@CommandLine.Command(name = CLIConstants.SERVICE_DISTRIBUTED_TRACING,
         subcommands = {
                 CreateDistributedTracing.class,
                 DeleteDistributedTracing.class,

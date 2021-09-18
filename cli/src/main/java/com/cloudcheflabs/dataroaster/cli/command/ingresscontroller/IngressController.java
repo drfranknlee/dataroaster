@@ -1,12 +1,13 @@
 package com.cloudcheflabs.dataroaster.cli.command.ingresscontroller;
 
 import com.cloudcheflabs.dataroaster.cli.config.DataRoasterConfig;
+import com.cloudcheflabs.dataroaster.cli.domain.CLIConstants;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import picocli.CommandLine;
 
 import java.util.concurrent.Callable;
 
-@CommandLine.Command(name = "ingresscontroller",
+@CommandLine.Command(name = CLIConstants.SERVICE_INGRESS_CONTROLLER,
         subcommands = {
                 CreateIngressController.class,
                 DeleteIngressController.class,

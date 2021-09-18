@@ -2,6 +2,7 @@ package com.cloudcheflabs.dataroaster.cli.command;
 
 import com.cloudcheflabs.dataroaster.cli.command.analytics.Analytics;
 import com.cloudcheflabs.dataroaster.cli.command.backup.Backup;
+import com.cloudcheflabs.dataroaster.cli.command.blueprint.Blueprint;
 import com.cloudcheflabs.dataroaster.cli.command.cicd.CiCd;
 import com.cloudcheflabs.dataroaster.cli.command.cluster.Cluster;
 import com.cloudcheflabs.dataroaster.cli.command.datacatalog.DataCatalog;
@@ -37,9 +38,10 @@ import picocli.CommandLine;
                 Streaming.class,
                 Analytics.class,
                 Workflow.class,
+                Blueprint.class,
                 CommandLine.HelpCommand.class
         },
-        version = "dataroaster 3.0.0",
+        version = "dataroaster 3.1.0-SNAPSHOT",
         description = "DataRoaster CLI Console.")
 public class Console implements Runnable {
 

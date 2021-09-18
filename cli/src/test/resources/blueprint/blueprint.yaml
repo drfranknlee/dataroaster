@@ -1,10 +1,12 @@
 project:
   name: my-blueprint-project
   description: "My blueprint project description..."
+
 cluster:
   name: my-blueprint-cluster
   description: "My blueprint cluster description..."
   kubeconfig: "/home/opc/.kube/config"
+
 services:
   - name: ingresscontroller
 
@@ -125,10 +127,6 @@ services:
     params:
       properties:
         - velero-s3
-    extra-params:
-      storage-class:
-        property-ref: storage-classes
-        key: storage-class-rwo
 
 properties:
   - name: s3
