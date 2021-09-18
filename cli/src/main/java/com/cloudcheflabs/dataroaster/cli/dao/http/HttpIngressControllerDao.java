@@ -3,6 +3,7 @@ package com.cloudcheflabs.dataroaster.cli.dao.http;
 import com.cloudcheflabs.dataroaster.cli.api.dao.IngressControllerDao;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -74,21 +75,16 @@ public class HttpIngressControllerDao extends AbstractHttpClient implements Ingr
 
         String urlPath = serverUrl + "/api/apis/resource_control/ingress_controller/get_external_ip";
 
-        // parameters in body.
-        String content = "cluster_id=" + clusterId;
+        HttpUrl.Builder urlBuilder = HttpUrl.parse(urlPath).newBuilder();
+        urlBuilder.addQueryParameter("cluster_id", String.valueOf(clusterId));
 
-        RequestBody body = RequestBody.create(mediaType, content);
-        try {
-            Request request = new Request.Builder()
-                    .url(urlPath)
-                    .addHeader("Authorization", "Bearer " + accessToken)
-                    .addHeader("Content-Length", String.valueOf(body.contentLength()))
-                    .get()
-                    .build();
+        String url = urlBuilder.build().toString();
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", "Bearer " + accessToken)
+                .get()
+                .build();
 
-            return ResponseHandler.doCall(client, request);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return ResponseHandler.doCall(client, request);
     }
 }

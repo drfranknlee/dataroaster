@@ -113,7 +113,7 @@ public class CommandUtils {
         IngressControllerDao ingressControllerDao = applicationContext.getBean(IngressControllerDao.class);
 
         int count = 0;
-        int MAX = 5;
+        int MAX = 20;
         String externalIp = null;
         for(int i = 0; i < MAX; i++) {
             RestResponse restResponse = ingressControllerDao.getExternalIpOfIngressControllerNginx(configProps, Long.valueOf(clusterId));
