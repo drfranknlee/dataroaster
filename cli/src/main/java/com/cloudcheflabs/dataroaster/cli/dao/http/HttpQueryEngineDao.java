@@ -3,6 +3,7 @@ package com.cloudcheflabs.dataroaster.cli.dao.http;
 import com.cloudcheflabs.dataroaster.cli.api.dao.QueryEngineDao;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -42,26 +43,26 @@ public class HttpQueryEngineDao extends AbstractHttpClient implements QueryEngin
         String urlPath = serverUrl + "/api/apis/query_engine/create";
 
         // parameters in body.
-        String content = "project_id=" + projectId;
-        content += "&service_def_id=" + serviceDefId;
-        content += "&cluster_id=" + clusterId;
-        content += "&s3_bucket=" + s3Bucket;
-        content += "&s3_access_key=" + s3AccessKey;
-        content += "&s3_secret_key=" + s3SecretKey;
-        content += "&s3_endpoint=" + s3Endpoint;
-        content += "&spark_thrift_server_storage_class=" + sparkThriftServerStorageClass;
-        content += "&spark_thrift_server_executors=" + sparkThriftServerExecutors;
-        content += "&spark_thrift_server_executor_memory=" + sparkThriftServerExecutorMemory;
-        content += "&spark_thrift_server_executor_cores=" + sparkThriftServerExecutorCores;
-        content += "&spark_thrift_server_driver_memory=" + sparkThriftServerDriverMemory;
-        content += "&trino_workers=" + trinoWorkers;
-        content += "&trino_server_max_memory=" + trinoServerMaxMemory;
-        content += "&trino_cores=" + trinoCores;
-        content += "&trino_temp_data_storage=" + trinoTempDataStorage;
-        content += "&trino_data_storage=" + trinoDataStorage;
-        content += "&trino_storage_class=" + trinoStorageClass;
-
-        RequestBody body = RequestBody.create(mediaType, content);
+        RequestBody body = new FormBody.Builder()
+                .add("project_id", String.valueOf(projectId))
+                .add("service_def_id", String.valueOf(serviceDefId))
+                .add("cluster_id", String.valueOf(clusterId))
+                .add("s3_bucket", String.valueOf(s3Bucket))
+                .add("s3_access_key", String.valueOf(s3AccessKey))
+                .add("s3_secret_key", String.valueOf(s3SecretKey))
+                .add("s3_endpoint", String.valueOf(s3Endpoint))
+                .add("spark_thrift_server_storage_class", String.valueOf(sparkThriftServerStorageClass))
+                .add("spark_thrift_server_executors", String.valueOf(sparkThriftServerExecutors))
+                .add("spark_thrift_server_executor_memory", String.valueOf(sparkThriftServerExecutorMemory))
+                .add("spark_thrift_server_executor_cores", String.valueOf(sparkThriftServerExecutorCores))
+                .add("spark_thrift_server_driver_memory", String.valueOf(sparkThriftServerDriverMemory))
+                .add("trino_workers", String.valueOf(trinoWorkers))
+                .add("trino_server_max_memory", String.valueOf(trinoServerMaxMemory))
+                .add("trino_cores", String.valueOf(trinoCores))
+                .add("trino_temp_data_storage", String.valueOf(trinoTempDataStorage))
+                .add("trino_data_storage", String.valueOf(trinoDataStorage))
+                .add("trino_storage_class", String.valueOf(trinoStorageClass))
+                .build();
         try {
             Request request = new Request.Builder()
                     .url(urlPath)

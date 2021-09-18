@@ -1,20 +1,19 @@
-package com.cloudcheflabs.dataroaster.cli.command.analytics;
+package com.cloudcheflabs.dataroaster.cli.command.blueprint;
 
 import com.cloudcheflabs.dataroaster.cli.config.DataRoasterConfig;
-import com.cloudcheflabs.dataroaster.cli.domain.CLIConstants;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import picocli.CommandLine;
 
 import java.util.concurrent.Callable;
 
-@CommandLine.Command(name = CLIConstants.SERVICE_ANALYTICS,
+@CommandLine.Command(name = "blueprint",
         subcommands = {
-                CreateAnalytics.class,
-                DeleteAnalytics.class,
+                CreateBlueprint.class,
+                DeleteBlueprint.class,
                 CommandLine.HelpCommand.class
         },
-        description = "Manage Analytics Service.")
-public class Analytics implements Callable<Integer> {
+        description = "Manage Blueprint Deployment")
+public class Blueprint implements Callable<Integer> {
 
     ConfigProps configProps;
 

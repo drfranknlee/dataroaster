@@ -1,10 +1,7 @@
 package com.cloudcheflabs.dataroaster.cli.command.cluster;
 
-import com.cloudcheflabs.dataroaster.cli.api.dao.ClusterDao;
-import com.cloudcheflabs.dataroaster.cli.config.SpringContextSingleton;
+import com.cloudcheflabs.dataroaster.cli.command.CommandUtils;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
-import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
-import org.springframework.context.ApplicationContext;
 import picocli.CommandLine;
 
 import java.util.concurrent.Callable;
@@ -28,17 +25,6 @@ public class CreateCluster implements Callable<Integer> {
         ConfigProps configProps = parent.configProps;
 
         // create kubernetes cluster.
-        ApplicationContext applicationContext = SpringContextSingleton.getInstance();
-        ClusterDao clusterDao = applicationContext.getBean(ClusterDao.class);
-
-        RestResponse restResponse = clusterDao.createCluster(configProps, name, description);
-
-        if(restResponse.getStatusCode() == 200) {
-            System.out.println("cluster created successfully!");
-            return 0;
-        } else {
-            System.err.println(restResponse.getErrorMessage());
-            return -1;
-        }
+        return CommandUtils.createCluster(configProps, name, description);
     }
 }

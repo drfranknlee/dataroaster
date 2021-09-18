@@ -1,10 +1,12 @@
 package com.cloudcheflabs.dataroaster.cli.command.queryengine;
 
-import com.cloudcheflabs.dataroaster.cli.api.dao.*;
+import com.cloudcheflabs.dataroaster.cli.api.dao.ClusterDao;
+import com.cloudcheflabs.dataroaster.cli.api.dao.ProjectDao;
+import com.cloudcheflabs.dataroaster.cli.api.dao.ResourceControlDao;
+import com.cloudcheflabs.dataroaster.cli.command.CommandUtils;
 import com.cloudcheflabs.dataroaster.cli.config.SpringContextSingleton;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
-import com.cloudcheflabs.dataroaster.cli.domain.ServiceDef;
 import com.cloudcheflabs.dataroaster.common.util.JsonUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.ApplicationContext;
@@ -91,11 +93,15 @@ public class CreateQueryEngine implements Callable<Integer> {
             System.out.printf(format, String.valueOf(map.get("id")), (String) map.get("name"), (String) map.get("description"));
         }
 
-        String projectId = cnsl.readLine("Select Project : ");
-        if(projectId == null) {
-            throw new RuntimeException("project id is required!");
+        String projectId = cnsl.readLine("Select Project ID : ");
+        while(projectId.equals("")) {
+            System.err.println("project id is required!");
+            projectId = cnsl.readLine("Select Project ID : ");
+            if(!projectId.equals("")) {
+                break;
+            }
         }
-
+     
         System.out.printf("\n");
 
 
@@ -118,32 +124,16 @@ public class CreateQueryEngine implements Callable<Integer> {
 
         System.out.printf("\n");
 
-        String clusterId = cnsl.readLine("Select Cluster : ");
-        if(clusterId == null) {
-            throw new RuntimeException("cluster id is required!");
-        }
-
-        System.out.printf("\n");
-
-        // get service def id.
-        String serviceDefId = null;
-        ServicesDao serviceDefDao = applicationContext.getBean(ServicesDao.class);
-        restResponse = serviceDefDao.listServiceDef(configProps);
-
-        // if response status code is not ok, then throw an exception.
-        if(restResponse.getStatusCode() != RestResponse.STATUS_OK) {
-            throw new RuntimeException(restResponse.getErrorMessage());
-        }
-
-        List<Map<String, Object>> serviceDefLists =
-                JsonUtils.toMapList(new ObjectMapper(), restResponse.getSuccessMessage());
-        for(Map<String, Object> map : serviceDefLists) {
-            String type = (String) map.get("type");
-            if(type.equals(ServiceDef.ServiceTypeEnum.QUERY_ENGINE.name())) {
-                serviceDefId = String.valueOf(map.get("id"));
+        String clusterId = cnsl.readLine("Select Cluster ID : ");
+        while(clusterId.equals("")) {
+            System.err.println("cluster id is required!");
+            clusterId = cnsl.readLine("Select Cluster ID : ");
+            if(!clusterId.equals("")) {
                 break;
             }
         }
+      
+        System.out.printf("\n");
 
         // show storage classes.
         ResourceControlDao resourceControlDao = applicationContext.getBean(ResourceControlDao.class);
@@ -171,9 +161,14 @@ public class CreateQueryEngine implements Callable<Integer> {
         System.out.printf("\n");
 
         String sparkThriftServerStorageClass = cnsl.readLine("Select Storage Class for Spark Thrift Server(for instance, nfs) : ");
-        if(sparkThriftServerStorageClass == null) {
-            throw new RuntimeException("spark thrift server storage class is required!");
+        while(sparkThriftServerStorageClass.equals("")) {
+            System.err.println("spark thrift server storage class is required!");
+            sparkThriftServerStorageClass = cnsl.readLine("Select Storage Class for Spark Thrift Server(for instance, nfs) : ");
+            if(!sparkThriftServerStorageClass.equals("")) {
+                break;
+            }
         }
+       
 
         System.out.printf("\n");
 
@@ -190,20 +185,21 @@ public class CreateQueryEngine implements Callable<Integer> {
         System.out.printf("\n");
 
         String trinoStorageClass = cnsl.readLine("Select Storage Class for Trino : ");
-        if(trinoStorageClass == null) {
-            throw new RuntimeException("trino storage class is required!");
+        while(trinoStorageClass.equals("")) {
+            System.err.println("trino storage class is required!");
+            trinoStorageClass = cnsl.readLine("Select Storage Class for Trino : ");
+            if(!trinoStorageClass.equals("")) {
+                break;
+            }
         }
-
+     
         System.out.printf("\n");
 
-
         // create.
-        QueryEngineDao queryEngineDao = applicationContext.getBean(QueryEngineDao.class);
-        restResponse = queryEngineDao.createQueryEngine(
+        return CommandUtils.createQueryEngine(
                 configProps,
-                Long.valueOf(projectId),
-                Long.valueOf(serviceDefId),
-                Long.valueOf(clusterId),
+                projectId,
+                clusterId,
                 s3Bucket,
                 s3AccessKey,
                 s3SecretKey,
@@ -219,13 +215,5 @@ public class CreateQueryEngine implements Callable<Integer> {
                 trinoTempDataStorage,
                 trinoDataStorage,
                 trinoStorageClass);
-
-        if(restResponse.getStatusCode() == 200) {
-            System.out.println("query engine service created successfully!");
-            return 0;
-        } else {
-            System.err.println(restResponse.getErrorMessage());
-            return -1;
-        }
     }
 }

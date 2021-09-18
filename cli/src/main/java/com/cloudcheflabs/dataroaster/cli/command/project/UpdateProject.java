@@ -52,21 +52,33 @@ public class UpdateProject implements Callable<Integer> {
             System.out.printf(format, String.valueOf(map.get("id")), (String) map.get("name"), (String) map.get("description"));
         }
 
-        String projectId = cnsl.readLine("Select Project to be updated : ");
-        if(projectId == null) {
-            throw new RuntimeException("project id is required!");
+        String projectId = cnsl.readLine("Select Project ID to be updated : ");
+        while(projectId.equals("")) {
+            System.err.println("project id is required!");
+            projectId = cnsl.readLine("Select Project ID to be updated : ");
+            if(!projectId.equals("")) {
+                break;
+            }
         }
-
+      
         String name = cnsl.readLine("Enter Project Name : ");
-        if(name == null) {
-            throw new RuntimeException("project name is required!");
-        }
+        while(name.equals("")) {
+            System.err.println("project name is required!");
+            name = cnsl.readLine("Enter Project Name : ");
+            if(!name.equals("")) {
+                break;
+            }
+        }       
 
         String description = cnsl.readLine("Enter Project Description : ");
-        if(description == null) {
-            throw new RuntimeException("project description is required!");
+        while(description.equals("")) {
+            System.err.println("project description is required!");
+            description = cnsl.readLine("Enter Project Description : ");
+            if(!description.equals("")) {
+                break;
+            }
         }
-
+      
         // update project.
         restResponse = projectDao.updateProject(configProps, Long.valueOf(projectId), name, description);
 

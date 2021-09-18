@@ -1,18 +1,19 @@
 package com.cloudcheflabs.dataroaster.cli.command.cicd;
 
 import com.cloudcheflabs.dataroaster.cli.config.DataRoasterConfig;
+import com.cloudcheflabs.dataroaster.cli.domain.CLIConstants;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import picocli.CommandLine;
 
 import java.util.concurrent.Callable;
 
-@CommandLine.Command(name = "cicd",
+@CommandLine.Command(name = CLIConstants.SERVICE_CICD,
         subcommands = {
                 CreateCiCd.class,
                 DeleteCiCd.class,
                 CommandLine.HelpCommand.class
         },
-        description = "Manage CI / CD.")
+        description = "Manage CI / CD Service.")
 public class CiCd implements Callable<Integer> {
 
     ConfigProps configProps;

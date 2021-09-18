@@ -3,6 +3,7 @@ package com.cloudcheflabs.dataroaster.cli.dao.http;
 import com.cloudcheflabs.dataroaster.cli.api.dao.DistributedTracingDao;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -29,15 +30,14 @@ public class HttpDistributedTracingDao extends AbstractHttpClient implements Dis
         String urlPath = serverUrl + "/api/apis/distributed_tracing/create";
 
         // parameters in body.
-        String content = "project_id=" + projectId;
-        content += "&service_def_id=" + serviceDefId;
-        content += "&cluster_id=" + clusterId;
-        content += "&storage_class=" + storageClass;
-        content += "&ingress_host=" + ingressHost;
-        content += "&elasticsearch_host_port=" + elasticsearchHostPort;
-
-
-        RequestBody body = RequestBody.create(mediaType, content);
+        RequestBody body = new FormBody.Builder()
+                .add("project_id", String.valueOf(projectId))
+                .add("service_def_id", String.valueOf(serviceDefId))
+                .add("cluster_id", String.valueOf(clusterId))
+                .add("storage_class", String.valueOf(storageClass))
+                .add("ingress_host", String.valueOf(ingressHost))
+                .add("elasticsearch_host_port", String.valueOf(elasticsearchHostPort))
+                .build();
         try {
             Request request = new Request.Builder()
                     .url(urlPath)

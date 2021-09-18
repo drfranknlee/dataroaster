@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface ResourceControlDao {
     List<StorageClass> listStorageClasses(Kubeconfig kubeconfig);
+    String getExternalIpOfIngressControllerNginx(Kubeconfig kubeconfig, String namespace);
 }

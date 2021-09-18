@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface ResourceControlService {
     List<StorageClass> listStorageClasses(long clusterId, String userName);
+    String getExternalIpOfIngressControllerNginx(long clusterId, String userName);
 }

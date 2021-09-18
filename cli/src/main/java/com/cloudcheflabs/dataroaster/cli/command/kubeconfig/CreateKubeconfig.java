@@ -1,7 +1,7 @@
 package com.cloudcheflabs.dataroaster.cli.command.kubeconfig;
 
 import com.cloudcheflabs.dataroaster.cli.api.dao.ClusterDao;
-import com.cloudcheflabs.dataroaster.cli.api.dao.KubeconfigDao;
+import com.cloudcheflabs.dataroaster.cli.command.CommandUtils;
 import com.cloudcheflabs.dataroaster.cli.config.SpringContextSingleton;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
@@ -57,23 +57,19 @@ public class CreateKubeconfig implements Callable<Integer> {
             System.out.printf(format, String.valueOf(map.get("id")), (String) map.get("name"), (String) map.get("description"));
         }
 
-        String clusterId = cnsl.readLine("Select Cluster : ");
-        if(clusterId == null) {
-            throw new RuntimeException("cluster id is required!");
+        String clusterId = cnsl.readLine("Select Cluster ID : ");
+        while(clusterId.equals("")) {
+            System.err.println("cluster id is required!\n");
+            clusterId = cnsl.readLine("Select Cluster ID : ");
+            if(!clusterId.equals("")) {
+                break;
+            }
         }
 
         // create kubeconfig.
         String kubeconfigPath = kubeconfigFile.getAbsolutePath();
         String kubeconfig = FileUtils.fileToString(kubeconfigPath, false);
 
-        KubeconfigDao kubeconfigDao = applicationContext.getBean(KubeconfigDao.class);
-        restResponse = kubeconfigDao.createKubeconfig(configProps, Long.valueOf(clusterId), kubeconfig);
-        if(restResponse.getStatusCode() == 200) {
-            System.out.println("kubeconfig created successfully!");
-            return 0;
-        } else {
-            System.err.println(restResponse.getErrorMessage());
-            return -1;
-        }
+        return CommandUtils.createKubeconfig(configProps, clusterId, kubeconfig);
     }
 }

@@ -4,6 +4,7 @@ import com.cloudcheflabs.dataroaster.apiserver.api.dao.ResourceControlDao;
 import com.cloudcheflabs.dataroaster.apiserver.domain.Kubeconfig;
 import com.cloudcheflabs.dataroaster.apiserver.domain.StorageClass;
 import com.cloudcheflabs.dataroaster.apiserver.kubernetes.client.KubernetesClientUtils;
+import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import org.springframework.stereotype.Repository;
 
@@ -28,5 +29,23 @@ public class KubernetesResourceControlDao implements ResourceControlDao {
         }
 
         return storageClasses;
+    }
+
+    @Override
+    public String getExternalIpOfIngressControllerNginx(Kubeconfig kubeconfig, String namespace) {
+        try {
+            String externalIP = null;
+            KubernetesClient adminClient = KubernetesClientUtils.newClientWithKubeconfigYaml(kubeconfig);
+            for (Service service : adminClient.services().inNamespace(namespace).list().getItems()) {
+                if (service.getMetadata().getName().equals("ingress-nginx-controller")) {
+                    externalIP = service.getStatus().getLoadBalancer().getIngress().get(0).getIp();
+                    break;
+                }
+            }
+
+            return externalIP;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

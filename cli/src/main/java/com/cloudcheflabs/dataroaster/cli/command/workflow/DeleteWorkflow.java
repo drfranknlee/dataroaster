@@ -1,7 +1,7 @@
 package com.cloudcheflabs.dataroaster.cli.command.workflow;
 
 import com.cloudcheflabs.dataroaster.cli.api.dao.ServicesDao;
-import com.cloudcheflabs.dataroaster.cli.api.dao.WorkflowDao;
+import com.cloudcheflabs.dataroaster.cli.command.CommandUtils;
 import com.cloudcheflabs.dataroaster.cli.config.SpringContextSingleton;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
@@ -62,7 +62,14 @@ public class DeleteWorkflow implements Callable<Integer> {
 
         System.out.printf("\n");
 
-        String serviceId = cnsl.readLine("Select Service to be deleted : ");
+        String serviceId = cnsl.readLine("Select Service ID to be deleted : ");
+        while(serviceId.equals("")) {
+            System.err.println("service id is required!");
+            serviceId = cnsl.readLine("Select Service ID to be deleted : ");
+            if(!serviceId.equals("")) {
+                break;
+            }
+        }
         if(serviceId == null) {
             throw new RuntimeException("service id is required!");
         }
@@ -70,15 +77,6 @@ public class DeleteWorkflow implements Callable<Integer> {
         System.out.printf("\n");
 
         // delete.
-        WorkflowDao workflowDao = applicationContext.getBean(WorkflowDao.class);
-        restResponse = workflowDao.deleteWorkflow(configProps, Long.valueOf(serviceId));
-
-        if(restResponse.getStatusCode() == 200) {
-            System.out.println("workflow service deleted successfully!");
-            return 0;
-        } else {
-            System.err.println(restResponse.getErrorMessage());
-            return -1;
-        }
+        return CommandUtils.deleteWorkflow(configProps, serviceId);
     }
 }

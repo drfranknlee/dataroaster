@@ -1,10 +1,7 @@
 package com.cloudcheflabs.dataroaster.cli.command.project;
 
-import com.cloudcheflabs.dataroaster.cli.api.dao.ProjectDao;
-import com.cloudcheflabs.dataroaster.cli.config.SpringContextSingleton;
+import com.cloudcheflabs.dataroaster.cli.command.CommandUtils;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
-import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
-import org.springframework.context.ApplicationContext;
 import picocli.CommandLine;
 
 import java.util.concurrent.Callable;
@@ -27,16 +24,6 @@ public class CreateProject implements Callable<Integer> {
     public Integer call() throws Exception {
         ConfigProps configProps = parent.configProps;
 
-        ApplicationContext applicationContext = SpringContextSingleton.getInstance();
-        ProjectDao projectDao = applicationContext.getBean(ProjectDao.class);
-        RestResponse restResponse = projectDao.createProject(configProps, name, description);
-
-        if(restResponse.getStatusCode() == 200) {
-            System.out.println("project created successfully!");
-            return 0;
-        } else {
-            System.err.println(restResponse.getErrorMessage());
-            return -1;
-        }
+        return CommandUtils.createProject(configProps, name, description);
     }
 }

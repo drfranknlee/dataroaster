@@ -1,7 +1,7 @@
 package com.cloudcheflabs.dataroaster.cli.command.datacatalog;
 
-import com.cloudcheflabs.dataroaster.cli.api.dao.DataCatalogDao;
 import com.cloudcheflabs.dataroaster.cli.api.dao.ServicesDao;
+import com.cloudcheflabs.dataroaster.cli.command.CommandUtils;
 import com.cloudcheflabs.dataroaster.cli.config.SpringContextSingleton;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
@@ -62,23 +62,18 @@ public class DeleteDataCatalog implements Callable<Integer> {
 
         System.out.printf("\n");
 
-        String serviceId = cnsl.readLine("Select Service to be deleted : ");
-        if(serviceId == null) {
-            throw new RuntimeException("service id is required!");
+        String serviceId = cnsl.readLine("Select Service ID to be deleted : ");
+        while(serviceId.equals("")) {
+            System.err.println("service id is required!");
+            serviceId = cnsl.readLine("Select Service ID to be deleted : ");
+            if(!serviceId.equals("")) {
+                break;
+            }
         }
 
         System.out.printf("\n");
 
         // delete.
-        DataCatalogDao dataCatalogDao = applicationContext.getBean(DataCatalogDao.class);
-        restResponse = dataCatalogDao.deleteDataCatalog(configProps, Long.valueOf(serviceId));
-
-        if(restResponse.getStatusCode() == 200) {
-            System.out.println("data catalog service deleted successfully!");
-            return 0;
-        } else {
-            System.err.println(restResponse.getErrorMessage());
-            return -1;
-        }
+        return CommandUtils.deleteDataCatalog(configProps, serviceId);
     }
 }

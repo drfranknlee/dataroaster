@@ -3,6 +3,7 @@ package com.cloudcheflabs.dataroaster.cli.dao.http;
 import com.cloudcheflabs.dataroaster.cli.api.dao.AnalyticsDao;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -33,17 +34,17 @@ public class HttpAnalyticsDao extends AbstractHttpClient implements AnalyticsDao
         String urlPath = serverUrl + "/api/apis/analytics/create";
 
         // parameters in body.
-        String content = "project_id=" + projectId;
-        content += "&service_def_id=" + serviceDefId;
-        content += "&cluster_id=" + clusterId;
-        content += "&jupyterhub_github_client_id=" + jupyterhubGithubClientId;
-        content += "&jupyterhub_github_client_secret=" + jupyterhubGithubClientSecret;
-        content += "&jupyterhub_ingress_host=" + jupyterhubIngressHost;
-        content += "&storage_class=" + storageClass;
-        content += "&jupyterhub_storage_size=" + jupyterhubStorageSize;
-        content += "&redash_storage_size=" + redashStorageSize;
-
-        RequestBody body = RequestBody.create(mediaType, content);
+        RequestBody body = new FormBody.Builder()
+                .add("project_id", String.valueOf(projectId))
+                .add("service_def_id", String.valueOf(serviceDefId))
+                .add("cluster_id", String.valueOf(clusterId))
+                .add("jupyterhub_github_client_id", String.valueOf(jupyterhubGithubClientId))
+                .add("jupyterhub_github_client_secret", String.valueOf(jupyterhubGithubClientSecret))
+                .add("jupyterhub_ingress_host", String.valueOf(jupyterhubIngressHost))
+                .add("storage_class", String.valueOf(storageClass))
+                .add("jupyterhub_storage_size", String.valueOf(jupyterhubStorageSize))
+                .add("redash_storage_size", String.valueOf(redashStorageSize))
+                .build();
         try {
             Request request = new Request.Builder()
                     .url(urlPath)

@@ -3,9 +3,7 @@ package com.cloudcheflabs.dataroaster.cli.dao.http;
 import com.cloudcheflabs.dataroaster.cli.api.dao.IngressControllerDao;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
+import okhttp3.*;
 
 import java.io.IOException;
 
@@ -23,11 +21,11 @@ public class HttpIngressControllerDao extends AbstractHttpClient implements Ingr
         String urlPath = serverUrl + "/api/apis/ingress_controller/create";
 
         // parameters in body.
-        String content = "project_id=" + projectId;
-        content += "&service_def_id=" + serviceDefId;
-        content += "&cluster_id=" + clusterId;
-
-        RequestBody body = RequestBody.create(mediaType, content);
+        RequestBody body = new FormBody.Builder()
+                .add("project_id", String.valueOf(projectId))
+                .add("service_def_id", String.valueOf(serviceDefId))
+                .add("cluster_id", String.valueOf(clusterId))
+                .build();
         try {
             Request request = new Request.Builder()
                     .url(urlPath)
@@ -65,5 +63,25 @@ public class HttpIngressControllerDao extends AbstractHttpClient implements Ingr
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public RestResponse getExternalIpOfIngressControllerNginx(ConfigProps configProps, long clusterId) {
+        String serverUrl = configProps.getServer();
+        String accessToken = configProps.getAccessToken();
+
+        String urlPath = serverUrl + "/api/apis/resource_control/ingress_controller/get_external_ip";
+
+        HttpUrl.Builder urlBuilder = HttpUrl.parse(urlPath).newBuilder();
+        urlBuilder.addQueryParameter("cluster_id", String.valueOf(clusterId));
+
+        String url = urlBuilder.build().toString();
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", "Bearer " + accessToken)
+                .get()
+                .build();
+
+        return ResponseHandler.doCall(client, request);
     }
 }

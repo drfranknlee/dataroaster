@@ -3,6 +3,7 @@ package com.cloudcheflabs.dataroaster.cli.dao.http;
 import com.cloudcheflabs.dataroaster.cli.api.dao.KubeconfigDao;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -24,9 +25,10 @@ public class HttpKubeconfigDao extends AbstractHttpClient implements KubeconfigD
         String urlPath = serverUrl + "/api/apis/k8s/create_kubeconfig";
 
         // parameters in body.
-        String content = "cluster_id=" + id + "&kubeconfig=" + kubeconfig;
-
-        RequestBody body = RequestBody.create(mediaType, content);
+        RequestBody body = new FormBody.Builder()
+                .add("cluster_id", String.valueOf(id))
+                .add("kubeconfig", String.valueOf(kubeconfig))
+                .build();
         try {
             Request request = new Request.Builder()
                     .url(urlPath)

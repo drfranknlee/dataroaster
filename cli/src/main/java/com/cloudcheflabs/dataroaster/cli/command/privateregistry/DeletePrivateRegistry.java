@@ -1,7 +1,7 @@
 package com.cloudcheflabs.dataroaster.cli.command.privateregistry;
 
-import com.cloudcheflabs.dataroaster.cli.api.dao.PrivateRegistryDao;
 import com.cloudcheflabs.dataroaster.cli.api.dao.ServicesDao;
+import com.cloudcheflabs.dataroaster.cli.command.CommandUtils;
 import com.cloudcheflabs.dataroaster.cli.config.SpringContextSingleton;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
@@ -62,23 +62,18 @@ public class DeletePrivateRegistry implements Callable<Integer> {
 
         System.out.printf("\n");
 
-        String serviceId = cnsl.readLine("Select Service to be deleted : ");
-        if(serviceId == null) {
-            throw new RuntimeException("service id is required!");
+        String serviceId = cnsl.readLine("Select Service ID to be deleted : ");
+        while(serviceId.equals("")) {
+            System.err.println("service id is required!");
+            serviceId = cnsl.readLine("Select Service ID to be deleted : ");
+            if(!serviceId.equals("")) {
+                break;
+            }
         }
 
         System.out.printf("\n");
 
         // delete.
-        PrivateRegistryDao privateRegistryDao = applicationContext.getBean(PrivateRegistryDao.class);
-        restResponse = privateRegistryDao.deletePrivateRegistry(configProps, Long.valueOf(serviceId));
-
-        if(restResponse.getStatusCode() == 200) {
-            System.out.println("private registry service deleted successfully!");
-            return 0;
-        } else {
-            System.err.println(restResponse.getErrorMessage());
-            return -1;
-        }
+        return CommandUtils.deletePrivateRegistry(configProps, serviceId);
     }
 }

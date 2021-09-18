@@ -52,20 +52,33 @@ public class UpdateCluster implements Callable<Integer> {
             System.out.printf(format, String.valueOf(map.get("id")), (String) map.get("name"), (String) map.get("description"));
         }
 
-        String clusterId = cnsl.readLine("Select Cluster to be updated : ");
-        if(clusterId == null) {
-            throw new RuntimeException("cluster id is required!");
+        String clusterId = cnsl.readLine("Select Cluster ID to be updated : ");
+        while(clusterId.equals("")) {
+            System.err.println("cluster id is required!");
+            clusterId = cnsl.readLine("Select Cluster ID to be updated : ");
+            if(!clusterId.equals("")) {
+                break;
+            }
         }
 
         String name = cnsl.readLine("Enter Cluster Name : ");
-        if(name == null) {
-            throw new RuntimeException("cluster name is required!");
+        while(name.equals("")) {
+            System.err.println("cluster name is required!");
+            name = cnsl.readLine("Enter Cluster Name : ");
+            if(!name.equals("")) {
+                break;
+            }
         }
 
         String description = cnsl.readLine("Enter Cluster Description : ");
-        if(description == null) {
-            throw new RuntimeException("cluster description is required!");
+        while(description.equals("")) {
+            System.err.println("cluster description is required!");
+            description = cnsl.readLine("Enter Cluster Description : ");
+            if(!description.equals("")) {
+                break;
+            }
         }
+
 
         // create kubernetes cluster.
         restResponse = clusterDao.updateCluster(configProps, Long.valueOf(clusterId), name, description);

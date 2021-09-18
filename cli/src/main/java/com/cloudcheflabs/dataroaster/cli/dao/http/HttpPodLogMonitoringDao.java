@@ -3,6 +3,7 @@ package com.cloudcheflabs.dataroaster.cli.dao.http;
 import com.cloudcheflabs.dataroaster.cli.api.dao.PodLogMonitoringDao;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -23,9 +24,12 @@ public class HttpPodLogMonitoringDao extends AbstractHttpClient implements PodLo
         String urlPath = serverUrl + "/api/apis/pod_log_monitoring/create";
 
         // parameters in body.
-        String content = "project_id=" + projectId + "&service_def_id=" + serviceDefId + "&cluster_id=" + clusterId + "&elasticsearch_hosts=" + elasticsearchHosts;
-
-        RequestBody body = RequestBody.create(mediaType, content);
+        RequestBody body = new FormBody.Builder()
+                .add("project_id", String.valueOf(projectId))
+                .add("service_def_id", String.valueOf(serviceDefId))
+                .add("cluster_id", String.valueOf(clusterId))
+                .add("elasticsearch_hosts", String.valueOf(elasticsearchHosts))
+                .build();
         try {
             Request request = new Request.Builder()
                     .url(urlPath)

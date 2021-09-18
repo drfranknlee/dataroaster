@@ -3,6 +3,7 @@ package com.cloudcheflabs.dataroaster.cli.dao.http;
 import com.cloudcheflabs.dataroaster.cli.api.dao.MetricsMonitoringDao;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -23,13 +24,13 @@ public class HttpMetricsMonitoringDao extends AbstractHttpClient implements Metr
         String urlPath = serverUrl + "/api/apis/metrics_monitoring/create";
 
         // parameters in body.
-        String content = "project_id=" + projectId;
-        content += "&service_def_id=" + serviceDefId;
-        content += "&cluster_id=" + clusterId;
-        content += "&storage_class=" + storageClass;
-        content += "&storage_size=" + storageSize;
-
-        RequestBody body = RequestBody.create(mediaType, content);
+        RequestBody body = new FormBody.Builder()
+                .add("project_id", String.valueOf(projectId))
+                .add("service_def_id", String.valueOf(serviceDefId))
+                .add("cluster_id", String.valueOf(clusterId))
+                .add("storage_class", String.valueOf(storageClass))
+                .add("storage_size", String.valueOf(storageSize))
+                .build();
         try {
             Request request = new Request.Builder()
                     .url(urlPath)

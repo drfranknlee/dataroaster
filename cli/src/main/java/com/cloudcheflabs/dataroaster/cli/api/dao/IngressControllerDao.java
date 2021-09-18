@@ -10,4 +10,5 @@ public interface IngressControllerDao {
                                        long serviceDefId,
                                        long clusterId);
     RestResponse deleteIngressController(ConfigProps configProps, long serviceId);
+    RestResponse getExternalIpOfIngressControllerNginx(ConfigProps configProps, long clusterId);
 }

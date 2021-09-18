@@ -1,13 +1,11 @@
 package com.cloudcheflabs.dataroaster.cli.command.ingresscontroller;
 
 import com.cloudcheflabs.dataroaster.cli.api.dao.ClusterDao;
-import com.cloudcheflabs.dataroaster.cli.api.dao.IngressControllerDao;
 import com.cloudcheflabs.dataroaster.cli.api.dao.ProjectDao;
-import com.cloudcheflabs.dataroaster.cli.api.dao.ServicesDao;
+import com.cloudcheflabs.dataroaster.cli.command.CommandUtils;
 import com.cloudcheflabs.dataroaster.cli.config.SpringContextSingleton;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
-import com.cloudcheflabs.dataroaster.cli.domain.ServiceDef;
 import com.cloudcheflabs.dataroaster.common.util.JsonUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.ApplicationContext;
@@ -56,10 +54,14 @@ public class CreateIngressController implements Callable<Integer> {
             System.out.printf(format, String.valueOf(map.get("id")), (String) map.get("name"), (String) map.get("description"));
         }
 
-        String projectId = cnsl.readLine("Select Project : ");
-        if(projectId == null) {
-            throw new RuntimeException("project id is required!");
-        }
+        String projectId = cnsl.readLine("Select Project ID : ");
+        while(projectId.equals("")) {
+            System.err.println("project id is required!");
+            projectId = cnsl.readLine("Select Project ID : ");
+            if(!projectId.equals("")) {
+                break;
+            }
+        }      
 
         System.out.printf("\n");
 
@@ -83,48 +85,19 @@ public class CreateIngressController implements Callable<Integer> {
 
         System.out.printf("\n");
 
-        String clusterId = cnsl.readLine("Select Cluster : ");
-        if(clusterId == null) {
-            throw new RuntimeException("cluster id is required!");
-        }
-
-        System.out.printf("\n");
-
-        // get service def id.
-        String serviceDefId = null;
-        ServicesDao serviceDefDao = applicationContext.getBean(ServicesDao.class);
-        restResponse = serviceDefDao.listServiceDef(configProps);
-
-        // if response status code is not ok, then throw an exception.
-        if(restResponse.getStatusCode() != RestResponse.STATUS_OK) {
-            throw new RuntimeException(restResponse.getErrorMessage());
-        }
-
-        List<Map<String, Object>> serviceDefLists =
-                JsonUtils.toMapList(new ObjectMapper(), restResponse.getSuccessMessage());
-        for(Map<String, Object> map : serviceDefLists) {
-            String type = (String) map.get("type");
-            if(type.equals(ServiceDef.ServiceTypeEnum.INGRESS_CONTROLLER.name())) {
-                serviceDefId = String.valueOf(map.get("id"));
+        String clusterId = cnsl.readLine("Select Cluster ID : ");
+        while(clusterId.equals("")) {
+            System.err.println("cluster id is required!");
+            clusterId = cnsl.readLine("Select Cluster ID : ");
+            if(!clusterId.equals("")) {
                 break;
             }
         }
+       
+        System.out.printf("\n");
 
 
         // create.
-        IngressControllerDao ingressControllerDao = applicationContext.getBean(IngressControllerDao.class);
-        restResponse = ingressControllerDao.createIngressController(
-                configProps,
-                Long.valueOf(projectId),
-                Long.valueOf(serviceDefId),
-                Long.valueOf(clusterId));
-
-        if(restResponse.getStatusCode() == 200) {
-            System.out.println("ingress controller service created successfully!");
-            return 0;
-        } else {
-            System.err.println(restResponse.getErrorMessage());
-            return -1;
-        }
+        return CommandUtils.createIngressController(configProps, projectId, clusterId);
     }
 }
