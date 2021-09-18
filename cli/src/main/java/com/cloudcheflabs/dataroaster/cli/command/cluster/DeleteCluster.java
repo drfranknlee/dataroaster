@@ -1,6 +1,7 @@
 package com.cloudcheflabs.dataroaster.cli.command.cluster;
 
 import com.cloudcheflabs.dataroaster.cli.api.dao.ClusterDao;
+import com.cloudcheflabs.dataroaster.cli.command.CommandUtils;
 import com.cloudcheflabs.dataroaster.cli.config.SpringContextSingleton;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
@@ -55,13 +56,6 @@ public class DeleteCluster implements Callable<Integer> {
         String clusterId = cnsl.readLine("Select Cluster to be deleted : ");
 
         // create kubernetes cluster.
-        restResponse = clusterDao.deleteCluster(configProps, Long.valueOf(clusterId));
-        if(restResponse.getStatusCode() == 200) {
-            System.out.println("cluster deleted successfully!");
-            return 0;
-        } else {
-            System.err.println(restResponse.getErrorMessage());
-            return -1;
-        }
+        return CommandUtils.deleteCluster(configProps, clusterId);
     }
 }

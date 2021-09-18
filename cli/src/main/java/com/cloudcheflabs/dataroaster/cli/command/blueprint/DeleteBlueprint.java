@@ -257,6 +257,18 @@ public class DeleteBlueprint implements Callable<Integer> {
             }
         }
 
+        try {
+            // delete project.
+            String projectId = CommandUtils.getProjectId(configProps, projectName);
+            CommandUtils.deleteProject(configProps, projectId);
+
+            // delete cluster.
+            String clusterId = CommandUtils.getClusterId(configProps, clusterName);
+            CommandUtils.deleteCluster(configProps, clusterId);
+        } catch (Exception e) {
+            System.err.printf("error: %s\n", e.getMessage());
+        }
+
         System.out.println("all the services in blueprint deleted successfully.");
 
         return 0;

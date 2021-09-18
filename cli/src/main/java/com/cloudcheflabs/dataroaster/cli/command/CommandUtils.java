@@ -922,4 +922,81 @@ public class CommandUtils {
             return -1;
         }
     }
+
+    public static String getProjectId(ConfigProps configProps, String projectName) {
+        // show project list.
+        ApplicationContext applicationContext = SpringContextSingleton.getInstance();
+        ProjectDao projectDao = applicationContext.getBean(ProjectDao.class);
+        RestResponse restResponse = projectDao.listProjects(configProps);
+
+        // if response status code is not ok, then throw an exception.
+        if(restResponse.getStatusCode() != RestResponse.STATUS_OK) {
+            throw new RuntimeException(restResponse.getErrorMessage());
+        }
+
+        List<Map<String, Object>> projectLists =
+                JsonUtils.toMapList(new ObjectMapper(), restResponse.getSuccessMessage());
+
+        for(Map<String, Object> map : projectLists) {
+            String tempProjectName = (String) map.get("name");
+            if(tempProjectName.equals(projectName)) {
+                return String.valueOf(map.get("id"));
+            }
+        }
+
+        return null;
+    }
+
+    public static String getClusterId(ConfigProps configProps, String clusterName) {
+        // show cluster list.
+        ApplicationContext applicationContext = SpringContextSingleton.getInstance();
+        ClusterDao clusterDao = applicationContext.getBean(ClusterDao.class);
+        RestResponse restResponse = clusterDao.listClusters(configProps);
+
+        // if response status code is not ok, then throw an exception.
+        if(restResponse.getStatusCode() != RestResponse.STATUS_OK) {
+            throw new RuntimeException(restResponse.getErrorMessage());
+        }
+
+        List<Map<String, Object>> clusterLists =
+                JsonUtils.toMapList(new ObjectMapper(), restResponse.getSuccessMessage());
+
+        for(Map<String, Object> map : clusterLists) {
+            String tempClusterName = (String) map.get("name");
+            if(tempClusterName.equals(clusterName)) {
+                return String.valueOf(map.get("id"));
+            }
+        }
+
+        return null;
+    }
+
+    public static int deleteProject(ConfigProps configProps,
+                                    String projectId) {
+        ApplicationContext applicationContext = SpringContextSingleton.getInstance();
+        ProjectDao projectDao = applicationContext.getBean(ProjectDao.class);
+        RestResponse restResponse = projectDao.deleteProject(configProps, Long.valueOf(projectId));
+
+        if(restResponse.getStatusCode() == 200) {
+            System.out.println("project deleted successfully!");
+            return 0;
+        } else {
+            System.err.println(restResponse.getErrorMessage());
+            return -1;
+        }
+    }
+
+    public static int deleteCluster(ConfigProps configProps,
+                                    String clusterId) {
+        ApplicationContext applicationContext = SpringContextSingleton.getInstance();
+        ClusterDao clusterDao = applicationContext.getBean(ClusterDao.class);
+        RestResponse restResponse = clusterDao.deleteCluster(configProps, Long.valueOf(clusterId));
+        if(restResponse.getStatusCode() == 200) {
+            System.out.println("cluster deleted successfully!");
+            return 0;
+        } else {
+            System.err.println(restResponse.getErrorMessage());
+            return -1;
+        }
+    }
 }

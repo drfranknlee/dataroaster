@@ -1,6 +1,7 @@
 package com.cloudcheflabs.dataroaster.cli.command.project;
 
 import com.cloudcheflabs.dataroaster.cli.api.dao.ProjectDao;
+import com.cloudcheflabs.dataroaster.cli.command.CommandUtils;
 import com.cloudcheflabs.dataroaster.cli.config.SpringContextSingleton;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
@@ -32,7 +33,7 @@ public class DeleteProject implements Callable<Integer> {
             return -1;
         }
 
-        // show cluster list.
+        // show project list.
         ApplicationContext applicationContext = SpringContextSingleton.getInstance();
         ProjectDao projectDao = applicationContext.getBean(ProjectDao.class);
         RestResponse restResponse = projectDao.listProjects(configProps);
@@ -58,14 +59,6 @@ public class DeleteProject implements Callable<Integer> {
         }
 
         // delete project.
-        restResponse = projectDao.deleteProject(configProps, Long.valueOf(projectId));
-
-        if(restResponse.getStatusCode() == 200) {
-            System.out.println("project deleted successfully!");
-            return 0;
-        } else {
-            System.err.println(restResponse.getErrorMessage());
-            return -1;
-        }
+        return CommandUtils.deleteProject(configProps, projectId);
     }
 }
