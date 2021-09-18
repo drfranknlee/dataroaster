@@ -9,7 +9,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 
 import java.io.IOException;
-import java.util.Base64;
 
 public class HttpQueryEngineDao extends AbstractHttpClient implements QueryEngineDao {
 

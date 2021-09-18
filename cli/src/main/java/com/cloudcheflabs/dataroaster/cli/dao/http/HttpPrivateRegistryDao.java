@@ -3,12 +3,12 @@ package com.cloudcheflabs.dataroaster.cli.dao.http;
 import com.cloudcheflabs.dataroaster.cli.api.dao.PrivateRegistryDao;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 
 import java.io.IOException;
-import java.util.Base64;
 
 public class HttpPrivateRegistryDao extends AbstractHttpClient implements PrivateRegistryDao {
 
@@ -24,24 +24,24 @@ public class HttpPrivateRegistryDao extends AbstractHttpClient implements Privat
         String urlPath = serverUrl + "/api/apis/private_registry/create";
 
         // parameters in body.
-        String content = "project_id=" + projectId;
-        content += "&service_def_id=" + serviceDefId;
-        content += "&cluster_id=" + clusterId;
-        content += "&core_host=" + coreHost;
-        content += "&notary_host=" + notaryHost;
-        content += "&storage_class=" + storageClass;
-        content += "&registry_storage_size=" + registryStorageSize;
-        content += "&chartmuseum_storage_size=" + chartmuseumStorageSize;
-        content += "&jobservice_storage_size=" + jobserviceStorageSize;
-        content += "&database_storage_size=" + databaseStorageSize;
-        content += "&redis_storage_size=" + redisStorageSize;
-        content += "&trivy_storage_size=" + trivyStorageSize;
-        content += "&s3_bucket=" + s3Bucket;
-        content += "&s3_access_key=" + s3AccessKey;
-        content += "&s3_secret_key=" + s3SecretKey;
-        content += "&s3_endpoint=" + s3Endpoint;
-
-        RequestBody body = RequestBody.create(mediaType, content);
+        RequestBody body = new FormBody.Builder()
+                .add("project_id", String.valueOf(projectId))
+                .add("service_def_id", String.valueOf(serviceDefId))
+                .add("cluster_id", String.valueOf(clusterId))
+                .add("core_host", String.valueOf(coreHost))
+                .add("notary_host", String.valueOf(notaryHost))
+                .add("storage_class", String.valueOf(storageClass))
+                .add("registry_storage_size", String.valueOf(registryStorageSize))
+                .add("chartmuseum_storage_size", String.valueOf(chartmuseumStorageSize))
+                .add("jobservice_storage_size", String.valueOf(jobserviceStorageSize))
+                .add("database_storage_size", String.valueOf(databaseStorageSize))
+                .add("redis_storage_size", String.valueOf(redisStorageSize))
+                .add("trivy_storage_size", String.valueOf(trivyStorageSize))
+                .add("s3_bucket", String.valueOf(s3Bucket))
+                .add("s3_access_key", String.valueOf(s3AccessKey))
+                .add("s3_secret_key", String.valueOf(s3SecretKey))
+                .add("s3_endpoint", String.valueOf(s3Endpoint))
+                .build();
         try {
             Request request = new Request.Builder()
                     .url(urlPath)

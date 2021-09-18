@@ -3,6 +3,7 @@ package com.cloudcheflabs.dataroaster.cli.dao.http;
 import com.cloudcheflabs.dataroaster.cli.api.dao.StreamingDao;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -31,15 +32,15 @@ public class HttpStreamingDao extends AbstractHttpClient implements StreamingDao
         String urlPath = serverUrl + "/api/apis/streaming/create";
 
         // parameters in body.
-        String content = "project_id=" + projectId;
-        content += "&service_def_id=" + serviceDefId;
-        content += "&cluster_id=" + clusterId;
-        content += "&kafka_replica_count=" + kafkaReplicaCount;
-        content += "&kafka_storage_size=" + kafkaStorageSize;
-        content += "&storage_class=" + storageClass;
-        content += "&zk_replica_count=" + zkReplicaCount;
-
-        RequestBody body = RequestBody.create(mediaType, content);
+        RequestBody body = new FormBody.Builder()
+                .add("project_id", String.valueOf(projectId))
+                .add("service_def_id", String.valueOf(serviceDefId))
+                .add("cluster_id", String.valueOf(clusterId))
+                .add("kafka_replica_count", String.valueOf(kafkaReplicaCount))
+                .add("kafka_storage_size", String.valueOf(kafkaStorageSize))
+                .add("storage_class", String.valueOf(storageClass))
+                .add("zk_replica_count", String.valueOf(zkReplicaCount))
+                .build();
         try {
             Request request = new Request.Builder()
                     .url(urlPath)

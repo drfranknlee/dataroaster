@@ -52,8 +52,6 @@ public class QueryEngineController {
             String trinoDataStorage = params.get("trino_data_storage");
             String trinoStorageClass = params.get("trino_storage_class");
 
-            LOG.info("s3AccessKey: [{}], s3SecretKey: [{}]", s3AccessKey, s3SecretKey);
-
             String userName = (String) context.getAttribute(AuthorizationFilter.KEY_USER_NAME);
 
             queryEngineService.create(Long.valueOf(projectId),

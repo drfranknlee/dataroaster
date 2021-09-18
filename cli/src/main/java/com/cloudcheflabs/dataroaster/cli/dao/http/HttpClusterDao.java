@@ -3,6 +3,7 @@ package com.cloudcheflabs.dataroaster.cli.dao.http;
 import com.cloudcheflabs.dataroaster.cli.api.dao.ClusterDao;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
 import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -23,9 +24,10 @@ public class HttpClusterDao extends AbstractHttpClient implements ClusterDao {
         String urlPath = serverUrl + "/api/apis/k8s/create_cluster";
 
         // parameters in body.
-        String content = "cluster_name=" + name + "&description=" + description;
-
-        RequestBody body = RequestBody.create(mediaType, content);
+        RequestBody body = new FormBody.Builder()
+                .add("cluster_name", String.valueOf(name))
+                .add("description", String.valueOf(description))
+                .build();
         try {
             Request request = new Request.Builder()
                     .url(urlPath)
