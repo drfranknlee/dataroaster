@@ -19,6 +19,7 @@ services:
       storage-class: 
         property-ref: storage-classes
         key: storage-class-rwo
+        
   - name: queryengine
     params:
       properties:
