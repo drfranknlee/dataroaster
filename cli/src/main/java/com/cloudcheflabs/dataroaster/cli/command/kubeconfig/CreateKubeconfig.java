@@ -58,8 +58,12 @@ public class CreateKubeconfig implements Callable<Integer> {
         }
 
         String clusterId = cnsl.readLine("Select Cluster : ");
-        if(clusterId == null) {
-            throw new RuntimeException("cluster id is required!");
+        while(clusterId == null) {
+            System.err.println("cluster id is required!");
+            clusterId = cnsl.readLine("Select Cluster : ");
+            if(clusterId != null) {
+                break;
+            }
         }
 
         // create kubeconfig.
