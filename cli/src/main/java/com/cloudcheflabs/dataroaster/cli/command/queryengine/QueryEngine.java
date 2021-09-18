@@ -13,7 +13,7 @@ import java.util.concurrent.Callable;
                 DeleteQueryEngine.class,
                 CommandLine.HelpCommand.class
         },
-        description = "Manage Query Engine.")
+        description = "Manage Query Engine Service.")
 public class QueryEngine implements Callable<Integer> {
 
     ConfigProps configProps;

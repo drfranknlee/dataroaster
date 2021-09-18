@@ -13,7 +13,7 @@ import java.util.concurrent.Callable;
                 DeletePodLogMonitoring.class,
                 CommandLine.HelpCommand.class
         },
-        description = "Manage Pod Log Monitoring.")
+        description = "Manage Pod Log Monitoring Service.")
 public class PodLogMonitoring implements Callable<Integer> {
 
     ConfigProps configProps;

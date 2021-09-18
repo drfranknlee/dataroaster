@@ -13,7 +13,7 @@ import java.util.concurrent.Callable;
                 DeleteStreaming.class,
                 CommandLine.HelpCommand.class
         },
-        description = "Manage Streaming.")
+        description = "Manage Streaming Service.")
 public class Streaming implements Callable<Integer> {
 
     ConfigProps configProps;

@@ -13,7 +13,7 @@ import java.util.concurrent.Callable;
                 DeleteBackup.class,
                 CommandLine.HelpCommand.class
         },
-        description = "Manage Backup.")
+        description = "Manage Backup Service.")
 public class Backup implements Callable<Integer> {
 
     ConfigProps configProps;

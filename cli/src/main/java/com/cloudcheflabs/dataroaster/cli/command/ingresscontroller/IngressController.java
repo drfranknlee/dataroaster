@@ -13,7 +13,7 @@ import java.util.concurrent.Callable;
                 DeleteIngressController.class,
                 CommandLine.HelpCommand.class
         },
-        description = "Manage Ingress Controller.")
+        description = "Manage Ingress Controller Service.")
 public class IngressController implements Callable<Integer> {
 
     ConfigProps configProps;

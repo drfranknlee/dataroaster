@@ -13,7 +13,7 @@ import java.util.concurrent.Callable;
                 DeleteDistributedTracing.class,
                 CommandLine.HelpCommand.class
         },
-        description = "Manage Distributed Tracing.")
+        description = "Manage Distributed Tracing Service.")
 public class DistributedTracing implements Callable<Integer> {
 
     ConfigProps configProps;

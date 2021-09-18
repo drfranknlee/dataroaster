@@ -13,7 +13,7 @@ import java.util.concurrent.Callable;
                 DeletePrivateRegistry.class,
                 CommandLine.HelpCommand.class
         },
-        description = "Manage Private Registry.")
+        description = "Manage Private Registry Service.")
 public class PrivateRegistry implements Callable<Integer> {
 
     ConfigProps configProps;

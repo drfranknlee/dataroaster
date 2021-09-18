@@ -13,7 +13,7 @@ import java.util.concurrent.Callable;
                 DeleteCiCd.class,
                 CommandLine.HelpCommand.class
         },
-        description = "Manage CI / CD.")
+        description = "Manage CI / CD Service.")
 public class CiCd implements Callable<Integer> {
 
     ConfigProps configProps;

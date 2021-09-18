@@ -13,7 +13,7 @@ import java.util.concurrent.Callable;
                 DeleteAnalytics.class,
                 CommandLine.HelpCommand.class
         },
-        description = "Manage Analytics.")
+        description = "Manage Analytics Service.")
 public class Analytics implements Callable<Integer> {
 
     ConfigProps configProps;

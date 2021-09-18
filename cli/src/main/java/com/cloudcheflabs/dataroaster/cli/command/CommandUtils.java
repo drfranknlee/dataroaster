@@ -135,6 +135,7 @@ public class CommandUtils {
             }
         }
 
+        System.out.println("\n");
         System.out.printf("External IP Address of Ingress Controller NGINX Service: %s\n", externalIp);
         System.out.println("\n");
         if(ingressHosts != null) {

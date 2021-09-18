@@ -13,7 +13,7 @@ import java.util.concurrent.Callable;
                 DeleteDataCatalog.class,
                 CommandLine.HelpCommand.class
         },
-        description = "Manage Data Catalog.")
+        description = "Manage Data Catalog Service.")
 public class DataCatalog implements Callable<Integer> {
 
     ConfigProps configProps;

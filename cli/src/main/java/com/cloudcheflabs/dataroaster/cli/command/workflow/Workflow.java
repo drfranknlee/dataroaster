@@ -13,7 +13,7 @@ import java.util.concurrent.Callable;
                 DeleteWorkflow.class,
                 CommandLine.HelpCommand.class
         },
-        description = "Manage Workflow.")
+        description = "Manage Workflow Service.")
 public class Workflow implements Callable<Integer> {
 
     ConfigProps configProps;

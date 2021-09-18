@@ -13,7 +13,7 @@ import java.util.concurrent.Callable;
                 DeleteMetricsMonitoring.class,
                 CommandLine.HelpCommand.class
         },
-        description = "Manage Metrics Monitoring.")
+        description = "Manage Metrics Monitoring Service.")
 public class MetricsMonitoring implements Callable<Integer> {
 
     ConfigProps configProps;
