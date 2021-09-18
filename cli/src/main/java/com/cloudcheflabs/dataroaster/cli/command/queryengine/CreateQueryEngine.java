@@ -73,6 +73,8 @@ public class CreateQueryEngine implements Callable<Integer> {
             return -1;
         }
 
+        System.out.printf("s3AccessKey: [%s], s3SecretKey: [%s]\n", s3AccessKey, s3SecretKey);
+
         // show project list.
         ApplicationContext applicationContext = SpringContextSingleton.getInstance();
         ProjectDao projectDao = applicationContext.getBean(ProjectDao.class);
