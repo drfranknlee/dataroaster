@@ -53,7 +53,14 @@ public class DeleteCluster implements Callable<Integer> {
             System.out.printf(format, String.valueOf(map.get("id")), (String) map.get("name"), (String) map.get("description"));
         }
 
-        String clusterId = cnsl.readLine("Select Cluster to be deleted : ");
+        String clusterId = cnsl.readLine("Select Cluster ID to be deleted : ");
+        while(clusterId.equals("")) {
+            System.err.println("cluster id is required!");
+            clusterId = cnsl.readLine("Select Cluster ID to be deleted : ");
+            if(!clusterId.equals("")) {
+                break;
+            }
+        }
 
         // create kubernetes cluster.
         return CommandUtils.deleteCluster(configProps, clusterId);

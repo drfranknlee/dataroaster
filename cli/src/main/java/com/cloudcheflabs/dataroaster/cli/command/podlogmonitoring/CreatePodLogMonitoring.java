@@ -58,11 +58,15 @@ public class CreatePodLogMonitoring implements Callable<Integer> {
 
         System.out.printf("\n");
 
-        String projectId = cnsl.readLine("Select Project : ");
-        if(projectId == null) {
-            throw new RuntimeException("project id is required!");
+        String projectId = cnsl.readLine("Select Project ID : ");
+        while(projectId.equals("")) {
+            System.err.println("project id is required!");
+            projectId = cnsl.readLine("Select Project ID : ");
+            if(!projectId.equals("")) {
+                break;
+            }
         }
-
+       
         System.out.printf("\n");
 
 
@@ -85,10 +89,14 @@ public class CreatePodLogMonitoring implements Callable<Integer> {
 
         System.out.printf("\n");
 
-        String clusterId = cnsl.readLine("Select Cluster : ");
-        if(clusterId == null) {
-            throw new RuntimeException("cluster id is required!");
-        }
+        String clusterId = cnsl.readLine("Select Cluster ID : ");
+        while(clusterId.equals("")) {
+            System.err.println("cluster id is required!");
+            clusterId = cnsl.readLine("Select Cluster ID : ");
+            if(!clusterId.equals("")) {
+                break;
+            }
+        }       
 
         System.out.printf("\n");
 

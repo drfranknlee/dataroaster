@@ -53,11 +53,15 @@ public class DeleteProject implements Callable<Integer> {
             System.out.printf(format, String.valueOf(map.get("id")), (String) map.get("name"), (String) map.get("description"));
         }
 
-        String projectId = cnsl.readLine("Select Project to be deleted : ");
-        if(projectId == null) {
-            throw new RuntimeException("project id is required!");
+        String projectId = cnsl.readLine("Select Project ID to be deleted : ");
+        while(projectId.equals("")) {
+            System.err.println("project id is required!");
+            projectId = cnsl.readLine("Select Project ID to be deleted : ");
+            if(!projectId.equals("")) {
+                break;
+            }
         }
-
+       
         // delete project.
         return CommandUtils.deleteProject(configProps, projectId);
     }

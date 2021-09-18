@@ -147,19 +147,19 @@ public class CommandUtils {
         System.out.println("Before moving on, make sure that your Ingress Hosts have been registered \nwith the external IP Address of Ingress Controller NGINX Service to your public DNS server.");
 
         String yN = cnsl.readLine("Continue(y/N) : ");
-        if(yN != null) {
-            if(yN.toLowerCase().equals("n") || yN.toLowerCase().equals("no")) {
-                System.err.println("blueprint cancelled...");
-                return -1;
-            } else if(yN.toLowerCase().equals("y") || yN.toLowerCase().equals("yes")) {
-                System.out.println("ok...");
-            } else {
-                System.err.println("blueprint cancelled...");
-                return -1;
+        while(yN.equals("")) {
+            System.err.println("y/N ?");
+            yN = cnsl.readLine("Continue(y/N) : ");
+            if(!yN.equals("")) {
+                break;
             }
-        } else {
+        }
+
+        if(yN.toLowerCase().equals("n") || yN.toLowerCase().equals("no")) {
             System.err.println("blueprint cancelled...");
             return -1;
+        } else if(yN.toLowerCase().equals("y") || yN.toLowerCase().equals("yes")) {
+            System.out.println("ok...");
         }
 
         return 0;

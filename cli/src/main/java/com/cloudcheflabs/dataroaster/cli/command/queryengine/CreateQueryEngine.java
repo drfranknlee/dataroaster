@@ -93,11 +93,15 @@ public class CreateQueryEngine implements Callable<Integer> {
             System.out.printf(format, String.valueOf(map.get("id")), (String) map.get("name"), (String) map.get("description"));
         }
 
-        String projectId = cnsl.readLine("Select Project : ");
-        if(projectId == null) {
-            throw new RuntimeException("project id is required!");
+        String projectId = cnsl.readLine("Select Project ID : ");
+        while(projectId.equals("")) {
+            System.err.println("project id is required!");
+            projectId = cnsl.readLine("Select Project ID : ");
+            if(!projectId.equals("")) {
+                break;
+            }
         }
-
+     
         System.out.printf("\n");
 
 
@@ -120,11 +124,15 @@ public class CreateQueryEngine implements Callable<Integer> {
 
         System.out.printf("\n");
 
-        String clusterId = cnsl.readLine("Select Cluster : ");
-        if(clusterId == null) {
-            throw new RuntimeException("cluster id is required!");
+        String clusterId = cnsl.readLine("Select Cluster ID : ");
+        while(clusterId.equals("")) {
+            System.err.println("cluster id is required!");
+            clusterId = cnsl.readLine("Select Cluster ID : ");
+            if(!clusterId.equals("")) {
+                break;
+            }
         }
-
+      
         System.out.printf("\n");
 
         // show storage classes.
@@ -153,9 +161,14 @@ public class CreateQueryEngine implements Callable<Integer> {
         System.out.printf("\n");
 
         String sparkThriftServerStorageClass = cnsl.readLine("Select Storage Class for Spark Thrift Server(for instance, nfs) : ");
-        if(sparkThriftServerStorageClass == null) {
-            throw new RuntimeException("spark thrift server storage class is required!");
+        while(sparkThriftServerStorageClass.equals("")) {
+            System.err.println("spark thrift server storage class is required!");
+            sparkThriftServerStorageClass = cnsl.readLine("Select Storage Class for Spark Thrift Server(for instance, nfs) : ");
+            if(!sparkThriftServerStorageClass.equals("")) {
+                break;
+            }
         }
+       
 
         System.out.printf("\n");
 
@@ -172,10 +185,14 @@ public class CreateQueryEngine implements Callable<Integer> {
         System.out.printf("\n");
 
         String trinoStorageClass = cnsl.readLine("Select Storage Class for Trino : ");
-        if(trinoStorageClass == null) {
-            throw new RuntimeException("trino storage class is required!");
+        while(trinoStorageClass.equals("")) {
+            System.err.println("trino storage class is required!");
+            trinoStorageClass = cnsl.readLine("Select Storage Class for Trino : ");
+            if(!trinoStorageClass.equals("")) {
+                break;
+            }
         }
-
+     
         System.out.printf("\n");
 
         // create.

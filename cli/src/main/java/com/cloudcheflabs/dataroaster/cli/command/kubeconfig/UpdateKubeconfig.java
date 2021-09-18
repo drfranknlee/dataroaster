@@ -57,9 +57,13 @@ public class UpdateKubeconfig implements Callable<Integer> {
             System.out.printf(format, String.valueOf(map.get("id")), (String) map.get("name"), (String) map.get("description"));
         }
 
-        String clusterId = cnsl.readLine("Select Cluster : ");
-        if(clusterId == null) {
-            throw new RuntimeException("cluster id is required!");
+        String clusterId = cnsl.readLine("Select Cluster ID : ");
+        while(clusterId.equals("")) {
+            System.err.println("cluster id is required!");
+            clusterId = cnsl.readLine("Select Cluster ID : ");
+            if(!clusterId.equals("")) {
+                break;
+            }
         }
 
         // create kubeconfig.

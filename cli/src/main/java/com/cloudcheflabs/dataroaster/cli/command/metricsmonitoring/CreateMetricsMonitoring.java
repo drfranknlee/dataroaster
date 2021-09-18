@@ -54,11 +54,15 @@ public class CreateMetricsMonitoring implements Callable<Integer> {
             System.out.printf(format, String.valueOf(map.get("id")), (String) map.get("name"), (String) map.get("description"));
         }
 
-        String projectId = cnsl.readLine("Select Project : ");
-        if(projectId == null) {
-            throw new RuntimeException("project id is required!");
+        String projectId = cnsl.readLine("Select Project ID : ");
+        while(projectId.equals("")) {
+            System.err.println("project id is required!");
+            projectId = cnsl.readLine("Select Project ID : ");
+            if(!projectId.equals("")) {
+                break;
+            }
         }
-
+     
         System.out.printf("\n");
 
 
@@ -81,10 +85,14 @@ public class CreateMetricsMonitoring implements Callable<Integer> {
 
         System.out.printf("\n");
 
-        String clusterId = cnsl.readLine("Select Cluster : ");
-        if(clusterId == null) {
-            throw new RuntimeException("cluster id is required!");
-        }
+        String clusterId = cnsl.readLine("Select Cluster ID : ");
+        while(clusterId.equals("")) {
+            System.err.println("cluster id is required!");
+            clusterId = cnsl.readLine("Select Cluster ID : ");
+            if(!clusterId.equals("")) {
+                break;
+            }
+        }    
 
         System.out.printf("\n");
 
@@ -109,17 +117,25 @@ public class CreateMetricsMonitoring implements Callable<Integer> {
         System.out.printf("\n");
 
         String storageClass = cnsl.readLine("Select Storage Class : ");
-        if(storageClass == null) {
-            throw new RuntimeException("storage class is required!");
+        while(storageClass.equals("")) {
+            System.err.println("storage class is required!");
+            storageClass = cnsl.readLine("Select Storage Class : ");
+            if(!storageClass.equals("")) {
+                break;
+            }
         }
-
+       
         System.out.printf("\n");
 
         String storageSize = cnsl.readLine("Enter Storage Size in GiB : ");
-        if(storageSize == null) {
-            throw new RuntimeException("storage size is required!");
+        while(storageSize.equals("")) {
+            System.err.println("storage size is required!");
+            storageSize = cnsl.readLine("Enter Storage Size in GiB : ");
+            if(!storageSize.equals("")) {
+                break;
+            }
         }
-
+       
         System.out.printf("\n");
 
         // create.

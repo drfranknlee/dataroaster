@@ -63,6 +63,13 @@ public class DeleteWorkflow implements Callable<Integer> {
         System.out.printf("\n");
 
         String serviceId = cnsl.readLine("Select Service to be deleted : ");
+        while(serviceId.equals("")) {
+            System.err.println("service id is required!");
+            serviceId = cnsl.readLine("Select Service to be deleted : ");
+            if(!serviceId.equals("")) {
+                break;
+            }
+        }
         if(serviceId == null) {
             throw new RuntimeException("service id is required!");
         }
