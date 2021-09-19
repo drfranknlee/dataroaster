@@ -1,19 +1,9 @@
 package com.cloudcheflabs.dataroaster.cli.command.metricsmonitoring;
 
-import com.cloudcheflabs.dataroaster.cli.api.dao.ClusterDao;
-import com.cloudcheflabs.dataroaster.cli.api.dao.ProjectDao;
-import com.cloudcheflabs.dataroaster.cli.api.dao.ResourceControlDao;
 import com.cloudcheflabs.dataroaster.cli.command.CommandUtils;
-import com.cloudcheflabs.dataroaster.cli.config.SpringContextSingleton;
 import com.cloudcheflabs.dataroaster.cli.domain.ConfigProps;
-import com.cloudcheflabs.dataroaster.cli.domain.RestResponse;
-import com.cloudcheflabs.dataroaster.common.util.JsonUtils;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.context.ApplicationContext;
 import picocli.CommandLine;
 
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(name = "create",
@@ -35,95 +25,29 @@ public class CreateMetricsMonitoring implements Callable<Integer> {
         }
 
         // show project list.
-        ApplicationContext applicationContext = SpringContextSingleton.getInstance();
-        ProjectDao projectDao = applicationContext.getBean(ProjectDao.class);
-        RestResponse restResponse = projectDao.listProjects(configProps);
+        CommandUtils.showProjectList(configProps);
 
-        // if response status code is not ok, then throw an exception.
-        if(restResponse.getStatusCode() != RestResponse.STATUS_OK) {
-            throw new RuntimeException(restResponse.getErrorMessage());
-        }
-
-        List<Map<String, Object>> projectLists =
-                JsonUtils.toMapList(new ObjectMapper(), restResponse.getSuccessMessage());
-
-        String format = "%-20s%-20s%-20s%n";
-
-        System.out.printf(format,"PROJECT ID", "PROJECT NAME", "PROJECT DESCRIPTION");
-        for(Map<String, Object> map : projectLists) {
-            System.out.printf(format, String.valueOf(map.get("id")), (String) map.get("name"), (String) map.get("description"));
-        }
-
-        String projectId = cnsl.readLine("Select Project ID : ");
-        while(projectId.equals("")) {
-            System.err.println("project id is required!");
-            projectId = cnsl.readLine("Select Project ID : ");
-            if(!projectId.equals("")) {
-                break;
-            }
-        }
+        String projectId = CommandUtils.getProjectIdByPrompt(cnsl);
      
         System.out.printf("\n");
 
 
         // show cluster list.
-        ClusterDao clusterDao = applicationContext.getBean(ClusterDao.class);
-        restResponse = clusterDao.listClusters(configProps);
-
-        // if response status code is not ok, then throw an exception.
-        if(restResponse.getStatusCode() != RestResponse.STATUS_OK) {
-            throw new RuntimeException(restResponse.getErrorMessage());
-        }
-
-        List<Map<String, Object>> clusterLists =
-                JsonUtils.toMapList(new ObjectMapper(), restResponse.getSuccessMessage());
-
-        System.out.printf(format,"CLUSTER ID", "CLUSTER NAME", "CLUSTER DESCRIPTION");
-        for(Map<String, Object> map : clusterLists) {
-            System.out.printf(format, String.valueOf(map.get("id")), (String) map.get("name"), (String) map.get("description"));
-        }
+        CommandUtils.showClusterList(configProps);
 
         System.out.printf("\n");
 
-        String clusterId = cnsl.readLine("Select Cluster ID : ");
-        while(clusterId.equals("")) {
-            System.err.println("cluster id is required!");
-            clusterId = cnsl.readLine("Select Cluster ID : ");
-            if(!clusterId.equals("")) {
-                break;
-            }
-        }    
+        String clusterId = CommandUtils.getClusterIdByPrompt(cnsl);
 
         System.out.printf("\n");
 
 
         // show storage classes.
-        ResourceControlDao resourceControlDao = applicationContext.getBean(ResourceControlDao.class);
-        restResponse = resourceControlDao.listStorageClasses(configProps, Long.valueOf(clusterId));
-        List<Map<String, Object>> storageClasses =
-                JsonUtils.toMapList(new ObjectMapper(), restResponse.getSuccessMessage());
-
-        format = "%-20s%-20s%-20s%-20s%n";
-
-        System.out.printf(format,"STORAGE CLASS NAME", "RECLAIM POLICY", "VOLUME BIDING MODE", "PROVISIONER");
-        for(Map<String, Object> map : storageClasses) {
-            System.out.printf(format,
-                    String.valueOf(map.get("name")),
-                    (String) map.get("reclaimPolicy"),
-                    (String) map.get("volumeBindingMode"),
-                    (String) map.get("provisioner"));
-        }
+        CommandUtils.showStorageClasses(configProps, clusterId);
 
         System.out.printf("\n");
 
-        String storageClass = cnsl.readLine("Select Storage Class : ");
-        while(storageClass.equals("")) {
-            System.err.println("storage class is required!");
-            storageClass = cnsl.readLine("Select Storage Class : ");
-            if(!storageClass.equals("")) {
-                break;
-            }
-        }
+        String storageClass = CommandUtils.getStorageClassByPrompt(cnsl);
        
         System.out.printf("\n");
 

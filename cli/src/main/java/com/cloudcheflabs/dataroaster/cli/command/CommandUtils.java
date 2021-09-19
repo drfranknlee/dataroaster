@@ -999,4 +999,110 @@ public class CommandUtils {
             return -1;
         }
     }
+
+    public static String getClusterIdByPrompt(java.io.Console cnsl) {
+        String clusterId = cnsl.readLine("Select Cluster ID : ");
+        while(clusterId.equals("")) {
+            System.err.println("cluster id is required!");
+            clusterId = cnsl.readLine("Select Cluster ID : ");
+            if(!clusterId.equals("")) {
+                break;
+            }
+        }
+
+        return clusterId;
+    }
+
+    public static String getProjectIdByPrompt(java.io.Console cnsl) {
+        String projectId = cnsl.readLine("Select Project ID : ");
+        while(projectId.equals("")) {
+            System.err.println("project id is required!");
+            projectId = cnsl.readLine("Select Project ID : ");
+            if(!projectId.equals("")) {
+                break;
+            }
+        }
+
+        return projectId;
+    }
+
+    public static String getStorageClassByPrompt(java.io.Console cnsl) {
+        String storageClass = cnsl.readLine("Select Storage Class : ");
+        while(storageClass.equals("")) {
+            System.err.println("storage class is required!");
+            storageClass = cnsl.readLine("Select Storage Class : ");
+            if(!storageClass.equals("")) {
+                break;
+            }
+        }
+
+        return storageClass;
+    }
+
+    public static void showProjectList(ConfigProps configProps) {
+        ApplicationContext applicationContext = SpringContextSingleton.getInstance();
+        ProjectDao projectDao = applicationContext.getBean(ProjectDao.class);
+        RestResponse restResponse = projectDao.listProjects(configProps);
+
+        // if response status code is not ok, then throw an exception.
+        if(restResponse.getStatusCode() != RestResponse.STATUS_OK) {
+            throw new RuntimeException(restResponse.getErrorMessage());
+        }
+
+        List<Map<String, Object>> projectLists =
+                JsonUtils.toMapList(new ObjectMapper(), restResponse.getSuccessMessage());
+
+        String format = "%-20s%-20s%-20s%n";
+
+        System.out.printf(format,"PROJECT ID", "PROJECT NAME", "PROJECT DESCRIPTION");
+        for(Map<String, Object> map : projectLists) {
+            System.out.printf(format, String.valueOf(map.get("id")), (String) map.get("name"), (String) map.get("description"));
+        }
+    }
+
+    public static void showClusterList(ConfigProps configProps) {
+        ApplicationContext applicationContext = SpringContextSingleton.getInstance();
+        ClusterDao clusterDao = applicationContext.getBean(ClusterDao.class);
+        RestResponse restResponse = clusterDao.listClusters(configProps);
+
+        // if response status code is not ok, then throw an exception.
+        if(restResponse.getStatusCode() != RestResponse.STATUS_OK) {
+            throw new RuntimeException(restResponse.getErrorMessage());
+        }
+
+        List<Map<String, Object>> clusterLists =
+                JsonUtils.toMapList(new ObjectMapper(), restResponse.getSuccessMessage());
+
+        String format = "%-20s%-20s%-20s%n";
+
+        System.out.printf(format,"CLUSTER ID", "CLUSTER NAME", "CLUSTER DESCRIPTION");
+        for(Map<String, Object> map : clusterLists) {
+            System.out.printf(format, String.valueOf(map.get("id")), (String) map.get("name"), (String) map.get("description"));
+        }
+    }
+
+    public static void showStorageClasses(ConfigProps configProps, String clusterId) {
+        ApplicationContext applicationContext = SpringContextSingleton.getInstance();
+        ResourceControlDao resourceControlDao = applicationContext.getBean(ResourceControlDao.class);
+        RestResponse restResponse = resourceControlDao.listStorageClasses(configProps, Long.valueOf(clusterId));
+
+        // if response status code is not ok, then throw an exception.
+        if(restResponse.getStatusCode() != RestResponse.STATUS_OK) {
+            throw new RuntimeException(restResponse.getErrorMessage());
+        }
+
+        List<Map<String, Object>> storageClasses =
+                JsonUtils.toMapList(new ObjectMapper(), restResponse.getSuccessMessage());
+
+        String format = "%-20s%-20s%-20s%-20s%n";
+
+        System.out.printf(format,"STORAGE CLASS NAME", "RECLAIM POLICY", "VOLUME BIDING MODE", "PROVISIONER");
+        for(Map<String, Object> map : storageClasses) {
+            System.out.printf(format,
+                    String.valueOf(map.get("name")),
+                    (String) map.get("reclaimPolicy"),
+                    (String) map.get("volumeBindingMode"),
+                    (String) map.get("provisioner"));
+        }
+    }
 }
