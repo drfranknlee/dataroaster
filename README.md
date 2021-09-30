@@ -1046,6 +1046,20 @@ Manage Backup for Persistent Volumes and resources.
 #### Create Backup
 Velero will be created.
 * The namespace of velero is `dataroaster-velero`.
+
+Currently, Velero CLI which is missing in ansible dataroaster installation needs to be installed manually like this.
+```
+mkdir -p velero;
+cd velero/
+curl -L -O https://github.com/vmware-tanzu/velero/releases/download/v1.6.0/velero-v1.6.0-linux-amd64.tar.gz
+tar zxvf velero-v1.6.0-linux-amd64.tar.gz
+cd velero-v1.6.0-linux-amd64/
+sudo cp velero /usr/local/bin/velero
+
+# check velero.
+velero
+```
+
 ```
 dataroaster backup create <params>
 ```
