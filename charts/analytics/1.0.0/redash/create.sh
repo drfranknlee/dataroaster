@@ -25,6 +25,9 @@ kubectl wait --namespace ${NAMESPACE} \
   --selector=app=redash \
   --timeout=120s
 
+# sleep for making sure to be ready to create db.
+sleep 10
+
 # create tables.
 kubectl exec -it -n ${NAMESPACE} \
 $(kubectl get po -l app=redash -n ${NAMESPACE} -o jsonpath={.items[0].metadata.name}) \

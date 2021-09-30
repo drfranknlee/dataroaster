@@ -27,6 +27,9 @@ kubectl wait --namespace ${NAMESPACE} \
 --timeout=120s \
 --kubeconfig={{ kubeconfig }};
 
+# sleep for making sure to be ready to create db.
+sleep 10
+
 # create tables.
 kubectl --kubeconfig={{ kubeconfig }} \
 exec -it -n ${NAMESPACE} \
