@@ -68,7 +68,7 @@ services:
   - name: workflow
     params:
       properties:
-        - s3
+        - argo-workflow-s3
       storage-size: 1
     extra-params:
       storage-class:
@@ -136,6 +136,12 @@ properties:
       s3-access-key: any-access-key
       s3-secret-key: any-secret-key
       s3-endpoint: https://s3-endpoint
+  - name: argo-workflow-s3
+    kv:
+      s3-bucket: mykidong
+      s3-access-key: any-access-key
+      s3-secret-key: any-secret-key
+      s3-endpoint: s3-endpoint
   - name: velero-s3
     kv:
       s3-bucket: velero-backups
